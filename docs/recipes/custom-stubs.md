@@ -10,13 +10,13 @@ php artisan vendor:publish --tag=ichava::icon-sets-package-scaffolder-stubs
 
 ```php
 // config/icon-sets-package-scaffolder.php
-'stubs_path' => base_path('stubs/ichava/icon-package'),
+'stubs_path' => base_path('stubs/ichava'),
 ```
 
 Or per environment:
 
 ```dotenv
-ICHAVA_SCAFFOLDER_STUBS_PATH=/srv/templates/icon-package
+ICHAVA_SCAFFOLDER_STUBS_PATH=/srv/templates/ichava-stubs
 ```
 
 ## What the tree may contain

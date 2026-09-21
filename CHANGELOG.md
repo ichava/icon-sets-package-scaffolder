@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The stubs publish destination named a directory that no longer exists.** The bundled tree
+  became `stubs/` when `stubs/icon-package/` was flattened, but the provider still published to
+  `base_path('stubs/ichava/icon-package')`, and two docs pages repeated it as the `stubs_path`
+  example. Now `base_path('stubs/ichava')`, matching the source shape.
+
+  The destination is arbitrary -- it is a directory in the host application, and nothing breaks
+  if it is wrong. It is worth fixing anyway: a path that names a layout nobody has reads as
+  though it still means something, and the next person to change the tree will look for the
+  `icon-package` directory it implies.
+
+- **`docs/configuration.md` named the wrong config file** in the `V39` explanation --
+  `icon-package-scaffolder.php` rather than `icon-sets-package-scaffolder.php`. It slipped the
+  rebrand sweep because that pass matched `config/icon-package-scaffolder.php` with its
+  directory prefix, and this instance is bare. Verified this time by reading the filename off
+  disk and the config key out of the provider, then checking both appear in the page.
+
+## [Unreleased]
+
+### Fixed
+
 - **Every scaffolded package failed to boot.** The stub tree shipped
   `src/Commands/UpdateIconsCommand.php`, extending
   `Simtabi\Laranail\Ichava\Commands\UpdateIconsCommand` -- a class `ichava/core` has never
