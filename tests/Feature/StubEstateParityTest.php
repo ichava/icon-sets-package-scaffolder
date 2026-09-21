@@ -48,16 +48,31 @@ afterEach(function () {
 /**
  * A real, shipped pack to measure the stub against.
  *
- * `flag-icons` rather than any other: it is public, it carries the full
+ * The flag pack rather than any other: it is public, it carries the full
  * manifest shape (repositories, scripts, branch-alias, support.security) and
  * all four workflows, and it is the pack whose `<use>` elements the SVG policy
  * corpus run already tracks, so it is unlikely to be quietly retired.
+ *
+ * **The directory is `icons-flag`; the GitHub repository is still `flag-icons`.**
+ * The 2026-09-21 restructure renamed the local checkouts and left the remotes
+ * alone, so the two names diverge and both are correct in their own place. The
+ * clone step in `tests.yml` therefore fetches `ichava/flag-icons.git` *into* a
+ * directory named `icons-flag` -- change one and the other has to move with it.
+ *
+ * `dirname(__DIR__, 3)` is the package parent, `packages/`, and was correct
+ * before and after the move: the whole tree relocated together, so the break
+ * was the rename alone. Anyone reaching for the depth here is fixing something
+ * that is not wrong.
  */
 function estateCheckoutPath(): ?string
 {
-    $candidate = dirname(__DIR__, 3) . '/flag-icons';
+    return is_dir(estateCandidatePath() . '/.git') ? estateCandidatePath() : null;
+}
 
-    return is_dir($candidate . '/.git') ? $candidate : null;
+/** Where the sibling is expected, named so a skip can say what it looked for. */
+function estateCandidatePath(): string
+{
+    return dirname(__DIR__, 3) . '/icons-flag';
 }
 
 /**
@@ -162,14 +177,24 @@ function scaffoldForParity(string $root): void
 }
 
 /**
- * The monorepo sibling is not present in a standalone checkout of `core`, and
- * CI clones one repo. Skipping is correct there: this guard is a working-tree
- * check, and a false red in CI would train people to ignore it.
+ * Skipping covers a standalone checkout with no sibling beside it.
+ *
+ * **It does not cover CI, which clones the sibling deliberately** -- see
+ * `tests.yml`, `Check out flag-icons beside the checkout`. An earlier revision
+ * of this docblock said CI clones one repository and that skipping was correct
+ * there, and that claim outlived the workflow step that falsified it.
+ *
+ * The message names the path rather than the pack, because every way this has
+ * actually skipped was a path that moved, and a message naming the pack reads
+ * like a network or ref problem instead.
  */
 function skipWithoutEstate(): void
 {
     if (estatePackManifest() === null) {
-        test()->markTestSkipped('flag-icons not resolvable at origin/main; parity guard needs the sibling clone.');
+        test()->markTestSkipped(sprintf(
+            'parity guard needs the estate sibling at %s (not found, or its origin/main is unreadable)',
+            estateCandidatePath(),
+        ));
     }
 }
 

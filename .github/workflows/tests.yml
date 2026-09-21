@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Check out flag-icons beside the checkout
+      - name: Check out the estate pack beside the checkout
         # tests/Feature/StubEstateParityTest.php measures the scaffolder stubs
         # against a real pack's manifest read off disk, rather than against
         # literals that would age silently beside the thing they guard. That
@@ -44,12 +44,17 @@ jobs:
         #
         # actions/checkout refuses a path outside the workspace and the
         # sibling is exactly that, so clone it directly. Failing loudly when
-        # flag-icons is unreachable is deliberate: a guard that cannot run
+        # the pack is unreachable is deliberate: a guard that cannot run
         # should say so rather than pass by skipping.
+        #
+        # The repository is `flag-icons` and the directory is `icons-flag`: the
+        # 2026-09-21 restructure renamed the local checkouts and left the
+        # remotes alone. `estateCandidatePath()` in the test spells the
+        # directory, so the two move together or the guard silently skips.
         run: |
           git clone --depth 1 --no-tags \
             https://github.com/ichava/flag-icons.git \
-            "$(dirname "$GITHUB_WORKSPACE")/flag-icons"
+            "$(dirname "$GITHUB_WORKSPACE")/icons-flag"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
