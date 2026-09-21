@@ -43,7 +43,8 @@ First release. Extracted from `ichava/core`, where the generator was a single
 
   The cost is a sequencing constraint that is now visible rather than hidden: a change moving
   both the stub and the estate is red here until the estate side merges. Land the pack first,
-  then the stub.
+  then the stub -- which is how the `^0.2.5 || ^0.3` constraint below actually got there, in two
+  steps rather than one, with the guard red in between and saying why.
 - 59 tests. The extraction was gated on generating byte-identical output to core's command for
   both a single-set and a multi-variant pack -- 24 files and 25 files, `diff -r` clean against
   core at `a902a5e`.
