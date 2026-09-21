@@ -227,8 +227,9 @@ composer test
 ## Pack-specific docs
 
 Vendor-specific deep dives live in this repo under [`docs/`](docs/). Anything that applies to
-*every* Ichava icon pack lives in the
-[main documentation repo](https://github.com/ichava/documentation/blob/main/README.md#icon-packs).
+*every* Ichava icon pack lives with the package that owns it -- the engine's guides in
+[`ichava/core`](https://github.com/ichava/core#documentation), and pack authoring in
+[`ichava/icon-sets-package-scaffolder`](https://github.com/ichava/icon-sets-package-scaffolder#documentation).
 
 - [Variants](docs/variants.md), the variants this pack ships
 - [Customisation](docs/customization.md), styling knobs unique to {{humanName}}
@@ -236,10 +237,10 @@ Vendor-specific deep dives live in this repo under [`docs/`](docs/). Anything th
 
 Cross-references into the shared docs:
 
-- [Icon path format](https://github.com/ichava/documentation/blob/main/core/icon-path-format.md)
-- [Blade components](https://github.com/ichava/documentation/blob/main/core/blade-components.md)
-- [Global helper](https://github.com/ichava/documentation/blob/main/core/global-helper.md)
-- [Seeding pack icons](https://github.com/ichava/documentation/blob/main/icon-packs/seeding-pack-icons.md)
+- [Icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md)
+- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md)
+- [Global helper](https://github.com/ichava/core/blob/main/docs/tools/global-helper.md)
+- [Seeding pack icons](https://github.com/ichava/core/blob/main/docs/recipes/seed-pack-icons.md)
 
 ## Changelog
 
