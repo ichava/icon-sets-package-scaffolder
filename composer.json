@@ -1,0 +1,91 @@
+{
+    "name": "ichava/icon-package-scaffolder",
+    "description": "Scaffolds Ichava icon packages: one command, a token-substituted stub tree, and the conventions the ecosystem already enforces.",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "scaffolding",
+        "generator",
+        "icons",
+        "svg",
+        "ichava"
+    ],
+    "homepage": "https://opensource.simtabi.com/products/ichava/icon-package-scaffolder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Imani Manyara",
+            "email": "imani@simtabi.com",
+            "homepage": "https://simtabi.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4.1 || ^8.5",
+        "illuminate/support": "^13.0",
+        "laranail/console": "^0.1.0",
+        "laranail/package-tools": "^0.1.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/package-tools.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/console.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/enumerator.git"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.6 || ^5.0",
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\Providers\\IconPackageScaffolderServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        }
+    },
+    "scripts": {
+        "pint": "@php vendor/bin/laranail-pint --test",
+        "pint-fix": "@php vendor/bin/laranail-pint --parallel",
+        "lint": "@pint",
+        "format": "@pint-fix",
+        "test": "vendor/bin/pest --parallel",
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=2G"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "source": "https://github.com/ichava/icon-package-scaffolder",
+        "issues": "https://github.com/ichava/icon-package-scaffolder/issues",
+        "security": "https://github.com/ichava/icon-package-scaffolder/security/policy",
+        "docs": "https://opensource.simtabi.com/documentation/ichava/icon-package-scaffolder/"
+    }
+}
