@@ -5,11 +5,11 @@ Generate packs from a template tree you control.
 Publish the bundled tree, edit it, point the config at it:
 
 ```bash
-php artisan vendor:publish --tag=ichava::icon-package-scaffolder-stubs
+php artisan vendor:publish --tag=ichava::icon-sets-package-scaffolder-stubs
 ```
 
 ```php
-// config/icon-package-scaffolder.php
+// config/icon-sets-package-scaffolder.php
 'stubs_path' => base_path('stubs/ichava/icon-package'),
 ```
 

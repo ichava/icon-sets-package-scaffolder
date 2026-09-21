@@ -5,7 +5,7 @@ Scaffolding your first icon pack, and what you get.
 ## One command
 
 ```bash
-php artisan ichava::icon-package-scaffolder.make
+php artisan ichava::icon-sets-package-scaffolder.make
 ```
 
 It asks for a name, a vendor, an author email, a Blade prefix, a set type and --
@@ -29,7 +29,7 @@ class in a pack scaffolded before the change.
 Supply everything and it never reaches a prompt:
 
 ```bash
-php artisan ichava::icon-package-scaffolder.make Hero \
+php artisan ichava::icon-sets-package-scaffolder.make Hero \
   --vendor=Acme \
   --email=dev@example.com \
   --path=../acme-hero-icons \

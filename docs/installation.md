@@ -52,7 +52,7 @@ thing that class supplied -- `SupportsNamespacedNames` -- comes from
 php artisan list ichava
 ```
 
-`ichava::icon-package-scaffolder.make` should be listed. If it is not, the
+`ichava::icon-sets-package-scaffolder.make` should be listed. If it is not, the
 provider did not register: check that package discovery is not disabled for this
 package in your application's `composer.json` `extra.laravel.dont-discover`.
 
