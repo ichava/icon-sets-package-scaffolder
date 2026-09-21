@@ -49,6 +49,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The estate guard resolved a sibling directory that no longer exists.** The 2026-09-21
+  restructure moved the tree to `ichava/packages/` and renamed the local checkouts —
+  `flag-icons` became `icons-flag` — while leaving every GitHub repository and composer name
+  alone. `StubEstateParityTest` looked for `dirname(__DIR__, 3) . '/flag-icons'`, found nothing,
+  and skipped: `51 passed, 8 skipped (162 assertions)` against `59 passed (208 assertions)`
+  before the move. Restored to 59 and zero skipped.
+
+  **It is a rename break, not a depth one.** `dirname(__DIR__, 3)` still resolves to `packages/`
+  and was correct throughout, because the whole tree moved together. Anyone reaching for the
+  depth would be changing something that is not wrong — and the demo app's path repositories,
+  broken in the same move, are the opposite case: correct names at the wrong depth.
+
+  The clone step in `tests.yml` moved with it. The repository is still `flag-icons` and the
+  directory it clones into is now `icons-flag`, so the two spellings are both right in their own
+  place and have to move together; both now say so where they are written.
+
+  The skip message names the path it looked for rather than the pack. Every way this guard has
+  actually skipped was a path that moved, and a message naming the pack reads like a network or
+  ref problem instead — which is how eight silent skips went unnoticed through a green run.
+
+- **`skipWithoutEstate()`'s docblock claimed CI clones one repository and that skipping was
+  correct there.** CI clones the sibling deliberately and has since the initial release. The
+  claim outlived the workflow step that falsified it, and it is the source of the same wrong
+  statement corrected in the entry above.
+
 - **A failed SBOM download no longer takes the whole release down.** `release.yml` generates the
   SBOM before it publishes, and the Syft installer fetches its checksums from GitHub's
   release-asset CDN. On 2026-09-21 that answered `504` for about twenty minutes, failing the job
