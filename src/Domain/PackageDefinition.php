@@ -22,6 +22,9 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidP
  */
 final readonly class PackageDefinition
 {
+    /** The estate-wide slug prefix every icon pack carries. */
+    private const string SLUG_PREFIX = 'icon-sets-';
+
     /** @param list<IconVariant> $variants */
     private function __construct(
         public string $studlyName,
@@ -86,10 +89,30 @@ final readonly class PackageDefinition
         return $this->vendorKebab() . '/' . $this->bladeNamespace();
     }
 
-    /** `hero-icons` -- the Blade component namespace and the pack's short name. */
+    /**
+     * `icon-sets-hero` -- the Blade component namespace and the pack's short name.
+     *
+     * The estate renamed to the `icon-sets-` PREFIX on 2026-09-21: directory,
+     * GitHub repository and composer name moved together. This used to append
+     * an `-icons` SUFFIX, so a pack scaffolded after the rename got a composer
+     * name, config key, component tag and Artisan command matching nothing
+     * that exists. Measured against the real packs: `ichava/icon-sets-flag`,
+     * `config/icon-sets-flag.php`, `<x-icon-sets-flag-icon>`.
+     *
+     * Idempotent, because `emoji-sets` became `icon-sets-emoji` rather than
+     * `icon-sets-emoji-sets`: someone typing the full slug must not get
+     * `icon-sets-icon-sets-flag`.
+     *
+     * This is the one place the name is derived. Stubs reference it through
+     * the `{{bladeNamespace}}` token -- twenty-one sites used to rebuild it by
+     * hand as `{{kebabName}}-icons`, which is why the rebrand reached the
+     * packages and not what the scaffolder emits.
+     */
     public function bladeNamespace(): string
     {
-        return $this->kebabName . '-icons';
+        return str_starts_with($this->kebabName, self::SLUG_PREFIX)
+            ? $this->kebabName
+            : self::SLUG_PREFIX . $this->kebabName;
     }
 
     public function vendorKebab(): string
@@ -103,18 +126,15 @@ final readonly class PackageDefinition
     }
 
     /**
-     * `Acme\HeroIcons` -- the PSR-4 root of the generated package.
+     * `Acme\IconSetsHero` -- the PSR-4 root of the generated package.
      *
-     * The `Icons` suffix is appended here rather than expected in the typed
-     * name, which is why the convention is to type `Hero`, not `HeroIcons`:
-     * the latter yields `HeroIconsIcons` and the composer name
-     * `acme/hero-icons-icons`. That is inherited behaviour, pinned by a test
-     * below, and is tracked separately -- changing it silently would rename
-     * every class in a pack scaffolded before the change.
+     * Derived from bladeNamespace() so the class root and the composer name
+     * cannot drift apart. The real packs are `…\Ichava\IconSetsFlag`, studly
+     * of the same slug.
      */
     public function namespace(): string
     {
-        return $this->vendorStudly() . '\\' . $this->studlyName . 'Icons';
+        return $this->vendorStudly() . '\\' . Str::studly($this->bladeNamespace());
     }
 
     /** `Hero Icons` -- for descriptions and headings. */

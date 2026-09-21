@@ -17,7 +17,7 @@ use {{namespace}}\View\Components\IconComponent;
  *
  * Registers the {{studlyName}} icon set with the Ichava ecosystem.
  * Icons are automatically discovered and made available via:
- * - Blade component: <x-{{kebabName}}-icons-icon name="icon-name" />
+ * - Blade component: <x-{{bladeNamespace}}-icon name="icon-name" />
  * - Helper function: ichava('{{packageName}}::icon-name')
  *
  * @package {{namespace}}
@@ -33,7 +33,7 @@ final class IconsServiceProvider extends ServiceProvider
         $package
             ->setName(IconsConstants::getVendorPackage())
             ->setPathFrom(source: $this, levelsUp: 2)
-            ->hasConfigFile('{{kebabName}}-icons');
+            ->hasConfigFile('{{bladeNamespace}}');
     }
 
     /**
@@ -41,8 +41,8 @@ final class IconsServiceProvider extends ServiceProvider
      */
     public function bootingPackage(): void
     {
-        // Register package-specific Blade component: <x-{{kebabName}}-icons-icon name="..." />
-        $this->loadBladeComponent(componentClass: IconComponent::class, packageName: '{{kebabName}}-icons');
+        // Register package-specific Blade component: <x-{{bladeNamespace}}-icon name="..." />
+        $this->loadBladeComponent(componentClass: IconComponent::class, packageName: '{{bladeNamespace}}');
 
         // Register icons with the Ichava registry
         $registry = $this->app->make(IconRegistry::class);

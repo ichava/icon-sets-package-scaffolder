@@ -26,30 +26,31 @@ it('derives every public name from the package name and vendor', function (): vo
 
     expect($definition->studlyName)->toBe('Hero')
         ->and($definition->kebabName)->toBe('hero')
-        ->and($definition->packageName())->toBe('acme/hero-icons')
-        ->and($definition->bladeNamespace())->toBe('hero-icons')
+        ->and($definition->packageName())->toBe('acme/icon-sets-hero')
+        ->and($definition->bladeNamespace())->toBe('icon-sets-hero')
         ->and($definition->vendorKebab())->toBe('acme')
         ->and($definition->vendorStudly())->toBe('Acme')
-        ->and($definition->namespace())->toBe('Acme\\HeroIcons')
+        ->and($definition->namespace())->toBe('Acme\\IconSetsHero')
         ->and($definition->humanName())->toBe('Hero');
 });
 
-it('appends the Icons suffix, so a name that already carries one doubles', function (): void {
+it('still doubles a name that already carries an Icons suffix', function (): void {
     // Inherited behaviour, pinned rather than endorsed. The convention is to
-    // type the bare noun: `Hero`, not `HeroIcons`. Pinning it here means a
-    // future decision to change it has to be deliberate, and shows up as this
-    // test going red rather than as every scaffolded class quietly renaming.
+    // type the bare noun: `Hero`, not `HeroIcons`. The `icon-sets-` prefix is
+    // idempotent (see EstateNamingParityTest); this trailing `Icons` is a
+    // different string and is not, which is deliberate -- silently stripping a
+    // word the author typed is worse than echoing it back.
     $definition = definition(['name' => 'HeroIcons']);
 
-    expect($definition->namespace())->toBe('Acme\\HeroIconsIcons')
-        ->and($definition->packageName())->toBe('acme/hero-icons-icons');
+    expect($definition->namespace())->toBe('Acme\\IconSetsHeroIcons')
+        ->and($definition->packageName())->toBe('acme/icon-sets-hero-icons');
 });
 
 it('namespaces the update command with the vendor and the slug', function (): void {
     // V59: a bare `icons:update` is a generic key in Artisan's flat map, and a
     // second package claiming it replaces the first silently.
     expect(definition(['name' => 'Hero'])->updateCommandName())
-        ->toBe('ichava::hero-icons.update')
+        ->toBe('ichava::icon-sets-hero.update')
         ->toMatch('/^[a-z0-9-]+::[a-z0-9-]+\./');
 });
 

@@ -18,7 +18,7 @@ describe('{{studlyName}} Icons Constants', function () {
 
     it('returns correct package name', function () {
         expect(IconsConstants::getPackageName())
-            ->toBe('{{kebabName}}-icons');
+            ->toBe('{{bladeNamespace}}');
     });
 
     it('returns correct prefix', function () {
