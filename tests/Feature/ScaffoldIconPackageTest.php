@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubLocator;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\ScaffoldResult;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\ScaffoldIconPackage;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\ScaffoldResult;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
 
 function scaffold(array $overrides, string $label): array
 {
@@ -158,8 +158,8 @@ it('is reachable without a terminal', function (): void {
     // only through a command's handle(), so exercising it meant driving prompts.
     $scaffold = new ScaffoldIconPackage(
         new Filesystem,
-        app(Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\RenderStubTree::class),
-        app(Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\CreateIconDirectories::class),
+        app(Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\RenderStubTree::class),
+        app(Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\CreateIconDirectories::class),
     );
 
     $root = scratchDirectory('headless');

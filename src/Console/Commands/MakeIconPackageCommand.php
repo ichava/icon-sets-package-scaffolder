@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\Commands;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Commands;
 
 use Throwable;
 
@@ -10,12 +10,12 @@ use function Laravel\Prompts\intro;
 use function Laravel\Prompts\outro;
 
 use Simtabi\Laranail\Console\Tools\Commands\Command;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\NextStepsReporter;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\ScaffoldIconPackage;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\DestinationResolver;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\PackageDefinitionPrompter;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\NextStepsReporter;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\DestinationResolver;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\PackageDefinitionPrompter;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
 
 /**
  * Scaffolds a new Ichava icon package.
@@ -35,7 +35,7 @@ final class MakeIconPackageCommand extends Command
 {
     use SupportsNamespacedNames;
 
-    protected $signature = 'ichava::icon-package-scaffolder.make
+    protected $signature = 'ichava::icon-sets-package-scaffolder.make
                            {name? : Package name, e.g. HeroIcons}
                            {--vendor= : Vendor name}
                            {--email= : Author email address}

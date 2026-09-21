@@ -1,5 +1,5 @@
 name: Feature request
-description: Propose an improvement to ichava/icon-package-scaffolder
+description: Propose an improvement to ichava/icon-sets-package-scaffolder
 labels: [enhancement]
 body:
   - type: textarea

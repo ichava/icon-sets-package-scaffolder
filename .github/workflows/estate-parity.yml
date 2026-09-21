@@ -1,0 +1,98 @@
+# Asks the parity guard on a schedule, because pull requests do not ask it often
+# enough.
+#
+# `StubEstateParityTest` compares the stub tree against a real pack read at
+# `origin/main`. That is a cross-repository assertion, and a repository's CI only
+# runs when that repository has a pull request -- so a change made in the estate
+# is invisible here until something independently triggers this repo's build.
+#
+# The window is not theoretical. On 2026-09-21 the packs moved to
+# `ichava/core: ^0.2.8` when the flag pack's floor bump merged at 16:07:53 UTC. This package's
+# last Tests run before that started at 16:03:32 UTC and passed -- correctly, for
+# the estate as it stood 261 seconds earlier. The stub then sat stale with nothing
+# to re-ask the question.
+#
+# A daily run closes it to a day. Two things about `schedule:` worth knowing
+# before editing this file:
+#
+#   * It runs on the DEFAULT BRANCH only, whatever the workflow file says. That
+#     is right here -- the question is whether `main`'s stub matches the estate --
+#     but it means changes to this file do nothing until they land on `main`.
+#   * GitHub disables scheduled workflows after 60 days with no repository
+#     activity, and says so only in the Actions tab. A quiet package is exactly
+#     the one whose stub drifts, so if this repo goes quiet, check that this is
+#     still enabled rather than reading its silence as agreement.
+
+name: Estate parity
+
+on:
+  schedule:
+    # 06:17 UTC daily. Off the hour on purpose: scheduled jobs queued at :00
+    # compete with everyone else's and can be delayed or dropped under load.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    name: Stub matches the estate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Check out the estate pack beside the checkout
+        # Repository and directory are both `icon-sets-flag` after the rebrand.
+        # `estateCandidatePath()` in the test spells the directory, so the two
+        # have to move together -- and the old `flag-icons` URL only redirects
+        # for about 30 days after a rename, which is a poor thing to build a
+        # daily job on.
+        run: |
+          git clone --depth 1 --no-tags \
+            https://github.com/ichava/icon-sets-flag.git \
+            "$(dirname "$GITHUB_WORKSPACE")/icon-sets-flag"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.5'
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo
+          coverage: none
+
+      - name: Authenticate Composer for private GitHub deps
+        env:
+          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
+        if: env.GH_PACKAGES_PAT != ''
+        run: |
+          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Compare the stub against the estate
+        # ICHAVA_REQUIRE_ESTATE turns a skip into a failure. This job cloned the
+        # sibling itself, so a skip here means the clone failed or the directory
+        # name drifted, and Pest exits 0 on a skip -- a scheduled guard that
+        # skipped would report green forever while measuring nothing.
+        env:
+          ICHAVA_REQUIRE_ESTATE: '1'
+        run: vendor/bin/pest --filter=StubEstateParity
+
+      - name: Say what to do about it
+        if: failure()
+        # A scheduled failure e-mails whoever owns the repository and otherwise
+        # sits in the Actions tab, which nobody is looking at. Spell the next
+        # step in the run itself rather than expecting the reader to reconstruct
+        # it from a diff of two composer manifests.
+        run: |
+          echo "::error title=Stub and estate disagree::The scaffolder's stub tree no longer matches ichava/icon-sets-flag at origin/main."
+          echo "::error::Usually the estate moved and the stub did not -- a dependency constraint, a workflow, or a docs page."
+          echo "::error::Fix the stub to match the pack, or the pack if the pack is what is wrong. Run locally with: vendor/bin/pest --filter=StubEstateParity"

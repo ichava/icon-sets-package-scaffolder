@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\Commands\MakeIconPackageCommand;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Commands\MakeIconPackageCommand;
 
 /**
  * The stub tree must not drift from the estate it scaffolds into.
@@ -53,11 +53,13 @@ afterEach(function () {
  * all four workflows, and it is the pack whose `<use>` elements the SVG policy
  * corpus run already tracks, so it is unlikely to be quietly retired.
  *
- * **The directory is `icons-flag`; the GitHub repository is still `flag-icons`.**
- * The 2026-09-21 restructure renamed the local checkouts and left the remotes
- * alone, so the two names diverge and both are correct in their own place. The
- * clone step in `tests.yml` therefore fetches `ichava/flag-icons.git` *into* a
- * directory named `icons-flag` -- change one and the other has to move with it.
+ * **The directory and the GitHub repository are both `icon-sets-flag`.** They
+ * diverged for part of 2026-09-21 -- the restructure renamed the local
+ * checkouts while the remotes still said `flag-icons` -- and the rebrand later
+ * closed the gap. The clone step in `tests.yml` fetches
+ * `ichava/icon-sets-flag.git` into a directory of the same name, so the two
+ * still have to move together; they are equal now by maintenance, not by
+ * anything enforcing it.
  *
  * `dirname(__DIR__, 3)` is the package parent, `packages/`, and was correct
  * before and after the move: the whole tree relocated together, so the break
@@ -77,7 +79,7 @@ function estateCheckoutPath(): ?string
 /** Where the sibling is expected, named so a skip can say what it looked for. */
 function estateCandidatePath(): string
 {
-    return dirname(__DIR__, 3) . '/icons-flag';
+    return dirname(__DIR__, 3) . '/icon-sets-flag';
 }
 
 /**
@@ -195,12 +197,32 @@ function scaffoldForParity(string $root): void
  */
 function skipWithoutEstate(): void
 {
-    if (estatePackManifest() === null) {
-        test()->markTestSkipped(sprintf(
-            'parity guard needs the estate sibling at %s (not found, or its origin/main is unreadable)',
-            estateCandidatePath(),
-        ));
+    if (estatePackManifest() !== null) {
+        return;
     }
+
+    $reason = sprintf(
+        'parity guard needs the estate sibling at %s (not found, or its origin/main is unreadable)',
+        estateCandidatePath(),
+    );
+
+    // Somewhere that promised the sibling, a skip is a failure.
+    //
+    // Pest exits 0 on a skipped test, so a run where the clone step broke, the
+    // directory was renamed, or the pack went private reports green and says
+    // nothing -- which is the exact shape of silent drift this guard exists to
+    // catch, arriving through the guard itself. It happened: the 2026-09-21
+    // rename turned 59 passed into 51 passed and 8 skipped, and nothing went red.
+    //
+    // This version of Pest has no --fail-on-skipped, so the contract lives here
+    // rather than in a grep over the output. CI and the scheduled run set
+    // ICHAVA_REQUIRE_ESTATE=1 because they provision the sibling themselves; a
+    // bare local checkout does not, and still skips politely.
+    if (filter_var(getenv('ICHAVA_REQUIRE_ESTATE') ?: '', FILTER_VALIDATE_BOOLEAN)) {
+        test()->fail($reason . ' -- ICHAVA_REQUIRE_ESTATE is set, so this is a failure rather than a skip');
+    }
+
+    test()->markTestSkipped($reason);
 }
 
 it('scaffolds the same runtime constraints a real pack declares', function () {

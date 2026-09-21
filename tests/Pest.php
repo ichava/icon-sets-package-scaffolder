@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Tests\TestCase;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Tests\TestCase;
 
 uses(TestCase::class)->in('Feature');
 

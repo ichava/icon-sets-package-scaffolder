@@ -3,9 +3,9 @@
 Generate a package from a test, a queued job, a CI step or an HTTP handler.
 
 ```php
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\ScaffoldIconPackage;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
 
 $definition = PackageDefinition::create(
     name: 'Hero',

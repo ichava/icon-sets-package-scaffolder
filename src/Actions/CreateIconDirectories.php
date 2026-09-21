@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions;
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
 /**
  * Creates the SVG directory layout a pack's icons live in.

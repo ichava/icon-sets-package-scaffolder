@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Console;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console;
 
 use Illuminate\Support\Str;
 
@@ -10,8 +10,8 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\confirm;
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\IconSetType;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconSetType;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
 /**
  * Asks for whatever the caller did not supply, then builds a definition.

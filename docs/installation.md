@@ -17,7 +17,7 @@ Add the VCS repositories first:
 ```json
 {
     "repositories": [
-        { "type": "vcs", "url": "https://github.com/ichava/icon-package-scaffolder" },
+        { "type": "vcs", "url": "https://github.com/ichava/icon-sets-package-scaffolder" },
         { "type": "vcs", "url": "https://github.com/laranail/package-tools.git" },
         { "type": "vcs", "url": "https://github.com/laranail/console.git" },
         { "type": "vcs", "url": "https://github.com/laranail/enumerator.git" }
@@ -32,7 +32,7 @@ every entry a package needs has to appear in the application that installs it.
 ## Install
 
 ```bash
-composer require --dev ichava/icon-package-scaffolder
+composer require --dev ichava/icon-sets-package-scaffolder
 ```
 
 A dev dependency: scaffolding happens once per pack, on a workstation, and

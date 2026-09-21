@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubLocator;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubRenderer;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\TokenMapFactory;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubRenderer;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\TokenMapFactory;
 
 function bundledStubs(): StubLocator
 {

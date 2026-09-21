@@ -1,5 +1,5 @@
 {
-    "name": "ichava/icon-package-scaffolder",
+    "name": "ichava/icon-sets-package-scaffolder",
     "description": "Scaffolds Ichava icon packages: one command, a token-substituted stub tree, and the conventions the ecosystem already enforces.",
     "type": "library",
     "keywords": [
@@ -10,7 +10,7 @@
         "svg",
         "ichava"
     ],
-    "homepage": "https://opensource.simtabi.com/products/ichava/icon-package-scaffolder",
+    "homepage": "https://opensource.simtabi.com/products/ichava/icon-sets-package-scaffolder",
     "license": "MIT",
     "authors": [
         {
@@ -48,18 +48,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\": "src/"
+            "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\Tests\\": "tests/"
+            "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Simtabi\\Laranail\\Ichava\\IconPackageScaffolder\\Providers\\IconPackageScaffolderServiceProvider"
+                "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\Providers\\IconPackageScaffolderServiceProvider"
             ]
         },
         "branch-alias": {
@@ -83,9 +83,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "support": {
-        "source": "https://github.com/ichava/icon-package-scaffolder",
-        "issues": "https://github.com/ichava/icon-package-scaffolder/issues",
-        "security": "https://github.com/ichava/icon-package-scaffolder/security/policy",
-        "docs": "https://opensource.simtabi.com/documentation/ichava/icon-package-scaffolder/"
+        "source": "https://github.com/ichava/icon-sets-package-scaffolder",
+        "issues": "https://github.com/ichava/icon-sets-package-scaffolder/issues",
+        "security": "https://github.com/ichava/icon-sets-package-scaffolder/security/policy",
+        "docs": "https://opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/"
     }
 }

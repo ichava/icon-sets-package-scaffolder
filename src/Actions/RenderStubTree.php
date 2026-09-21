@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions;
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubLocator;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubRenderer;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\TokenMapFactory;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubRenderer;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\TokenMapFactory;
 
 /**
  * Renders every stub into the destination.

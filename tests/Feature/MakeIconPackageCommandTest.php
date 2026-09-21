@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Contracts\Console\Kernel;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\Commands\MakeIconPackageCommand;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Commands\MakeIconPackageCommand;
 
 it('registers under a name that carries the vendor and the slug', function (): void {
     // V59. Asserted against the live registry rather than the $signature
@@ -12,7 +12,7 @@ it('registers under a name that carries the vendor and the slug', function (): v
     // trait writes the name past Symfony's validateName().
     $commands = app(Kernel::class)->all();
 
-    expect($commands)->toHaveKey('ichava::icon-package-scaffolder.make');
+    expect($commands)->toHaveKey('ichava::icon-sets-package-scaffolder.make');
 
     $names = array_map(
         static fn ($command): string => $command->getName(),

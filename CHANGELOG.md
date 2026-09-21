@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The parity guard resolved the estate sibling by a name that no longer exists**, so it
+  skipped instead of measuring. The 2026-09-21 restructure moved every package under
+  `packages/` and renamed the local checkouts -- `flag-icons` is `icons-flag` now, while the
+  GitHub repository keeps its old name -- and the guard spelled the directory. 59 passed became
+  51 passed and 8 skipped, and a skip is green.
+
+  `dirname(__DIR__, 3)` was never the problem and is unchanged: it resolves to the package
+  parent, which was `ichava/` before and is `packages/` now, because the whole tree moved
+  together. The docblock says so, because the depth is the obvious thing to reach for and it is
+  not wrong.
+
+### Added
+
+- **A skip is now a failure wherever the sibling was promised.** `ICHAVA_REQUIRE_ESTATE=1` makes
+  `skipWithoutEstate()` fail instead of skip, and both CI and the scheduled run set it because
+  they clone the pack themselves. A bare local checkout does not, and still skips politely.
+
+  Pest exits `0` on a skipped test and this version has no `--fail-on-skipped`, so a broken
+  clone step or a renamed directory reported green and said nothing. That is the failure this
+  guard exists to catch, arriving through the guard itself, and it had already happened once.
+  The contract lives in the test rather than in a grep over the output.
+
+- **`estate-parity.yml`, a daily scheduled run of the parity guard.** A pull request only asks
+  this question when *this* repository has one, so a change made in the estate is invisible here
+  until something independently triggers a build.
+
+  The window is measured, not hypothetical: the packs moved to `ichava/core: ^0.2.8` when
+  `flag-icons#27` merged at `16:07:53Z`, and this package's last run before that started at
+  `16:03:32Z` and passed -- correctly, for the estate as it stood 261 seconds earlier. A daily
+  run closes the window to a day.
+
+  Two properties of `schedule:` are written into the file because both are easy to trip over:
+  it runs on the **default branch** only, whatever the file on a branch says; and GitHub
+  disables scheduled workflows after 60 days of repository inactivity, announcing it only in the
+  Actions tab. A quiet package is exactly the one whose stub drifts.
+
+## [Unreleased]
+
 ### Added
 
 - **Scaffolded packs now ship the canonical `resources/` shape.** The stub tree
@@ -222,4 +262,4 @@ First release. Extracted from `ichava/core`, where the generator was a single
 - A scaffolded pack's update command is named `ichava::<slug>-icons.update`
   regardless of the vendor you give. Inherited from the stub.
 
-[0.1.0]: https://github.com/ichava/icon-package-scaffolder/releases/tag/v0.1.0
+[0.1.0]: https://github.com/ichava/icon-sets-package-scaffolder/releases/tag/v0.1.0
