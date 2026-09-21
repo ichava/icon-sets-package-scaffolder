@@ -29,7 +29,7 @@ it('merges config at the key the code reads', function (): void {
 it('resolves the stub locator against the bundled tree by default', function (): void {
     $locator = app(StubLocator::class);
 
-    expect($locator->root())->toBe(dirname(__DIR__, 2) . '/stubs/icon-package')
+    expect($locator->root())->toBe(dirname(__DIR__, 2) . '/stubs')
         ->and($locator->all())->not->toBeEmpty();
 });
 

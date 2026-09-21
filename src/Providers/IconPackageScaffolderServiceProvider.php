@@ -61,6 +61,6 @@ final class IconPackageScaffolderServiceProvider extends PackageServiceProvider
 
     private function bundledStubsRoot(): string
     {
-        return $this->package->basePath('stubs/icon-package');
+        return $this->package->basePath('stubs');
     }
 }

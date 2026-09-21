@@ -32,7 +32,7 @@ it('writes every stub, with no token left behind', function (): void {
     // removed should not need this number edited, and a literal would go stale
     // silently in the direction that matters -- a stub that stopped being
     // written still satisfies a count nobody updated.
-    $stubCount = count((new StubLocator(dirname(__DIR__, 2) . '/stubs/icon-package'))->all());
+    $stubCount = count((new StubLocator(dirname(__DIR__, 2) . '/stubs'))->all());
 
     expect($result)->toBeInstanceOf(ScaffoldResult::class)
         ->and($result->fileCount())->toBe($stubCount)

@@ -182,7 +182,7 @@ jobs:
         # GITHUB_WORKSPACE. A path outside it globs to nothing.
         run: |
           php scripts/scaffold-sample.php "$GITHUB_WORKSPACE/.scaffolded"
-          expected=$(find stubs/icon-package/.github/workflows -name '*.yml.stub' | wc -l | tr -d ' ')
+          expected=$(find stubs/.github/workflows -name '*.yml.stub' | wc -l | tr -d ' ')
           rendered=$(find .scaffolded/.github/workflows -name '*.yml' | wc -l | tr -d ' ')
           if [ "$expected" -eq 0 ] || [ "$rendered" -ne "$expected" ]; then
             echo "::error::rendered $rendered workflow files, expected $expected"
