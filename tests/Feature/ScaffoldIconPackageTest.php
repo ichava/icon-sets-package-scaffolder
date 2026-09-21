@@ -55,11 +55,11 @@ it('produces a package composer can parse and a PHP file php can parse', functio
 
     $composer = json_decode((string) file_get_contents($path . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
 
-    expect($composer['name'])->toBe('acme/hero-icons')
+    expect($composer['name'])->toBe('acme/icon-sets-hero')
         ->and($composer['authors'][0]['email'])->toBe('dev@example.com')
-        ->and($composer['autoload']['psr-4'])->toHaveKey('Acme\\HeroIcons\\')
+        ->and($composer['autoload']['psr-4'])->toHaveKey('Acme\\IconSetsHero\\')
         ->and($composer['extra']['laravel']['providers'][0])
-        ->toBe('Acme\\HeroIcons\\Providers\\IconsServiceProvider');
+        ->toBe('Acme\\IconSetsHero\\Providers\\IconsServiceProvider');
 
     // A stub that substitutes a namespace into PHP is one escaping mistake away
     // from a parse error, and a parse error in a generated package surfaces on
@@ -148,7 +148,7 @@ it('overwrites when forced', function (): void {
     app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root . '/pack'), force: true);
 
     expect(json_decode((string) file_get_contents($root . '/pack/composer.json'), true)['name'])
-        ->toBe('acme/hero-icons');
+        ->toBe('acme/icon-sets-hero');
 
     removeDirectory($root);
 });

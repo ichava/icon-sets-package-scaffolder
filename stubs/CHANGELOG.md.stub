@@ -8,5 +8,5 @@ All notable changes to `{{packageName}}` follow [Keep a Changelog](https://keepa
 
 - Initial release.
 - {{studlyName}} icon set integrated with the Ichava ecosystem.
-- `<x-{{kebabName}}-icons-icon>` Blade component, plus support for the generic `<x-ichava::icon>` form.
-- `ichava:update-{{kebabName}}-icons` Artisan command for refreshing the collection from source.
+- `<x-{{bladeNamespace}}-icon>` Blade component, plus support for the generic `<x-ichava::icon>` form.
+- `ichava:update-{{bladeNamespace}}` Artisan command for refreshing the collection from source.

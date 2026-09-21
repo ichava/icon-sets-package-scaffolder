@@ -25,7 +25,7 @@ The package will auto-register its service provider.
 ### Publish Configuration (Optional)
 
 ```bash
-php artisan vendor:publish --tag={{kebabName}}-icons-config
+php artisan vendor:publish --tag={{bladeNamespace}}-config
 ```
 
 ### Seed Icons to Database (Optional)
@@ -44,16 +44,16 @@ The simplest way to use icons in your Blade templates:
 
 ```blade
 {{-- Basic usage --}}
-<x-{{kebabName}}-icons-icon name="home" />
+<x-{{bladeNamespace}}-icon name="home" />
 
 {{-- With Tailwind classes --}}
-<x-{{kebabName}}-icons-icon name="user" class="w-6 h-6 text-blue-500" />
+<x-{{bladeNamespace}}-icon name="user" class="w-6 h-6 text-blue-500" />
 
 {{-- With custom attributes --}}
-<x-{{kebabName}}-icons-icon name="settings" class="w-8 h-8" id="settings-icon" data-tooltip="Settings" />
+<x-{{bladeNamespace}}-icon name="settings" class="w-8 h-8" id="settings-icon" data-tooltip="Settings" />
 
 {{-- Icon in a category/variant folder --}}
-<x-{{kebabName}}-icons-icon name="category/icon-name" />
+<x-{{bladeNamespace}}-icon name="category/icon-name" />
 ```
 
 ### Generic Ichava Blade Component
@@ -152,7 +152,7 @@ vendor/package::category.icon-name
 
 ## Configuration
 
-The package configuration is located at `config/{{kebabName}}-icons.php`:
+The package configuration is located at `config/{{bladeNamespace}}.php`:
 
 ```php
 return [

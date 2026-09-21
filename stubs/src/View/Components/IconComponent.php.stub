@@ -13,9 +13,9 @@ use {{namespace}}\Constants\IconsConstants;
  * Blade component for rendering {{studlyName}} icons.
  *
  * Usage Examples:
- * <x-{{kebabName}}-icons-icon name="home" />
- * <x-{{kebabName}}-icons-icon name="home" class="w-6 h-6 text-blue-500" />
- * <x-{{kebabName}}-icons-icon name="category/icon-name" />
+ * <x-{{bladeNamespace}}-icon name="home" />
+ * <x-{{bladeNamespace}}-icon name="home" class="w-6 h-6 text-blue-500" />
+ * <x-{{bladeNamespace}}-icon name="category/icon-name" />
  *
  * Or using the full path with the generic Ichava component:
  * <x-ichava::icon name="{{packageName}}::home" />
