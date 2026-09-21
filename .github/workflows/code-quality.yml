@@ -133,3 +133,83 @@ jobs:
 
       - name: actionlint
         uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+
+  scaffolded-workflows:
+    name: Scaffolded workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # The `actionlint` job above reads `.github/workflows/`, which is this
+    # package's own CI -- not the CI it generates. The four workflow stubs are
+    # invisible to it twice over: they live under `stubs/`, and a `.stub`
+    # extension keeps them out of every YAML tool anyway. They could not be
+    # linted in place even if they were found, because `{{kebabName}}` starts a
+    # YAML flow mapping, so a stub is not a valid document standalone.
+    #
+    # So render one and lint that. A broken scaffolded workflow otherwise
+    # surfaces in somebody else's repository, at their tag time.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Authenticate Composer for private GitHub deps
+        env:
+          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
+        # This package resolves laranail/{package-tools,console,enumerator}
+        # through VCS repositories rather than Packagist, and Composer's git
+        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
+        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
+        # when the secret is absent, so public forks are not blocked.
+        if: env.GH_PACKAGES_PAT != ''
+        run: |
+          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Scaffold a package into the workspace
+        id: render
+        # Inside the workspace, not RUNNER_TEMP: `raven-actions/actionlint`
+        # applies its `working-directory` input to the npm install step only,
+        # and resolves `files:` through `@actions/glob` against
+        # GITHUB_WORKSPACE. A path outside it globs to nothing.
+        run: |
+          php scripts/scaffold-sample.php "$GITHUB_WORKSPACE/.scaffolded"
+          expected=$(find stubs/icon-package/.github/workflows -name '*.yml.stub' | wc -l | tr -d ' ')
+          rendered=$(find .scaffolded/.github/workflows -name '*.yml' | wc -l | tr -d ' ')
+          if [ "$expected" -eq 0 ] || [ "$rendered" -ne "$expected" ]; then
+            echo "::error::rendered $rendered workflow files, expected $expected"
+            exit 1
+          fi
+          echo "expected=$expected" >> "$GITHUB_OUTPUT"
+
+      - name: actionlint
+        id: scaffolded
+        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+        with:
+          files: .scaffolded/.github/workflows/*.yml
+
+      - name: Assert the lint read the scaffolded files
+        # With `files:` globbing to nothing, actionlint falls back to linting
+        # `./.github/workflows` -- this repository's own, already green from the
+        # job above -- and this job passes having checked nothing. The count is
+        # what distinguishes the two.
+        # Both values arrive through `env:` in upper case deliberately:
+        # actionlint runs shellcheck over every `run:` block, and SC2154 fires
+        # on a lower-case name the script never assigns.
+        env:
+          LINTED: ${{ steps.scaffolded.outputs.total-files }}
+          EXPECTED: ${{ steps.render.outputs.expected }}
+        run: |
+          if [ "$LINTED" != "$EXPECTED" ]; then
+            echo "::error::actionlint linted $LINTED files, expected $EXPECTED -- it did not read the scaffolded tree"
+            exit 1
+          fi
+          echo "actionlint linted $LINTED scaffolded workflow files"

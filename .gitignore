@@ -11,3 +11,6 @@ Thumbs.db
 .vscode/
 *.log
 .phpstan.cache/
+
+# Rendered by `scripts/scaffold-sample.php` in CI, never committed.
+/.scaffolded/
