@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use {{namespace}}\Enums\Variant;
-
 /**
  * Pins the canonical `resources/` shape every ichava icon pack shares.
  *
@@ -59,20 +57,75 @@ it('states no licence in the translations', function () {
     expect(langLines())->not->toHaveKey('features');
 });
 
-it('matches its variant keys to the Variant enum exactly', function () {
-    $expected = array_column(Variant::cases(), 'value');
-    sort($expected);
+it('matches every labelled group to its enum exactly', function () {
+    // Discovered, not hardcoded to `variants`.
+    //
+    // A pack that starts variant-style and later adds `categories` or `sets`
+    // -- which three of the five estate packs did -- would otherwise keep a
+    // test that checks `variants` and says nothing about the new group. That
+    // is not hypothetical: icon-sets-emoji shipped `sets`/`set_descriptions`
+    // guarded by nothing at all, so its `Set` enum could drift from its
+    // translations silently.
+    //
+    // The rule is the convention this estate already follows: a group `x` with
+    // a sibling `x_descriptions` is a labelled group, and its keys must match
+    // the cases of `Enums\<Studly singular of x>`.
+    $lines = langLines();
+    $checked = 0;
 
-    foreach (['variants', 'variant_descriptions'] as $group) {
-        $actual = array_keys(langLines()[$group]);
-        sort($actual);
+    foreach (array_keys($lines) as $group) {
+        if (! is_array($lines[$group])) {
+            continue;
+        }
 
-        expect($actual)->toBe(
-            $expected,
-            "resources/lang/en/icons.php [{$group}] does not match the Variant enum. "
-            . 'Add the case and its label in the same change.',
+        // `categories` -> `Category`, not `Categorie`. A bare rtrim('s') is
+        // wrong for every -ies plural, and the estate has one: icon-sets-
+        // bundled and icon-sets-metronic both ship a `Category` enum.
+        $singular = str_ends_with($group, 'ies')
+            ? substr($group, 0, -3) . 'y'
+            : rtrim($group, 's');
+
+        // The sibling key is SINGULAR: `variants` pairs with
+        // `variant_descriptions`, `categories` with `category_descriptions`,
+        // `sets` with `set_descriptions`. Pairing on the plural finds nothing
+        // and the loop passes over every group in silence.
+        $descriptions = $singular . '_descriptions';
+
+        if (! isset($lines[$descriptions])) {
+            continue;
+        }
+
+        $enum = '{{namespace}}\\Enums\\' . str_replace(
+            ' ',
+            '',
+            ucwords(str_replace('_', ' ', $singular)),
         );
+
+        expect(enum_exists($enum))->toBeTrue(
+            "resources/lang/en/icons.php has a [{$group}] group but there is no {$enum}. "
+            . 'A labelled group is only meaningful against an enum.',
+        );
+
+        $expected = array_column($enum::cases(), 'value');
+        sort($expected);
+
+        foreach ([$group, $descriptions] as $pair) {
+            $actual = array_keys($lines[$pair]);
+            sort($actual);
+
+            expect($actual)->toBe(
+                $expected,
+                "resources/lang/en/icons.php [{$pair}] does not match {$enum}. "
+                . 'Add the case and its label in the same change.',
+            );
+        }
+
+        $checked++;
     }
+
+    // Non-vacuous. A discovery loop that matches nothing passes in silence,
+    // which is the failure this whole file exists to prevent.
+    expect($checked)->toBeGreaterThan(0, 'no labelled group found in resources/lang/en/icons.php');
 });
 
 it('declares itself as this package in config.json', function () {
