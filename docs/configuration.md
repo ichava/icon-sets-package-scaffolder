@@ -24,7 +24,7 @@ config **filename** whenever the filename differs from the package short name:
 return $configFileName === $this->shortName() ? $base : $base . '.' . $configFileName;
 ```
 
-So a file named anything other than `icon-package-scaffolder.php` would merge at
+So a file named anything other than `icon-sets-package-scaffolder.php` would merge at
 `ichava.icon-sets-package-scaffolder.<filename>.*` while every read site used the
 shorter key. Every read would return `null`, and nothing would say so.
 
@@ -40,7 +40,7 @@ falls through to.
 ## Your own stubs
 
 ```php
-'stubs_path' => base_path('stubs/ichava/icon-package'),
+'stubs_path' => base_path('stubs/ichava'),
 ```
 
 The generator walks whatever it finds there, so a custom tree needs no

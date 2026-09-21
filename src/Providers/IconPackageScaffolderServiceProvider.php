@@ -45,7 +45,12 @@ final class IconPackageScaffolderServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->publishes(
-            [$this->bundledStubsRoot() => base_path('stubs/ichava/icon-package')],
+            // `stubs/ichava`, matching the flattened source tree. The extra
+            // `icon-package` segment described a layout this package stopped
+            // having when `stubs/icon-package/` became `stubs/`, and a
+            // destination that names a directory nobody has is worse than an
+            // arbitrary one, because it reads as though it still means something.
+            [$this->bundledStubsRoot() => base_path('stubs/ichava')],
             'ichava::icon-sets-package-scaffolder-stubs',
         );
     }
