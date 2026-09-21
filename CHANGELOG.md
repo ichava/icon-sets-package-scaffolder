@@ -28,10 +28,22 @@ First release. Extracted from `ichava/core`, where the generator was a single
 - A publishable stub tree, and `ichava.icon-package-scaffolder.stubs_path` for
   pointing the generator at your own.
 - `StubEstateParityTest`, moved here from `ichava/core` with the stub tree it guards. It measures
-  a scaffolded package against `ichava/flag-icons` read off disk rather than against literals,
+  a scaffolded package against `ichava/flag-icons` at `origin/main` rather than against literals,
   because a literal encodes the estate as it was the day it was written and then ages silently
   beside the thing it was supposed to guard. Core's CI cloned the sibling for it; that clone
   moved here too.
+
+  It reads the pack through `git ls-tree` and `git show`, not off disk and not through
+  `git archive`. Both of those are wrong in ways that took a failure each to find. The working
+  tree makes the guard answer differently depending on what branch somebody has open next door,
+  red in one checkout and green in another for a reason CI cannot reproduce. `git archive`
+  applies `export-ignore`, and every pack export-ignores `.github`, `docs`, `tests` and
+  `CONTRIBUTING.md` to keep them out of dist tarballs -- so four of the things this compares
+  would not be in the archive at all, and the workflow case failed claiming the estate ships none.
+
+  The cost is a sequencing constraint that is now visible rather than hidden: a change moving
+  both the stub and the estate is red here until the estate side merges. Land the pack first,
+  then the stub.
 - 59 tests. The extraction was gated on generating byte-identical output to core's command for
   both a single-set and a multi-variant pack -- 24 files and 25 files, `diff -r` clean against
   core at `a902a5e`.

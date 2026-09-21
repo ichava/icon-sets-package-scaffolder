@@ -21,7 +21,7 @@ use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\Commands\MakeIconPacka
  *   • `orchestra/testbench: ^8|^10|^11`  -- stale
  *   • `pestphp/pest: ^2|^3`              -- two majors behind
  *
- * So this asserts against **a real pack's manifest**, read off disk, rather
+ * So this asserts against **a real pack's manifest at `origin/main`**, rather
  * than against literals. Hardcoded expectations are what let the drift happen:
  * a literal encodes the estate as it was on the day the test was written, and
  * then ages silently alongside the thing it was supposed to guard. A fixture
@@ -53,18 +53,98 @@ afterEach(function () {
  * all four workflows, and it is the pack whose `<use>` elements the SVG policy
  * corpus run already tracks, so it is unlikely to be quietly retired.
  */
-function estatePackPath(): ?string
+function estateCheckoutPath(): ?string
 {
     $candidate = dirname(__DIR__, 3) . '/flag-icons';
 
-    return is_dir($candidate) && is_file($candidate . '/composer.json') ? $candidate : null;
+    return is_dir($candidate . '/.git') ? $candidate : null;
+}
+
+/**
+ * The estate pack at `origin/main`, read from the object store.
+ *
+ * **Never the working tree.** Reading the sibling's checked-out files makes this
+ * guard answer a different question depending on what branch somebody else has
+ * open next door: a sibling on a feature branch turns this red in one checkout
+ * and green in another, for a reason CI structurally cannot reproduce, and the
+ * first instinct on seeing it is to chase a regression that is not there. That
+ * happened, in this monorepo, on this test.
+ *
+ * **And not `git archive` either, which is the obvious way to do this and is
+ * wrong.** Archive applies `export-ignore`, and every pack export-ignores
+ * `.github`, `docs`, `tests` and `CONTRIBUTING.md` to keep them out of dist
+ * tarballs -- so four of the things this guard compares would simply not be
+ * there, and the cases covering them would fail claiming the estate ships no
+ * workflows. `ls-tree` and `show` read the tree as committed.
+ *
+ * The cost is a real sequencing constraint rather than a hidden one: a change
+ * moving both the stub and the estate is red here until the estate side merges.
+ * **Land the pack first, then the stub.** A guard that went green mid-wave
+ * would not be measuring anything.
+ */
+function estateFile(string $relativePath): ?string
+{
+    $checkout = estateCheckoutPath();
+
+    if ($checkout === null) {
+        return null;
+    }
+
+    $descriptors = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
+    $process = proc_open(
+        ['git', '-C', $checkout, 'show', 'origin/main:' . $relativePath],
+        $descriptors,
+        $pipes,
+    );
+
+    if (! is_resource($process)) {
+        return null;
+    }
+
+    $contents = (string) stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+
+    return proc_close($process) === 0 ? $contents : null;
+}
+
+/**
+ * Paths under $prefix at `origin/main`, repo-relative.
+ *
+ * @return list<string>
+ */
+function estateFiles(string $prefix): array
+{
+    $checkout = estateCheckoutPath();
+
+    if ($checkout === null) {
+        return [];
+    }
+
+    $descriptors = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
+    $process = proc_open(
+        ['git', '-C', $checkout, 'ls-tree', '-r', '--name-only', 'origin/main', '--', $prefix],
+        $descriptors,
+        $pipes,
+    );
+
+    if (! is_resource($process)) {
+        return [];
+    }
+
+    $listing = (string) stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    proc_close($process);
+
+    return array_values(array_filter(explode("\n", trim($listing))));
 }
 
 function estatePackManifest(): ?array
 {
-    $path = estatePackPath();
+    $manifest = estateFile('composer.json');
 
-    return $path === null ? null : json_decode((string) file_get_contents($path . '/composer.json'), true);
+    return $manifest === null ? null : json_decode($manifest, true);
 }
 
 function scaffoldForParity(string $root): void
@@ -88,8 +168,8 @@ function scaffoldForParity(string $root): void
  */
 function skipWithoutEstate(): void
 {
-    if (estatePackPath() === null) {
-        test()->markTestSkipped('flag-icons sibling not present; parity guard needs the monorepo working tree.');
+    if (estatePackManifest() === null) {
+        test()->markTestSkipped('flag-icons not resolvable at origin/main; parity guard needs the sibling clone.');
     }
 }
 
@@ -141,7 +221,7 @@ it('scaffolds a provider importing the namespace package-tools actually publishe
     scaffoldForParity($this->scaffoldRoot);
 
     $generated = (string) file_get_contents($this->scaffoldRoot . '/src/Providers/IconsServiceProvider.php');
-    $estate = (string) file_get_contents(estatePackPath() . '/src/Providers/IconsServiceProvider.php');
+    $estate = (string) estateFile('src/Providers/IconsServiceProvider.php');
 
     // Read the namespace out of the real pack rather than naming it here, so an
     // upstream rename is caught instead of being encoded twice.
@@ -170,7 +250,7 @@ it('scaffolds the workflows every real pack ships', function () {
     skipWithoutEstate();
     scaffoldForParity($this->scaffoldRoot);
 
-    $estateWorkflows = glob(estatePackPath() . '/.github/workflows/*.yml') ?: [];
+    $estateWorkflows = estateFiles('.github/workflows');
     expect($estateWorkflows)->not->toBeEmpty('flag-icons ships no workflows to compare against.');
 
     foreach ($estateWorkflows as $workflow) {
@@ -195,7 +275,7 @@ it('scaffolds the docs pages a real pack ships, and no docs index', function () 
 
     // Deleting the index must not take its links with it: the pages it listed
     // still have to be scaffolded, and the README still has to reach them.
-    foreach (glob(estatePackPath() . '/docs/*.md') ?: [] as $page) {
+    foreach (estateFiles('docs') as $page) {
         $name = basename($page);
         expect(file_exists($this->scaffoldRoot . '/docs/' . $name))->toBeTrue(
             "Scaffolded packages are missing docs/{$name}, which flag-icons ships.",
