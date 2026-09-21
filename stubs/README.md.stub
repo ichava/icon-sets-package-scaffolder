@@ -201,14 +201,8 @@ php artisan ichava::ichava-core.info icons --package={{packageName}}
 Update icons from the latest source:
 
 ```bash
-php artisan {{vendorKebab}}::{{kebabName}}-icons.update
-
 # With custom source
-php artisan {{vendorKebab}}::{{kebabName}}-icons.update --source=/path/to/icons
-
-# Force update without confirmation
-php artisan {{vendorKebab}}::{{kebabName}}-icons.update --force
-```
+# Force update without confirmation```
 
 ## Adding Your Own Icons
 

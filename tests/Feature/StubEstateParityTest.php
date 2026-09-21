@@ -286,16 +286,42 @@ it('scaffolds a provider importing the namespace package-tools actually publishe
     expect($generated)->not->toContain('Laranail\\PackageTools\\');
 });
 
-it('scaffolds a namespaced update command, never a bare one', function () {
+it('scaffolds no Artisan command, and would namespace one if it ever did', function () {
     skipWithoutEstate();
     scaffoldForParity($this->scaffoldRoot);
 
-    $command = (string) file_get_contents($this->scaffoldRoot . '/src/Commands/UpdateIconsCommand.php');
+    // Two assertions, and the first is the one with teeth.
+    //
+    // The stub used to ship an UpdateIconsCommand extending a core class that
+    // has never existed, so the generated provider registered a missing class
+    // and every scaffolded package fatally failed to boot. No real pack has ever
+    // had src/Commands; updates go through `ichava::ichava-core.check-updates`
+    // and the sync-upstream workflow. So a generated pack registering *any*
+    // command is drift until the estate grows one.
+    $signatures = [];
 
-    // `V59`: Artisan's command table is a flat map, so a bare generic slug does
-    // not collide loudly -- it replaces whatever got there first.
-    expect($command)->toMatch('/\$signature\s*=\s*\'ichava::[a-z0-9-]+\.[a-z-]+/');
-    expect($command)->not->toMatch('/\$signature\s*=\s*\'ichava:[a-z]/');
+    // RecursiveDirectoryIterator, not glob(). PHP's glob does not treat `**` as
+    // "any depth" -- `src/**/*.php` matches exactly one directory level, so a
+    // command nested deeper would go unseen and this guard would pass by finding
+    // nothing. Measured: on a tree with src/Y.php and src/Commands/X.php,
+    // glob('src/**/*.php') returns 1 file and the iterator returns 2.
+    $php = new RegexIterator(
+        new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->scaffoldRoot . '/src')),
+        '/\\.php$/',
+    );
+
+    foreach ($php as $file) {
+        preg_match_all("/\\\$signature\\s*=\\s*'([^\\s']+)/", (string) file_get_contents($file->getPathname()), $m);
+        $signatures = [...$signatures, ...$m[1]];
+    }
+
+    expect($signatures)->toBe([], 'A scaffolded pack registers a command the estate does not have.');
+
+    // And if that ever changes deliberately, `V59` still applies: Artisan's table
+    // is a flat map, so a bare generic slug replaces whatever got there first.
+    foreach ($signatures as $signature) {
+        expect($signature)->toMatch('/^[a-z0-9-]+::[a-z0-9-]+\\./');
+    }
 });
 
 it('scaffolds the workflows every real pack ships', function () {
@@ -311,6 +337,36 @@ it('scaffolds the workflows every real pack ships', function () {
             "Scaffolded packages are missing {$name}, which flag-icons ships.",
         );
     }
+});
+
+it('scaffolds the same src/ shape a real pack has', function () {
+    skipWithoutEstate();
+    scaffoldForParity($this->scaffoldRoot);
+
+    // The case that was missing, and what it cost: the stub shipped
+    // `src/Commands/UpdateIconsCommand.php` extending
+    // `Simtabi\\Laranail\\Ichava\\Commands\\UpdateIconsCommand`, a class core has
+    // never had. The generated provider registered it, so **every scaffolded
+    // package fatally failed to boot** -- and nothing noticed, because the other
+    // cases compare composer, the provider, the workflows and the docs, and the
+    // end-to-end test only runs `php -l`, which is syntax and not resolution.
+    //
+    // Comparing the directory listing is cheap and catches the whole class: a
+    // stub that grows a subsystem the estate does not have, or loses one it does.
+    $estate = array_values(array_diff(estateFiles('src'), ['']));
+    $estateDirs = array_unique(array_map(
+        static fn (string $p): string => explode('/', substr($p, strlen('src/')))[0],
+        $estate,
+    ));
+    sort($estateDirs);
+
+    $generated = array_map(
+        static fn (string $p): string => basename($p),
+        glob($this->scaffoldRoot . '/src/*', GLOB_ONLYDIR) ?: [],
+    );
+    sort($generated);
+
+    expect($generated)->toBe($estateDirs);
 });
 
 it('scaffolds the docs pages a real pack ships, and no docs index', function () {
