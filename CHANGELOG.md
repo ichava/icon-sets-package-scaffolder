@@ -68,6 +68,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   default, but the point of this change is that a missing SBOM must not fail the publish, so it
   should not rest on a default a future reader has to know.
 
+- **`sync-upstream.yml.stub` word-split its `--force` flag.** `FLAGS=""` built a string that
+  reached `sync --pack="$PACK_SLUG" $FLAGS` unquoted, so the argument arrived only because
+  word-splitting happened to do the right thing — and quoting it, the obvious repair, would have
+  passed an empty argument instead. It is now an array: `FLAGS=()`, `FLAGS+=(--force)`,
+  `"${FLAGS[@]}"`, which the five real packs already carry.
+
+  **The new job found this on its first run**, as `SC2086` on the rendered file. It had been in
+  the stub since the workflow was written and no gate in the estate could see it.
+
 - **The stub's `ichava/core` constraint was a release behind the estate.** It read
   `^0.2.5 || ^0.3` while all five packs had moved to `^0.2.8 || ^0.3`, so a freshly scaffolded
   pack would resolve an older core than any pack in the family. `StubEstateParityTest` catches

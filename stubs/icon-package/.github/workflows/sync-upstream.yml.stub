@@ -74,8 +74,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACK_SLUG: ${{ github.event.repository.name }}
         run: |
-          FLAGS=""
-          if [ "${{ inputs.force }}" = "true" ]; then FLAGS="$FLAGS --force"; fi
+          # An array, not a string: $FLAGS unquoted relies on word-splitting to
+          # expand to nothing when empty, and quoting it would pass an empty
+          # argument instead. "${FLAGS[@]}" does both correctly.
+          FLAGS=()
+          if [ "${{ inputs.force }}" = "true" ]; then FLAGS+=(--force); fi
 
           # The push happens INSIDE the container. `gh auth setup-git` ran on
           # the runner, and actions/checkout leaves its credential in a file
@@ -95,7 +98,7 @@ jobs:
             -e GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
             -e GIT_CONFIG_VALUE_1="$AUTH_HEADER" \
             ichava-maintainer-toolkit:local \
-            sync --pack="$PACK_SLUG" $FLAGS
+            sync --pack="$PACK_SLUG" "${FLAGS[@]}"
 
       - name: Clean up
         if: always()
