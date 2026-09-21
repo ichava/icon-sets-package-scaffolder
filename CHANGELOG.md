@@ -81,8 +81,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `^0.2.5 || ^0.3` while all five packs had moved to `^0.2.8 || ^0.3`, so a freshly scaffolded
   pack would resolve an older core than any pack in the family. `StubEstateParityTest` catches
   this by measuring the stub against `flag-icons` at `origin/main` rather than against a literal,
-  but it skips when no sibling checkout is present — which is every CI runner. It is a guard that
-  only fires on a maintainer's machine; run the suite locally before releasing.
+  and `tests.yml` clones the sibling so the guard runs on CI as well as locally.
+
+  **The window it leaves is a scheduling one, not a coverage one**, and the margin here was four
+  minutes: this package's last CI run before the drift started at 16:03:32 UTC, `flag-icons`
+  merged `^0.2.8 || ^0.3` at 16:07:53 UTC, and that run passed because it was correct when it
+  ran. A cross-repo guard is only evaluated when *this* repo has a pull request, and nothing in
+  the estate triggers one — so the stub stayed behind until the next local `vendor/bin/pest`.
+  Closing that properly means a scheduled run here or moving the assertion to where the estate
+  changes; both are decisions rather than repairs, and neither is made yet. Until one is, run
+  the suite locally before releasing.
 
 - **The `[Unreleased]` block carried two `### Fixed` sections describing the same SBOM change in
   contradictory terms.** One said a second failure publishes the release without the asset; the
