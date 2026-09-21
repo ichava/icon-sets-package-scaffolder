@@ -5,48 +5,7 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Fixed
-
-- **The stubs publish destination named a directory that no longer exists.** The bundled tree
-  became `stubs/` when `stubs/icon-package/` was flattened, but the provider still published to
-  `base_path('stubs/ichava/icon-package')`, and two docs pages repeated it as the `stubs_path`
-  example. Now `base_path('stubs/ichava')`, matching the source shape.
-
-  The destination is arbitrary -- it is a directory in the host application, and nothing breaks
-  if it is wrong. It is worth fixing anyway: a path that names a layout nobody has reads as
-  though it still means something, and the next person to change the tree will look for the
-  `icon-package` directory it implies.
-
-- **`docs/configuration.md` named the wrong config file** in the `V39` explanation --
-  `icon-package-scaffolder.php` rather than `icon-sets-package-scaffolder.php`. It slipped the
-  rebrand sweep because that pass matched `config/icon-package-scaffolder.php` with its
-  directory prefix, and this instance is bare. Verified this time by reading the filename off
-  disk and the config key out of the provider, then checking both appear in the page.
-
-## [Unreleased]
-
-### Fixed
-
-- **Every scaffolded package failed to boot.** The stub tree shipped
-  `src/Commands/UpdateIconsCommand.php`, extending
-  `Simtabi\Laranail\Ichava\Commands\UpdateIconsCommand` -- a class `ichava/core` has never
-  had, at any commit. The generated provider registered it with
-  `->hasCommand(UpdateIconsCommand::class)`, so a generated pack fatals the moment Laravel
-  resolves its provider.
-
-  Removed rather than repaired, because the estate does not have it: no pack in the ecosystem
-  has ever had a `src/Commands/` directory. Refreshing assets goes through the `sync-upstream`
-  workflow and `ichava/maintainer-toolkit`, and checking for upstream releases goes through
-  `ichava::ichava-core.check-updates`. The generated README and attribution page now say that
-  instead of documenting a command that could not run.
-
-  **Nothing caught it**, which is the more interesting half. The parity guard compared
-  `composer.json`, the provider, the workflows and the docs pages -- not `src/`. The end-to-end
-  test ran `php -l` over every generated file, which is syntax and not class resolution. So a
-  package that could not boot passed a suite that scaffolded it, linted it and compared it
-  against a real pack.
+## [0.1.1] - 2026-09-21
 
 ### Added
 
@@ -62,22 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `**` as "any depth" -- `src/**/*.php` matches exactly one directory level, so the first
   version of this guard would have missed a nested command and passed by finding nothing.
 
-## [Unreleased]
-
-### Fixed
-
-- **The parity guard resolved the estate sibling by a name that no longer exists**, so it
-  skipped instead of measuring. The 2026-09-21 restructure moved every package under
-  `packages/` and renamed the local checkouts -- `flag-icons` is `icons-flag` now, while the
-  GitHub repository keeps its old name -- and the guard spelled the directory. 59 passed became
-  51 passed and 8 skipped, and a skip is green.
-
-  `dirname(__DIR__, 3)` was never the problem and is unchanged: it resolves to the package
-  parent, which was `ichava/` before and is `packages/` now, because the whole tree moved
-  together. The docblock says so, because the depth is the obvious thing to reach for and it is
-  not wrong.
-
-### Added
 
 - **A skip is now a failure wherever the sibling was promised.** `ICHAVA_REQUIRE_ESTATE=1` makes
   `skipWithoutEstate()` fail instead of skip, and both CI and the scheduled run set it because
@@ -102,9 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   disables scheduled workflows after 60 days of repository inactivity, announcing it only in the
   Actions tab. A quiet package is exactly the one whose stub drifts.
 
-## [Unreleased]
-
-### Added
 
 - **Scaffolded packs now ship the canonical `resources/` shape.** The stub tree
   carried `resources/assets/svg/config.json` and nothing else, so every
@@ -132,18 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `name`/`description` fails the second; adding an enum case without a label
   fails the third.
 
-### Fixed
-
-- **The parity guard could not see an estate sibling checked out as a worktree.**
-  `estateCheckoutPath()` tested `is_dir($path . '/.git')`, but `.git` is a
-  directory only in a clone -- in a linked worktree it is a file. The guard
-  skipped silently wherever the sibling was a worktree, and since skipping is
-  now a CI failure, a guard blind to a valid checkout is worse than an absent
-  one. It tests `file_exists()` now.
-
-## [Unreleased]
-
-### Added
 
 - **`actionlint` runs on every pull request.** Nothing validated the workflow files at all:
   `release.yml` triggers only on `push: tags`, so a broken workflow was first observed as a
@@ -184,6 +112,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   just closed.
 
 ### Fixed
+
+- **The stubs publish destination named a directory that no longer exists.** The bundled tree
+  became `stubs/` when `stubs/icon-package/` was flattened, but the provider still published to
+  `base_path('stubs/ichava/icon-package')`, and two docs pages repeated it as the `stubs_path`
+  example. Now `base_path('stubs/ichava')`, matching the source shape.
+
+  The destination is arbitrary -- it is a directory in the host application, and nothing breaks
+  if it is wrong. It is worth fixing anyway: a path that names a layout nobody has reads as
+  though it still means something, and the next person to change the tree will look for the
+  `icon-package` directory it implies.
+
+- **`docs/configuration.md` named the wrong config file** in the `V39` explanation --
+  `icon-package-scaffolder.php` rather than `icon-sets-package-scaffolder.php`. It slipped the
+  rebrand sweep because that pass matched `config/icon-package-scaffolder.php` with its
+  directory prefix, and this instance is bare. Verified this time by reading the filename off
+  disk and the config key out of the provider, then checking both appear in the page.
+
+
+- **Every scaffolded package failed to boot.** The stub tree shipped
+  `src/Commands/UpdateIconsCommand.php`, extending
+  `Simtabi\Laranail\Ichava\Commands\UpdateIconsCommand` -- a class `ichava/core` has never
+  had, at any commit. The generated provider registered it with
+  `->hasCommand(UpdateIconsCommand::class)`, so a generated pack fatals the moment Laravel
+  resolves its provider.
+
+  Removed rather than repaired, because the estate does not have it: no pack in the ecosystem
+  has ever had a `src/Commands/` directory. Refreshing assets goes through the `sync-upstream`
+  workflow and `ichava/maintainer-toolkit`, and checking for upstream releases goes through
+  `ichava::ichava-core.check-updates`. The generated README and attribution page now say that
+  instead of documenting a command that could not run.
+
+  **Nothing caught it**, which is the more interesting half. The parity guard compared
+  `composer.json`, the provider, the workflows and the docs pages -- not `src/`. The end-to-end
+  test ran `php -l` over every generated file, which is syntax and not class resolution. So a
+  package that could not boot passed a suite that scaffolded it, linted it and compared it
+  against a real pack.
+
+
+- **The parity guard resolved the estate sibling by a name that no longer exists**, so it
+  skipped instead of measuring. The 2026-09-21 restructure moved every package under
+  `packages/` and renamed the local checkouts -- `flag-icons` is `icons-flag` now, while the
+  GitHub repository keeps its old name -- and the guard spelled the directory. 59 passed became
+  51 passed and 8 skipped, and a skip is green.
+
+  `dirname(__DIR__, 3)` was never the problem and is unchanged: it resolves to the package
+  parent, which was `ichava/` before and is `packages/` now, because the whole tree moved
+  together. The docblock says so, because the depth is the obvious thing to reach for and it is
+  not wrong.
+
+
+- **The parity guard could not see an estate sibling checked out as a worktree.**
+  `estateCheckoutPath()` tested `is_dir($path . '/.git')`, but `.git` is a
+  directory only in a clone -- in a linked worktree it is a file. The guard
+  skipped silently wherever the sibling was a worktree, and since skipping is
+  now a CI failure, a guard blind to a valid checkout is worse than an absent
+  one. It tests `file_exists()` now.
+
 
 - **The estate guard resolved a sibling directory that no longer exists.** The 2026-09-21
   restructure moved the tree to `ichava/packages/` and renamed the local checkouts —
