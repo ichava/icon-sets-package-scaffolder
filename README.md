@@ -27,13 +27,13 @@ core would be a cycle.
 ## Usage
 
 ```bash
-php artisan ichava::icon-package-scaffolder.make
+php artisan ichava::icon-sets-package-scaffolder.make
 ```
 
 Answer the prompts, or supply everything and skip them:
 
 ```bash
-php artisan ichava::icon-package-scaffolder.make Hero \
+php artisan ichava::icon-sets-package-scaffolder.make Hero \
   --vendor=Acme --email=dev@example.com \
   --path=../acme-hero-icons --type=multi --variants=outline,solid \
   --no-interaction
@@ -57,7 +57,7 @@ Hosted at
 
 ### Reference
 
-- [`ichava::icon-package-scaffolder.make`](docs/tools/make-command.md) - every argument and option
+- [`ichava::icon-sets-package-scaffolder.make`](docs/tools/make-command.md) - every argument and option
 - [Stub tokens](docs/tools/tokens.md) - the token vocabulary a stub may use
 
 ### Recipes

@@ -1,4 +1,4 @@
-# `ichava::icon-package-scaffolder.make`
+# `ichava::icon-sets-package-scaffolder.make`
 
 The one command this package registers. Scaffolds a complete icon package.
 
@@ -28,7 +28,7 @@ environment, so a wrapper can retry one and not the other.
 
 ## The name
 
-`ichava::icon-package-scaffolder.make`, and no bare alias. An alias like
+`ichava::icon-sets-package-scaffolder.make`, and no bare alias. An alias like
 `make:icon-package` would be a generic key in Artisan's flat command map -- which
 is the collision the namespaced name exists to prevent -- and it would sit inside
 Laravel's own `make:` namespace, where a framework command could claim it.

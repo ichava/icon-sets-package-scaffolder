@@ -5,11 +5,11 @@ One setting, and the reason the config file is named what it is.
 ## The file
 
 ```bash
-php artisan vendor:publish --tag=ichava::icon-package-scaffolder-config
+php artisan vendor:publish --tag=ichava::icon-sets-package-scaffolder-config
 ```
 
-Lands at `config/icon-package-scaffolder.php`, read at
-`ichava.icon-package-scaffolder.*`.
+Lands at `config/icon-sets-package-scaffolder.php`, read at
+`ichava.icon-sets-package-scaffolder.*`.
 
 | Key | Env | Default | What it does |
 |---|---|---|---|
@@ -25,7 +25,7 @@ return $configFileName === $this->shortName() ? $base : $base . '.' . $configFil
 ```
 
 So a file named anything other than `icon-package-scaffolder.php` would merge at
-`ichava.icon-package-scaffolder.<filename>.*` while every read site used the
+`ichava.icon-sets-package-scaffolder.<filename>.*` while every read site used the
 shorter key. Every read would return `null`, and nothing would say so.
 
 That is not hypothetical. `ichava/core` shipped `config/ichava.php` and merged at
@@ -47,7 +47,7 @@ The generator walks whatever it finds there, so a custom tree needs no
 registration -- only the same token vocabulary. Start from a copy:
 
 ```bash
-php artisan vendor:publish --tag=ichava::icon-package-scaffolder-stubs
+php artisan vendor:publish --tag=ichava::icon-sets-package-scaffolder-stubs
 ```
 
 See [Scaffold from your own stubs](recipes/custom-stubs.md).
