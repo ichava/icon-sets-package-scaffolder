@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Every scaffolded package failed to boot.** The stub tree shipped
+  `src/Commands/UpdateIconsCommand.php`, extending
+  `Simtabi\Laranail\Ichava\Commands\UpdateIconsCommand` -- a class `ichava/core` has never
+  had, at any commit. The generated provider registered it with
+  `->hasCommand(UpdateIconsCommand::class)`, so a generated pack fatals the moment Laravel
+  resolves its provider.
+
+  Removed rather than repaired, because the estate does not have it: no pack in the ecosystem
+  has ever had a `src/Commands/` directory. Refreshing assets goes through the `sync-upstream`
+  workflow and `ichava/maintainer-toolkit`, and checking for upstream releases goes through
+  `ichava::ichava-core.check-updates`. The generated README and attribution page now say that
+  instead of documenting a command that could not run.
+
+  **Nothing caught it**, which is the more interesting half. The parity guard compared
+  `composer.json`, the provider, the workflows and the docs pages -- not `src/`. The end-to-end
+  test ran `php -l` over every generated file, which is syntax and not class resolution. So a
+  package that could not boot passed a suite that scaffolded it, linted it and compared it
+  against a real pack.
+
+### Added
+
+- **Two parity cases over the generated `src/` tree**, both mutation-checked by reintroducing the
+  stub and confirming they go red:
+
+  - the top-level directory listing must match the estate pack's, which catches a stub that
+    grows a subsystem the estate does not have or loses one it does;
+  - a generated pack must register no Artisan command at all, and `V59`'s namespacing still
+    applies if one is ever added deliberately.
+
+  The second walks the tree with `RecursiveDirectoryIterator`. PHP's `glob()` does not treat
+  `**` as "any depth" -- `src/**/*.php` matches exactly one directory level, so the first
+  version of this guard would have missed a nested command and passed by finding nothing.
+
+## [Unreleased]
+
+### Fixed
+
 - **The parity guard resolved the estate sibling by a name that no longer exists**, so it
   skipped instead of measuring. The 2026-09-21 restructure moved every package under
   `packages/` and renamed the local checkouts -- `flag-icons` is `icons-flag` now, while the
