@@ -47,14 +47,14 @@ jobs:
         # the pack is unreachable is deliberate: a guard that cannot run
         # should say so rather than pass by skipping.
         #
-        # The repository is `flag-icons` and the directory is `icons-flag`: the
-        # 2026-09-21 restructure renamed the local checkouts and left the
-        # remotes alone. `estateCandidatePath()` in the test spells the
+        # The repository and the directory are both `icon-sets-flag`. They
+        # diverged during the 2026-09-21 restructure and the rebrand closed
+        # the gap. `estateCandidatePath()` in the test spells the
         # directory, so the two move together or the guard silently skips.
         run: |
           git clone --depth 1 --no-tags \
-            https://github.com/ichava/flag-icons.git \
-            "$(dirname "$GITHUB_WORKSPACE")/icons-flag"
+            https://github.com/ichava/icon-sets-flag.git \
+            "$(dirname "$GITHUB_WORKSPACE")/icon-sets-flag"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2

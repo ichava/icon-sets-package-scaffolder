@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Console;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console;
 
 use Illuminate\Console\OutputStyle;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\ScaffoldResult;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\ScaffoldResult;
 
 /**
  * Prints what to do with a freshly scaffolded package.

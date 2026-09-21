@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Services;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services;
 
 use RuntimeException;
 use Symfony\Component\Finder\Finder;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\IconSetType;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconSetType;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
 
 /**
  * The validation these tests pin used to live in `validate:` closures on the

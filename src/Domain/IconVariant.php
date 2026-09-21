@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain;
 
 use Illuminate\Support\Str;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
 
 /**
  * One named icon style within a multi-variant pack -- "outline", "solid", "duotone".

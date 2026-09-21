@@ -66,8 +66,8 @@ jobs:
         uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
         with:
           format: cyclonedx-json
-          output-file: ichava-icon-package-scaffolder.cdx.json
-          artifact-name: ichava-icon-package-scaffolder.cdx.json
+          output-file: ichava-icon-sets-package-scaffolder.cdx.json
+          artifact-name: ichava-icon-sets-package-scaffolder.cdx.json
 
       - name: Back off before retrying the SBOM
         if: steps.sbom.outcome == 'failure'
@@ -80,8 +80,8 @@ jobs:
         uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
         with:
           format: cyclonedx-json
-          output-file: ichava-icon-package-scaffolder.cdx.json
-          artifact-name: ichava-icon-package-scaffolder.cdx.json
+          output-file: ichava-icon-sets-package-scaffolder.cdx.json
+          artifact-name: ichava-icon-sets-package-scaffolder.cdx.json
 
       - name: Note that the release ships without an SBOM
         if: steps.sbom.outcome == 'failure' && steps.sbom_retry.outcome == 'failure'
@@ -116,7 +116,7 @@ jobs:
             echo 'body<<CHANGELOG_EOF'
             printf '%s\n' "$SECTION"
             echo ''
-            echo "**Full changelog:** https://github.com/ichava/icon-package-scaffolder/blob/main/CHANGELOG.md"
+            echo "**Full changelog:** https://github.com/ichava/icon-sets-package-scaffolder/blob/main/CHANGELOG.md"
             echo 'CHANGELOG_EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -125,7 +125,7 @@ jobs:
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: true
-          files: ichava-icon-package-scaffolder.cdx.json
+          files: ichava-icon-sets-package-scaffolder.cdx.json
           # Explicit, though it is the action's default: a missing SBOM must not
           # fail the publish, so it must not rest on a default a reader has to know.
           fail_on_unmatched_files: false

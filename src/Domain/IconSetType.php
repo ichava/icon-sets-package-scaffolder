@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain;
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidPackageDefinition;
 
 /**
  * Whether a pack ships one flat icon set or several named variants.

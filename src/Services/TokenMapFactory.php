@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Services;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services;
 
 use Illuminate\Support\Str;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
 /**
  * Turns a definition into the `{{token}} => value` map the stubs substitute.

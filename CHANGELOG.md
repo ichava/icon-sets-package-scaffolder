@@ -223,4 +223,4 @@ First release. Extracted from `ichava/core`, where the generator was a single
 - A scaffolded pack's update command is named `ichava::<slug>-icons.update`
   regardless of the vendor you give. Inherited from the stub.
 
-[0.1.0]: https://github.com/ichava/icon-package-scaffolder/releases/tag/v0.1.0
+[0.1.0]: https://github.com/ichava/icon-sets-package-scaffolder/releases/tag/v0.1.0

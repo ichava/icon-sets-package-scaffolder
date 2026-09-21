@@ -24,11 +24,11 @@ declare(strict_types=1);
  */
 
 use Illuminate\Container\Container;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\IconSetType;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubLocator;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Actions\ScaffoldIconPackage;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconSetType;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Console;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console;
 
 use RuntimeException;
 
@@ -10,8 +10,8 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\confirm;
 
 use Illuminate\Filesystem\Filesystem;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Domain\PackageDefinition;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
 /**
  * Turns whatever the caller gave for a destination into a usable directory.

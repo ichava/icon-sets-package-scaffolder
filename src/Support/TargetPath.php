@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Support;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support;
 
 use InvalidArgumentException;
 

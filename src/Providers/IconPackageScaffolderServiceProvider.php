@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Simtabi\Laranail\Ichava\IconPackageScaffolder\Providers;
+namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Providers;
 
 use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPath;
 use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPackage;
 use Simtabi\Laranail\Package\Tools\Providers\PackageServiceProvider;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Services\StubLocator;
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Console\Commands\MakeIconPackageCommand;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Commands\MakeIconPackageCommand;
 
 /**
  * Registers the scaffolder with a host application.
@@ -27,9 +27,9 @@ final class IconPackageScaffolderServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->setName('ichava/icon-package-scaffolder')
+            ->setName('ichava/icon-sets-package-scaffolder')
             ->setPathFrom(source: $this, levelsUp: 2)
-            ->hasConfigFile('icon-package-scaffolder')
+            ->hasConfigFile('icon-sets-package-scaffolder')
             ->hasCommands(MakeIconPackageCommand::class);
     }
 
@@ -46,13 +46,13 @@ final class IconPackageScaffolderServiceProvider extends PackageServiceProvider
     {
         $this->publishes(
             [$this->bundledStubsRoot() => base_path('stubs/ichava/icon-package')],
-            'ichava::icon-package-scaffolder-stubs',
+            'ichava::icon-sets-package-scaffolder-stubs',
         );
     }
 
     private function stubsRoot(): string
     {
-        $configured = config('ichava.icon-package-scaffolder.stubs_path');
+        $configured = config('ichava.icon-sets-package-scaffolder.stubs_path');
 
         return is_string($configured) && trim($configured) !== ''
             ? rtrim($configured, '/\\')

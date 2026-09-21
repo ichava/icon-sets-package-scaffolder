@@ -1,7 +1,7 @@
-# ichava/icon-package-scaffolder
+# ichava/icon-sets-package-scaffolder
 
-[![Tests](https://github.com/ichava/icon-package-scaffolder/actions/workflows/tests.yml/badge.svg)](https://github.com/ichava/icon-package-scaffolder/actions/workflows/tests.yml)
-[![Static analysis](https://github.com/ichava/icon-package-scaffolder/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ichava/icon-package-scaffolder/actions/workflows/code-quality.yml)
+[![Tests](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/tests.yml/badge.svg)](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/tests.yml)
+[![Static analysis](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/code-quality.yml)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 > Scaffolds a complete Ichava icon package from one command: a token-substituted
@@ -14,7 +14,7 @@ ecosystem is published to Packagist yet, so a Packagist badge would render as
 ## Install
 
 ```bash
-composer require --dev ichava/icon-package-scaffolder
+composer require --dev ichava/icon-sets-package-scaffolder
 ```
 
 A dev dependency on purpose. Scaffolding is something you do once per pack, on a
@@ -45,7 +45,7 @@ Type the bare noun. `Hero` yields `acme/hero-icons` and `Acme\HeroIcons`; the
 ## <a name="documentation"></a>Documentation
 
 Hosted at
-[opensource.simtabi.com/documentation/ichava/icon-package-scaffolder/](https://opensource.simtabi.com/documentation/ichava/icon-package-scaffolder/).
+[opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/](https://opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/).
 
 ### Guides
 

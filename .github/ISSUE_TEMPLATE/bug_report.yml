@@ -1,5 +1,5 @@
 name: Bug report
-description: Something in ichava/icon-package-scaffolder misbehaves
+description: Something in ichava/icon-sets-package-scaffolder misbehaves
 labels: [bug]
 body:
   - type: textarea

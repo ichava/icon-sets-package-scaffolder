@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Ichava\IconPackageScaffolder\Support\TargetPath;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
 
 it('keeps an absolute path as given', function (): void {
     expect(TargetPath::resolve('/srv/packages/acme-hero-icons')->value)
