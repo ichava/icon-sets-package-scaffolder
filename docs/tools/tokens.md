@@ -1,3 +1,5 @@
+[← Docs index](../../README.md#documentation)
+
 # Stub tokens
 
 Every `{{token}}` a stub may use, and what it expands to.

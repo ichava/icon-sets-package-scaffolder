@@ -1,3 +1,5 @@
+[← Docs index](../README.md#documentation)
+
 # Installation
 
 What this package needs, and how it attaches to a Laravel application.

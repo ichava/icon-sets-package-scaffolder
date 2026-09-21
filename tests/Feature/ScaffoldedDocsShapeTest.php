@@ -53,8 +53,14 @@ it('scaffolds docs in the shape every pack in the estate uses', function (): voi
         // needle, not a failure message. Asserting a boolean is the only way
         // to attach one here, and writing it the other way is how this test
         // first failed on a file that was perfectly correct.
-        expect(str_starts_with($body, '# '))
-            ->toBeTrue("{$name} does not open with an H1");
+        // The page template gained a breadcrumb above the H1: the same link the
+        // page closes with, so a reader at the top of a long page can leave
+        // without scrolling. It is asserted exactly, rather than as "starts
+        // with `[`", because the defect this replaced was four different
+        // spellings across the estate and sixteen of them pointing at an
+        // anchor no README carried.
+        expect(str_starts_with($body, '[← Docs index](../README.md#documentation)' . "\n\n# "))
+            ->toBeTrue("{$name} does not open with the breadcrumb, a blank line, then an H1");
 
         expect(str_contains($body, '[← Docs index](../README.md#documentation)'))
             ->toBeTrue("{$name} has no footer");

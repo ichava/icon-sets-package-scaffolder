@@ -1,3 +1,5 @@
+[← Docs index](../README.md#documentation)
+
 # Customisation
 
 *How-to guide.*
