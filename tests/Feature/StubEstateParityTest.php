@@ -190,12 +190,32 @@ function scaffoldForParity(string $root): void
  */
 function skipWithoutEstate(): void
 {
-    if (estatePackManifest() === null) {
-        test()->markTestSkipped(sprintf(
-            'parity guard needs the estate sibling at %s (not found, or its origin/main is unreadable)',
-            estateCandidatePath(),
-        ));
+    if (estatePackManifest() !== null) {
+        return;
     }
+
+    $reason = sprintf(
+        'parity guard needs the estate sibling at %s (not found, or its origin/main is unreadable)',
+        estateCandidatePath(),
+    );
+
+    // Somewhere that promised the sibling, a skip is a failure.
+    //
+    // Pest exits 0 on a skipped test, so a run where the clone step broke, the
+    // directory was renamed, or the pack went private reports green and says
+    // nothing -- which is the exact shape of silent drift this guard exists to
+    // catch, arriving through the guard itself. It happened: the 2026-09-21
+    // rename turned 59 passed into 51 passed and 8 skipped, and nothing went red.
+    //
+    // This version of Pest has no --fail-on-skipped, so the contract lives here
+    // rather than in a grep over the output. CI and the scheduled run set
+    // ICHAVA_REQUIRE_ESTATE=1 because they provision the sibling themselves; a
+    // bare local checkout does not, and still skips politely.
+    if (filter_var(getenv('ICHAVA_REQUIRE_ESTATE') ?: '', FILTER_VALIDATE_BOOLEAN)) {
+        test()->fail($reason . ' -- ICHAVA_REQUIRE_ESTATE is set, so this is a failure rather than a skip');
+    }
+
+    test()->markTestSkipped($reason);
 }
 
 it('scaffolds the same runtime constraints a real pack declares', function () {

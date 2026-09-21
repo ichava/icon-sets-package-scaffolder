@@ -86,4 +86,10 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
+        # This job cloned the sibling itself, so a skipped parity case means the
+        # clone broke or the directory name drifted -- not that the pack is
+        # legitimately absent. Pest exits 0 on a skip, so without this the guard
+        # would report green while measuring nothing.
+        env:
+          ICHAVA_REQUIRE_ESTATE: '1'
         run: vendor/bin/pest
