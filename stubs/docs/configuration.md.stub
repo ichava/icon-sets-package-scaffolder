@@ -1,0 +1,51 @@
+# Configuration
+
+The `{{bladeNamespace}}` config key, its environment variables, and what each one changes.
+
+Publish the file to override anything in it:
+
+```bash
+php artisan vendor:publish --tag={{vendorKebab}}::{{bladeNamespace}}-config
+```
+
+## The config file
+
+`config/{{bladeNamespace}}.php`. The filename matters: `laranail/package-tools` resolves a
+package's config **by the name the provider passes to `hasConfigFile()`**, so a file named
+anything else is merged under a doubled key and every read returns `null` — silently.
+
+```php
+return [
+    // Whether this pack registers its icons at all.
+    'enabled' => env('{{snakeNameUpper}}_ICONS_ENABLED', true),
+
+    // Override where the SVGs are read from. Leave null for the shipped set.
+    'path' => env('{{snakeNameUpper}}_ICONS_PATH'),
+
+    'cache' => [
+        'enabled' => true,
+        'prefix'  => '{{prefix}}',
+    ],
+];
+```
+
+Read it through the namespaced key, not the bare filename:
+
+```php
+config('{{vendorKebab}}.{{bladeNamespace}}.enabled');
+```
+
+## Environment variables
+
+```env
+{{snakeNameUpper}}_ICONS_ENABLED=true
+{{snakeNameUpper}}_ICONS_PATH=/path/to/icons
+```
+
+> Setting `enabled` to `false` stops the pack registering its directory, so its icons vanish
+> from the registry and every lookup misses. Rows already seeded into the database are not
+> removed by it.
+
+---
+
+[← Docs index](../README.md#documentation)

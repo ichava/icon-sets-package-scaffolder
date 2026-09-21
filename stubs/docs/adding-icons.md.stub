@@ -1,0 +1,41 @@
+# Adding icons
+
+How to put your own SVGs into this pack, and the conventions the pipeline expects.
+
+## Where files go
+
+```
+resources/assets/svg/
+├── config.json          the pack's canonical metadata
+└── files/               single-set packs put SVGs here directly
+    ├── regular/         multi-variant packs use one directory per variant
+    └── solid/
+```
+
+Record the pack's own facts in `config.json` — name, version, licence, upstream. Nothing else
+should restate them: `IconRegistry` reads that file, and a second copy is how a pack once
+shipped translations claiming one licence while `config.json` said another.
+
+After adding files:
+
+```bash
+php artisan ichava::ichava-core.cache clear
+php artisan ichava::ichava-core.database seed --package={{packageName}}
+```
+
+## What the pipeline expects
+
+- **Valid SVG.** A file that fails to parse renders as nothing, not as an error.
+- **No `width` or `height` on the root** when a `viewBox` is present. Core drops them anyway,
+  because an icon carrying both ignores the size the component asks for.
+- **`currentColor` for fill and stroke**, so a consumer can colour the icon with a text class.
+  A hard-coded colour is not a defect, but it cannot be overridden.
+- **Lowercase, hyphenated filenames** — `arrow-left.svg`. The filename becomes the icon name.
+
+> You do not need to hand-repair a vendored SVG that parses badly. Core's read-time pipeline
+> recovers from the ordinary author mistakes — an unclosed tag, a bare `&`, an uppercase root.
+> Fix the pipeline, not the icon.
+
+---
+
+[← Docs index](../README.md#documentation)
