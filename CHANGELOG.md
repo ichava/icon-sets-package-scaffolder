@@ -5,6 +5,35 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **The stub tree linked at documentation pages that have moved out of `ichava/documentation`.**
+  Eight links across `stubs/README.md.stub`, `stubs/docs/customization.md.stub` and
+  `stubs/docs/variants.md.stub`, so **every pack scaffolded from here would have shipped a README
+  and two docs pages pointing at 404s.**
+
+  | Was | Is |
+  |---|---|
+  | `documentation/…/core/icon-path-format.md` | `core/…/docs/tools/icon-path-format.md` |
+  | `documentation/…/core/blade-components.md` | `core/…/docs/tools/blade-components.md` |
+  | `documentation/…/core/global-helper.md` | `core/…/docs/tools/global-helper.md` |
+  | `documentation/…/icon-packs/seeding-pack-icons.md` | `core/…/docs/recipes/seed-pack-icons.md` |
+
+  The ninth was worse and would have broken even though its file survives:
+  `documentation/README.md#icon-packs` — that **anchor no longer exists** in the rewritten
+  README, which is now security-only. It points at the owning packages instead.
+
+  **The stub tree is template content, so a sweep over a repository's own docs does not see it.**
+  Eight of the nine repositories in the migration fixed their own inbound links; this one fixed
+  its `docs/` and not its `stubs/`. Same shape as the `$FLAGS` word-splitting and the dotted
+  stubs dropped by a `mv` glob: the thing that ships is not the thing that was searched.
+
+  Every new target was verified to exist on its repository's `main` before being linked — and
+  the first check said `MISSING` for all four, because the local ref was stale. Fetch before
+  believing a `cat-file -e`.
+
 ## [0.1.1] - 2026-09-21
 
 ### Added

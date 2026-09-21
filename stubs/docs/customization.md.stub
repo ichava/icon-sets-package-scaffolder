@@ -67,5 +67,5 @@ Decorative icons (next to a text label) can omit the label, the renderer adds `a
 ## See also
 
 - [Variants](variants.md)
-- [Blade components](https://github.com/ichava/documentation/blob/main/core/blade-components.md)
-- [Global helper](https://github.com/ichava/documentation/blob/main/core/global-helper.md)
+- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md)
+- [Global helper](https://github.com/ichava/core/blob/main/docs/tools/global-helper.md)
