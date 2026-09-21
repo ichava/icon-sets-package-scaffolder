@@ -49,6 +49,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Scaffolded packs now ship the canonical `resources/` shape.** The stub tree
+  carried `resources/assets/svg/config.json` and nothing else, so every
+  generated pack was born missing `lang/` and `views/` -- the exact gap two
+  estate packs had to be brought up from.
+
+  - `resources/lang/en/icons.php.stub` -- variant labels, descriptions, command
+    and info strings. It **omits `name` and `description` deliberately**:
+    `config.json` is canonical for those and `IconRegistry` reads it. Every
+    estate pack that kept a second copy had let the two drift, one of them
+    describing a different product entirely, because nothing loaded the
+    translation and so nothing compared them.
+  - `resources/views/components/.gitkeep` -- placeholder, matching the estate.
+  - `tests/Unit/ResourceShapeTest.php.stub` -- ships *with* the generated pack,
+    so a new pack polices its own shape from its first commit.
+
+- **`StubEstateParityTest` now covers `resources/`.** It compared composer
+  constraints, the provider, command naming, workflows and docs, but nothing
+  about resources -- which is how the stub could sit two phases behind the
+  estate without the guard noticing. Three cases: the shape exists in both, the
+  generated translation does not restate `config.json`, and its variant keys
+  match the generated `Variant` enum.
+
+  **Mutation-checked:** deleting the lang stub fails all three; restoring
+  `name`/`description` fails the second; adding an enum case without a label
+  fails the third.
+
+### Fixed
+
+- **The parity guard could not see an estate sibling checked out as a worktree.**
+  `estateCheckoutPath()` tested `is_dir($path . '/.git')`, but `.git` is a
+  directory only in a clone -- in a linked worktree it is a file. The guard
+  skipped silently wherever the sibling was a worktree, and since skipping is
+  now a CI failure, a guard blind to a valid checkout is worse than an absent
+  one. It tests `file_exists()` now.
+
+## [Unreleased]
+
+### Added
+
 - **`actionlint` runs on every pull request.** Nothing validated the workflow files at all:
   `release.yml` triggers only on `push: tags`, so a broken workflow was first observed as a
   release that refused to start — after the decision to release had been made.

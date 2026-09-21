@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+use {{namespace}}\Enums\Variant;
+
+/**
+ * Pins the canonical `resources/` shape every ichava icon pack shares.
+ *
+ * Three of these assertions exist because of bugs the estate actually shipped,
+ * all of them the same shape: a file nothing loads cannot fail loudly.
+ *
+ * - One pack shipped a verbatim copy of another pack's translation file --
+ *   wrong product name, and the other pack's categories against its own. The
+ *   enum comparison below is what makes a copied file fail.
+ * - One pack's translation file claimed an MIT licence while its config.json
+ *   said Commercial. Package facts belong in config.json alone.
+ * - Every pack that kept `name` and `description` in both places had let them
+ *   drift, because nothing read the translation copy.
+ */
+function resourcesPath(): string
+{
+    return dirname(__DIR__, 2) . '/resources';
+}
+
+/** @return array<string, mixed> */
+function langLines(): array
+{
+    return require resourcesPath() . '/lang/en/icons.php';
+}
+
+it('ships every path of the canonical resource shape', function () {
+    foreach ([
+        'assets/svg/config.json',
+        'assets/svg/files',
+        'lang/en/icons.php',
+        'views/components',
+    ] as $path) {
+        expect(file_exists(resourcesPath() . '/' . $path))->toBeTrue("missing resources/{$path}");
+    }
+});
+
+it('does not name the translation group after the locale', function () {
+    // `lang/en/en.php` makes the group `en`, so every key reads
+    // `<namespace>::en.name` with the locale doubled.
+    expect(file_exists(resourcesPath() . '/lang/en/en.php'))->toBeFalse();
+});
+
+it('does not duplicate config.json metadata in english', function () {
+    // config.json is canonical for name and description -- IconRegistry reads
+    // it. A copy here is a second source that nothing compares.
+    expect(langLines())->not->toHaveKey('name')
+        ->and(langLines())->not->toHaveKey('description');
+});
+
+it('states no licence in the translations', function () {
+    // Package facts belong in config.json. A licence string here is a claim
+    // nothing validates, and one estate pack shipped the wrong one for months.
+    expect(langLines())->not->toHaveKey('features');
+});
+
+it('matches its variant keys to the Variant enum exactly', function () {
+    $expected = array_column(Variant::cases(), 'value');
+    sort($expected);
+
+    foreach (['variants', 'variant_descriptions'] as $group) {
+        $actual = array_keys(langLines()[$group]);
+        sort($actual);
+
+        expect($actual)->toBe(
+            $expected,
+            "resources/lang/en/icons.php [{$group}] does not match the Variant enum. "
+            . 'Add the case and its label in the same change.',
+        );
+    }
+});
+
+it('declares itself as this package in config.json', function () {
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+
+    expect($config['package']['name'])->toBe('{{packageName}}');
+});

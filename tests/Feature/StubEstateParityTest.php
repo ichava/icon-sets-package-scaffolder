@@ -68,7 +68,12 @@ afterEach(function () {
  */
 function estateCheckoutPath(): ?string
 {
-    return is_dir(estateCandidatePath() . '/.git') ? estateCandidatePath() : null;
+    // `.git` is a directory in a clone and a *file* in a linked worktree.
+    // Testing only for a directory made this skip silently wherever the estate
+    // sibling was checked out as a worktree -- and since skipping is now a CI
+    // failure, a guard that cannot see a perfectly valid checkout is worse than
+    // one that is merely absent.
+    return file_exists(estateCandidatePath() . '/.git') ? estateCandidatePath() : null;
 }
 
 /** Where the sibling is expected, named so a skip can say what it looked for. */
@@ -352,4 +357,61 @@ it('scaffolds workflows that trigger on pull_request, never on a branch push', f
             );
         }
     }
+});
+
+it('scaffolds the canonical resources shape the estate packs ship', function () {
+    skipWithoutEstate();
+    scaffoldForParity($this->scaffoldRoot);
+
+    // The estate settled on this shape after three bugs with one cause: a
+    // resource file nothing loads cannot fail loudly. One pack shipped another
+    // pack's translations, one claimed a licence it does not hold, and every
+    // pack keeping name/description in two places had let them drift. A new
+    // pack must not be born with any of that.
+    foreach ([
+        'resources/assets/svg/config.json',
+        'resources/lang/en/icons.php',
+        'resources/views/components/.gitkeep',
+    ] as $path) {
+        expect(estateFile($path))->not->toBeNull(
+            "The estate pack no longer ships {$path}; the stub tree should follow it, not lead it.",
+        );
+
+        expect(file_exists($this->scaffoldRoot . '/' . $path))->toBeTrue(
+            "Scaffolded packages are missing {$path}, which the estate ships.",
+        );
+    }
+});
+
+it('scaffolds a translation file that does not restate config.json', function () {
+    skipWithoutEstate();
+    scaffoldForParity($this->scaffoldRoot);
+
+    $lang = require $this->scaffoldRoot . '/resources/lang/en/icons.php';
+
+    // config.json is canonical for these in English, and IconRegistry reads it.
+    // A pack born with a second copy is a pack born with the drift in it.
+    expect($lang)->not->toHaveKey('name')
+        ->and($lang)->not->toHaveKey('description')
+        ->and($lang)->not->toHaveKey('features');
+});
+
+it('scaffolds a translation file whose keys match the generated Variant enum', function () {
+    skipWithoutEstate();
+    scaffoldForParity($this->scaffoldRoot);
+
+    $lang = require $this->scaffoldRoot . '/resources/lang/en/icons.php';
+    $enum = (string) file_get_contents($this->scaffoldRoot . '/src/Enums/Variant.php');
+
+    // Whatever cases the generated enum declares must have labels, or the
+    // shipped ResourceShapeTest fails on a pack nobody has touched yet.
+    preg_match_all("/^\s*case\s+\w+\s*=\s*'([^']+)'/m", $enum, $matches);
+
+    $cases = $matches[1];
+    sort($cases);
+
+    $labels = array_keys($lang['variants']);
+    sort($labels);
+
+    expect($labels)->toBe($cases);
 });
