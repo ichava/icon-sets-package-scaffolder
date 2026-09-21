@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|--------------------------------------------------------------------------
+| {{studlyName}} Icons -- localisable strings
+|--------------------------------------------------------------------------
+|
+| An overlay, not a second source of truth.
+|
+| `name` and `description` are deliberately absent. IconRegistry reads those
+| from resources/assets/svg/config.json, which is canonical, and a pack that
+| also keeps them here ends up with two sources that nothing compares. Every
+| pack in the ichava estate that shipped both had already drifted -- one of
+| them by describing a different product entirely -- because the translation
+| was never loaded and so never checked against anything.
+|
+| A non-English locale MAY add `name` and `description` to override the
+| config.json values. The `en` file must not, and a test enforces that.
+|
+| Keys under `variants` match {{namespace}}\Enums\Variant. Add a case there
+| and add its label here in the same change; the shipped test compares the two
+| and fails if they diverge.
+|
+*/
+
+return [
+    'variants' => [
+        'default' => 'Default',
+    ],
+
+    'variant_descriptions' => [
+        'default' => 'The default {{studlyName}} icon style',
+    ],
+
+    'commands' => [
+        'update'   => 'Update {{studlyName}} icons from their upstream source',
+        'fetching' => 'Fetching the latest {{studlyName}} icons...',
+        'complete' => '{{studlyName}} icons updated successfully!',
+    ],
+
+    'info' => [
+        'version'      => 'Version :version',
+        'total_icons'  => ':count icons available',
+        'variant_info' => ':variant: :count icons',
+    ],
+];
