@@ -9,7 +9,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Commands\MakeIconP
  * The stub tree must not drift from the estate it scaffolds into.
  *
  * Eight defects shipped because nothing compared the two. Every one of them was
- * fixed in the five real packs and never propagated to `stubs/icon-package/`,
+ * fixed in the five real packs and never propagated to `stubs/`,
  * so the scaffolder kept emitting conventions the estate had already retired:
  *
  *   • `"ichava/core": "^1.0"`            -- a version that has never existed

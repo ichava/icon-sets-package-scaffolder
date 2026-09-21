@@ -39,7 +39,7 @@ if ($destination === null || trim($destination) === '') {
     exit(2);
 }
 
-$stubsRoot = __DIR__ . '/../stubs/icon-package';
+$stubsRoot = __DIR__ . '/../stubs';
 
 $container = new Container;
 $container->bind(StubLocator::class, fn (): StubLocator => new StubLocator($stubsRoot));

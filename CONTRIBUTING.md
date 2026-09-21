@@ -16,7 +16,7 @@ composer analyse   # phpstan, level 6
 
 Four things about this package specifically:
 
-- **A stub is added by dropping a file into `stubs/icon-package/`.** There is no
+- **A stub is added by dropping a file into `stubs/`.** There is no
   manifest to register it in, on purpose: a list is a thing a new stub gets left
   out of, and the omission is silent.
 - **A new `{{token}}` goes in `Services\TokenMapFactory`, and a test checks it.**

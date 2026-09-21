@@ -10,7 +10,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\TokenMapFactory;
 
 function bundledStubs(): StubLocator
 {
-    return new StubLocator(dirname(__DIR__, 2) . '/stubs/icon-package');
+    return new StubLocator(dirname(__DIR__, 2) . '/stubs');
 }
 
 it('discovers dotfiles and the workflow tree', function (): void {
