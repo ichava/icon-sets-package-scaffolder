@@ -91,5 +91,9 @@ For the visual browser, install [`ichava/browser`](https://opensource.simtabi.co
 ## See also
 
 - [Variants](variants.md)
-- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md)
-- [Global helper](https://github.com/ichava/core/blob/main/docs/tools/global-helper.md)
+- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components)
+- [Global helper](https://opensource.simtabi.com/documentation/ichava/core/tools/global-helper)
+
+---
+
+[← Docs index](../README.md#documentation)
