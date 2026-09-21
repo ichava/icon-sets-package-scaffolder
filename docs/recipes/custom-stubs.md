@@ -1,3 +1,5 @@
+[← Docs index](../../README.md#documentation)
+
 # Scaffold from your own stubs
 
 Generate packs from a template tree you control.

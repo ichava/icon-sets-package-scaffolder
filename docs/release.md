@@ -1,3 +1,5 @@
+[← Docs index](../README.md#documentation)
+
 # Release
 
 How a version of this package ships.

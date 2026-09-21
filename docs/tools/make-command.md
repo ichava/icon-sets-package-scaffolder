@@ -1,3 +1,5 @@
+[← Docs index](../../README.md#documentation)
+
 # `ichava::icon-sets-package-scaffolder.make`
 
 The one command this package registers. Scaffolds a complete icon package.
