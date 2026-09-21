@@ -22,6 +22,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   key, and an `if:` referencing a property that does not exist are all caught, while
   `yaml.safe_load` still parses the first of them without complaint.
 
+- **The scaffolded workflows are linted too, by scaffolding a package and linting that.** The job
+  above reads `.github/workflows/`, which is this package's own CI — not the CI it generates. The
+  four workflow stubs are invisible to it twice over: they live under `stubs/`, and a `.stub`
+  extension keeps them out of every YAML tool regardless. They could not be linted in place even
+  if they were found, because `{{kebabName}}` opens a YAML flow mapping, so a stub is not a valid
+  document standalone.
+
+  `scripts/scaffold-sample.php` renders the tree with no terminal and no Laravel app, through the
+  package's own `ScaffoldIconPackage` resolved from a real container — the provider binds exactly
+  one thing, `StubLocator`, and the rest autowires. Hand-wiring it would drift from the provider
+  the first time a constructor gains an argument, and drift here means CI lints a tree the command
+  does not produce.
+
+  **The job asserts on the number of files actionlint read, and that assertion is the point.**
+  `raven-actions/actionlint` applies its `working-directory` input to one internal step, not to
+  the lint step, which is a `github-script` resolving `files:` against `GITHUB_WORKSPACE` — so a
+  scratch package rendered into `RUNNER_TEMP` globs to nothing. A glob matching nothing is not an
+  error: actionlint falls back to linting `./.github/workflows`, finds this repository's own files
+  already green from the job above, and passes having checked nothing of what it was pointed at.
+  Comparing the action's `total-files` output against the stub count is what separates the two.
+
+- **A scaffolded package now ships the `actionlint` job itself**, so a new pack lints its own
+  workflows from its first pull request rather than inheriting the gap the five existing packs
+  just closed.
+
 ### Fixed
 
 - **A failed SBOM download no longer takes the whole release down.** `release.yml` generates the
@@ -43,20 +68,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   default, but the point of this change is that a missing SBOM must not fail the publish, so it
   should not rest on a default a future reader has to know.
 
-### Fixed
+- **`sync-upstream.yml.stub` word-split its `--force` flag.** `FLAGS=""` built a string that
+  reached `sync --pack="$PACK_SLUG" $FLAGS` unquoted, so the argument arrived only because
+  word-splitting happened to do the right thing — and quoting it, the obvious repair, would have
+  passed an empty argument instead. It is now an array: `FLAGS=()`, `FLAGS+=(--force)`,
+  `"${FLAGS[@]}"`, which the five real packs already carry.
 
-- **A transient CDN failure can no longer take the whole release down.** `release.yml` generates
-  the SBOM before it publishes, and the Syft installer fetches its checksums from GitHub's
-  release-asset CDN. On 2026-09-21 that answered `504` for about twenty minutes, failing the job
-  four times before the publish step — so the tag existed with no release behind it, which is
-  exactly the drift the release table is meant to catch.
+  **The new job found this on its first run**, as `SC2086` on the rendered file. It had been in
+  the stub since the workflow was written and no gate in the estate could see it.
 
-  The step now makes two attempts, 45 seconds apart. That covers a single transient `504`, the
-  common case. It does not cover a sustained outage, and deliberately does not try: no in-job
-  backoff is worth twenty minutes, so re-run the job once the CDN is back.
+- **The stub's `ichava/core` constraint was a release behind the estate.** It read
+  `^0.2.5 || ^0.3` while all five packs had moved to `^0.2.8 || ^0.3`, so a freshly scaffolded
+  pack would resolve an older core than any pack in the family. `StubEstateParityTest` catches
+  this by measuring the stub against `flag-icons` at `origin/main` rather than against a literal,
+  but it skips when no sibling checkout is present — which is every CI runner. It is a guard that
+  only fires on a maintainer's machine; run the suite locally before releasing.
 
-  The retry carries no `continue-on-error`, so two failures still fail the release. The SBOM is
-  part of the contract — publishing without one silently would be worse than failing loudly.
+- **The `[Unreleased]` block carried two `### Fixed` sections describing the same SBOM change in
+  contradictory terms.** One said a second failure publishes the release without the asset; the
+  other said two failures still fail the release. The workflow does the first — `sbom_retry`
+  carries `continue-on-error: true` and the publish step sets `fail_on_unmatched_files: false`.
+  The stale section has been removed rather than reconciled.
 
 ## [0.1.0] - 2026-09-21
 

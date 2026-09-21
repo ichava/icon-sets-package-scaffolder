@@ -13,3 +13,4 @@
 # stubs/ is NOT export-ignored: it is the package's payload, not a test fixture.
 
 *.stub linguist-language=PHP
+/scripts          export-ignore
