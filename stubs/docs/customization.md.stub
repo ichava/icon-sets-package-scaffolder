@@ -64,6 +64,30 @@ Per-component `class="..."` overrides the default.
 
 Decorative icons (next to a text label) can omit the label, the renderer adds `aria-hidden="true"` automatically.
 
+## Adding your own icons
+
+Relocated from the README, which is now a slim pointer.
+
+1. Place your SVG files in `resources/assets/svg/files/`.
+2. For multi-variant icons, organise by variant: `files/regular/`, `files/solid/`, and so on.
+3. Record the metadata in `resources/assets/svg/config.json`.
+4. Clear the cache: `php artisan ichava::ichava-core.cache clear`.
+
+### Icon guidelines
+
+- Valid SVG, and nothing that the sanitiser will strip -- see core's security model.
+- **Drop `width` and `height`.** The component supplies them, and an SVG carrying both alongside a `viewBox` ignores the size it is asked for.
+- Use `currentColor` for `fill` and `stroke`, or the icon cannot be recoloured.
+- Lowercase, hyphenated filenames: `arrow-left.svg`.
+
+## Browsing what this pack ships
+
+```bash
+php artisan ichava::ichava-core.info icons --package={{packageName}}
+```
+
+For the visual browser, install [`ichava/browser`](https://opensource.simtabi.com/documentation/ichava/browser/) and visit `/{prefix}/icons`.
+
 ## See also
 
 - [Variants](variants.md)
