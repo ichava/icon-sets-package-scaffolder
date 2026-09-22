@@ -22,6 +22,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `categorys` -- which is the same `-ies` case the shipped `ResourceShapeTest`
   already handled and nothing had ever exercised against a generated pack.
 
+- **A scaffolded pack ships its own `metadata` guard.**
+  `stubs/tests/Unit/PackageMetadataTest.php.stub` asserts that
+  `metadata.repository` is the new package's own repository and that
+  `metadata.homepage` is never one of ours.
+
+  The scaffolder already guarded the value it *emits* -- it writes no
+  `homepage` key, and `ScaffoldedMetadataTest` pins that. What no pack had was
+  a guard of its own for afterwards, and afterwards is where this went wrong:
+  all five estate packs were generated correctly and had `homepage` drift onto
+  their own repository later, each needing the assertion added by hand. Five
+  pull requests in one week, for a rule a newborn pack can simply carry.
+
+  The stub asserts the **rule**, not a value, because the scaffolder cannot
+  know the upstream: absent is accepted, a real upstream URL is accepted, and
+  anything equal to `repository` or under our own vendor fails. Verified by
+  mutation against the rendered pack -- 2 passed clean, 1 failed for each of
+  three drifts, and 2 passed again for a genuine upstream value, so the guard
+  is not merely refusing everything.
+
+  It is a file of its own, and `ScaffoldedMetadataTest` asserts that too: a
+  top-level `it()` sharing a file with a PHPUnit class makes Pest skip the
+  class, which silently switched off 19 assertions across three packs.
+
 ### Documentation
 
 - `creating-icon-packages.md` documents the six axis tokens, and states what
