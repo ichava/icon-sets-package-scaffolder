@@ -5,7 +5,7 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.2] - 2026-09-22
 
 ### Added
 
@@ -44,18 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   It is a file of its own, and `ScaffoldedMetadataTest` asserts that too: a
   top-level `it()` sharing a file with a PHPUnit class makes Pest skip the
   class, which silently switched off 19 assertions across three packs.
-
-### Documentation
-
-- `creating-icon-packages.md` documents the six axis tokens, and states what
-  `--axis` does **not** reach: `icon-sets-emoji` needs two enums rather than a
-  different value for one, and `icon-sets-bundled`'s `set-licenses.md` has no
-  counterpart in any other pack. Both are one-offs; the guide says to scaffold
-  the closest axis and add the rest by hand.
-
-- Corrected a stale path. The guide told readers to copy stubs from
-  `vendor/ichava/core/stubs/icon-package/`, which has not existed since
-  scaffolding left core in `0.3.0`.
 
 ### Changed
 
@@ -133,6 +121,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Every new target was verified to exist on its repository's `main` before being linked — and
   the first check said `MISSING` for all four, because the local ref was stale. Fetch before
   believing a `cat-file -e`.
+
+### Documentation
+
+- `creating-icon-packages.md` documents the six axis tokens, and states what
+  `--axis` does **not** reach: `icon-sets-emoji` needs two enums rather than a
+  different value for one, and `icon-sets-bundled`'s `set-licenses.md` has no
+  counterpart in any other pack. Both are one-offs; the guide says to scaffold
+  the closest axis and add the rest by hand.
+
+- Corrected a stale path. The guide told readers to copy stubs from
+  `vendor/ichava/core/stubs/icon-package/`, which has not existed since
+  scaffolding left core in `0.3.0`.
 
 ## [0.1.1] - 2026-09-21
 
