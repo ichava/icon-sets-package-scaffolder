@@ -70,7 +70,7 @@ Hosted at
 ## Contributing & security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities through
-[SECURITY.md](SECURITY.md), never as a public issue.
+[security policy](https://github.com/ichava/icon-sets-package-scaffolder/security/policy), never as a public issue.
 
 ## License
 
