@@ -67,13 +67,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, fileinfo
           coverage: none
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 

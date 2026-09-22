@@ -28,18 +28,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # This package resolves laranail/{package-tools,console,enumerator}
-        # through VCS repositories rather than Packagist, and Composer's git
-        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
-        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
-        # when the secret is absent, so public forks are not blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 
@@ -62,18 +50,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # This package resolves laranail/{package-tools,console,enumerator}
-        # through VCS repositories rather than Packagist, and Composer's git
-        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
-        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
-        # when the secret is absent, so public forks are not blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 
@@ -95,18 +71,6 @@ jobs:
           php-version: 8.5
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
-
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # This package resolves laranail/{package-tools,console,enumerator}
-        # through VCS repositories rather than Packagist, and Composer's git
-        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
-        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
-        # when the secret is absent, so public forks are not blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
 
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
@@ -158,18 +122,6 @@ jobs:
           php-version: 8.5
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
-
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # This package resolves laranail/{package-tools,console,enumerator}
-        # through VCS repositories rather than Packagist, and Composer's git
-        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
-        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
-        # when the secret is absent, so public forks are not blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
 
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
