@@ -88,7 +88,7 @@ Every Ichava pack follows the same shape:
 
 - Class short names are constants (`IconsServiceProvider`, `IconsConstants`, `Variant` or `Category`, `IconComponent`). Disambiguation is by namespace.
 - Composer name is `<vendor>/<short>-icons`. GitHub repo is `<vendor>/<short>-icons` (no extra prefix).
-- Pack-specific docs live in `docs/`. Shared concerns link back to `ichava/documentation`.
+- Pack-specific docs live in `docs/`.
 - Tag releases as `v<x.y.z>`.
 
 ## See also
