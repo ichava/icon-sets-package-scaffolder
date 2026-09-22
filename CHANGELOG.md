@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **A scaffolded pack ships the five concern pages the estate packs ship.**
+  `stubs/docs/{installation,getting-started,configuration,architecture,release}.md.stub`,
+  with `stubs/README.md.stub` pointing at them. A new pack was previously born
+  with a `docs/` tree the estate's own authoring standard does not recognise.
+
 - **The generator can scaffold a `Category` pack.** It emitted `Variant`
   unconditionally, so a scaffolded pack could not look like
   `icon-sets-bundled`, `icon-sets-metronic` or `icon-sets-emoji` --
