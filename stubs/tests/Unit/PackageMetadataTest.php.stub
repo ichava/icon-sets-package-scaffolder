@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|--------------------------------------------------------------------------
+| Package metadata, in a file of its own
+|--------------------------------------------------------------------------
+|
+| Two fields in `config.json` both look like "the package's URL", and only one
+| of them is:
+|
+|   metadata.repository -- THIS package's repository. Always ours.
+|   metadata.homepage   -- the UPSTREAM project's own site. Never ours.
+|
+| Every pack in the estate had to have this assertion added by hand after the
+| fact, because `metadata.homepage` had drifted onto the pack's own repository
+| in two of them. It survives drift easily: `IconRegistry` reads the value into
+| the pack descriptor and the browser API allows it through `publicMetadata()`
+| beside `repository`, but no frontend renders it -- so a wrong value is
+| invisible until somebody reads the JSON.
+|
+| The scaffolder emits no `homepage` key, since it cannot know the upstream.
+| Fill it in when you vendor one, and this file will hold you to the rule.
+|
+| Keep Pest functions and PHPUnit classes in separate files. A top-level it()
+| added to a file containing a PHPUnit class makes Pest skip the class
+| entirely -- silently, with nothing failing and the suite merely getting
+| smaller. That cost this ecosystem 19 live assertions across three packs.
+|
+*/
+
+function packageMetadata(): array
+{
+    $config = json_decode(
+        (string) file_get_contents(dirname(__DIR__, 2) . '/resources/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+
+    return $config['metadata'];
+}
+
+it(description: 'points metadata.repository at this package', closure: function (): void {
+    expect(packageMetadata()['repository'])->toBe('https://github.com/{{packageName}}');
+});
+
+it(description: 'never points metadata.homepage at this package', closure: function (): void {
+    $metadata = packageMetadata();
+    $homepage = $metadata['homepage'] ?? null;
+
+    // Absent is correct for a pack that has not recorded an upstream yet, and
+    // is what the scaffolder emits. This asserts the RULE rather than the
+    // value, so it keeps working the day you fill the field in.
+    if ($homepage === null) {
+        expect($metadata)->not->toHaveKey('homepage');
+
+        return;
+    }
+
+    expect($homepage)
+        ->not->toBe($metadata['repository'])
+        ->and($homepage)->not->toContain('github.com/{{vendorKebab}}/');
+});
