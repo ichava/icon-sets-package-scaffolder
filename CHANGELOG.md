@@ -5,6 +5,47 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **A scaffolded package no longer ships dead links.** `stubs/README.md.stub`
+  linked `CONTRIBUTING.md` and `SECURITY.md` and the stub tree contained
+  neither, so every package ever generated was born with two 404s -- one of
+  them in the section that tells a reporter where to send a vulnerability.
+  Both stubs now exist.
+
+- **`ScaffoldedLinkTargetsTest` asserts every relative link in a generated
+  package resolves to a file that package contains.** No link checker could
+  have caught the two above: a checker runs against *this* repository, where
+  `stubs/README.md.stub` is not a document anyone renders and `{{token}}` is
+  not a path. The only artefact where these links are real is the generated
+  package, which exists solely inside a test, so the assertion has to run
+  there.
+
+  It skips HTML comments, fenced blocks and code spans. `attribution.md.stub`
+  teaches the pack author what to write with a worked example inside a
+  comment, and a guard that cannot tell an illustration from a live link fails
+  on correct files until somebody deletes the illustration to appease it.
+
+  It is mutation-checked: removing either new stub turns it red.
+
+### Changed
+
+- **`SECURITY.md` removed; the organization policy serves this repository now.**
+  The file was byte-identical across six ichava repositories and held nothing
+  specific to any of them. It was promoted into `ichava/.github` first, so the
+  policy improved before any copy was removed rather than after, and GitHub
+  serves that default on `/security/policy` for every repository without its
+  own. The two channels and the 48-hour acknowledgement are unchanged.
+
+- **The README's security link moved with it.** A relative
+  `[SECURITY.md](SECURITY.md)` is a path into this repository's file tree, and
+  the cascade does not put a file there -- it answers the policy page and
+  nothing else. Left alone the link would have become a 404 the moment the file
+  went, so it now points at `/security/policy` directly. `composer.json` and the
+  issue-template link already did.
+
 ## [0.1.2] - 2026-09-22
 
 ### Added

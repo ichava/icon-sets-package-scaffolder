@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
     url: https://github.com/ichava/icon-sets-package-scaffolder/security/policy
-    about: Report security issues privately per SECURITY.md. Do not open a public issue.
+    about: Report security issues privately per the security policy. Do not open a public issue.
   - name: Documentation
     url: https://github.com/ichava/icon-sets-package-scaffolder/tree/main/docs
     about: Read the org docs before filing -- your question may already be answered.

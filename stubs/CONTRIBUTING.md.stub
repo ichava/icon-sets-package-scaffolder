@@ -1,0 +1,29 @@
+# Contributing
+
+Thanks for helping improve `{{packageName}}`.
+
+## Icons come from upstream
+
+The SVGs under `resources/assets/svg/files` are vendored, and a refresh
+overwrites the directory wholesale. **Do not hand-edit a generated SVG** -- the
+next sync silently reverts it. Fix the upstream source, or the sync recipe that
+transforms it.
+
+That holds even when an icon is malformed. The author of an icon set is not a
+compiler, so a parse or render failure is fixed by hardening the read-time
+pipeline in `ichava/core`, never by repairing the asset here.
+
+## Code
+
+- `declare(strict_types=1);` at the top of every PHP file, and type hints on
+  every public method, parameters and return alike.
+- `vendor/bin/pest` runs the suite.
+- Conventional Commits: `feat:`, `fix:`, `docs:`, `refactor:`, `perf:`, `test:`,
+  `chore:`.
+- No `version` field in `composer.json` -- the version comes from the git tag.
+  No lock file is committed; this is a library, and a lock records a resolution
+  consumers never use.
+
+## Reporting a vulnerability
+
+Not here, and not in a public issue. See [SECURITY.md](SECURITY.md).
