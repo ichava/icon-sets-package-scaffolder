@@ -1,5 +1,3 @@
-[← Docs index](../README.md#documentation)
-
 # Configuration
 
 One setting, and the reason the config file is named what it is.

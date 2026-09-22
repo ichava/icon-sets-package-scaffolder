@@ -1,5 +1,3 @@
-[← Docs index](../README.md#documentation)
-
 # Getting started
 
 Scaffolding your first icon pack, and what you get.

@@ -1,5 +1,3 @@
-[← Docs index](../README.md#documentation)
-
 # Creating Custom Icon Packages
 
 *How-to guide.*

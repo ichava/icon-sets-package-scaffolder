@@ -1,5 +1,3 @@
-[← Docs index](../../README.md#documentation)
-
 # Scaffold from code, without a terminal
 
 Generate a package from a test, a queued job, a CI step or an HTTP handler.
