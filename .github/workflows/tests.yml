@@ -68,18 +68,6 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # This package resolves laranail/{package-tools,console,enumerator}
-        # through VCS repositories rather than Packagist, and Composer's git
-        # clone has no auth on a fresh runner. Provision a PAT with `repo:read`
-        # scope as the GH_PACKAGES_PAT secret. The step short-circuits cleanly
-        # when the secret is absent, so public forks are not blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update

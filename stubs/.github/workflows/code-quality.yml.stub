@@ -28,19 +28,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # ichava/core (and laranail/package-tools while still private) live
-        # in private repos. Composer's git clone has no auth on a fresh runner
-        # without this. Provision a PAT with `repo:read` scope and store it
-        # as the GH_PACKAGES_PAT secret on each consuming repo. The step
-        # short-circuits cleanly when the secret is absent, so public
-        # forks aren't blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 
@@ -63,19 +50,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # ichava/core (and laranail/package-tools while still private) live
-        # in private repos. Composer's git clone has no auth on a fresh runner
-        # without this. Provision a PAT with `repo:read` scope and store it
-        # as the GH_PACKAGES_PAT secret on each consuming repo. The step
-        # short-circuits cleanly when the secret is absent, so public
-        # forks aren't blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
-
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
 
@@ -97,19 +71,6 @@ jobs:
           php-version: 8.5
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
-
-      - name: Authenticate Composer for private GitHub deps
-        env:
-          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }}
-        # ichava/core (and laranail/package-tools while still private) live
-        # in private repos. Composer's git clone has no auth on a fresh runner
-        # without this. Provision a PAT with `repo:read` scope and store it
-        # as the GH_PACKAGES_PAT secret on each consuming repo. The step
-        # short-circuits cleanly when the secret is absent, so public
-        # forks aren't blocked.
-        if: env.GH_PACKAGES_PAT != ''
-        run: |
-          composer config --global --auth github-oauth.github.com "$GH_PACKAGES_PAT"
 
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction

@@ -59,6 +59,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **The "Authenticate Composer for private GitHub deps" step is gone.** It
+  configured a `GH_PACKAGES_PAT` against `github-oauth.github.com` because
+  `ichava/core` and `laranail/package-tools` were private. **Both are public
+  now**, and so is every other dependency this pack resolves, so the step
+  authenticated nothing.
+
+  It was already dead rather than merely redundant, and the estate proved it:
+  `icon-sets-emoji`'s `tests.yml` carries no such step and has been resolving
+  `ichava/core` from a VCS repository on every CI run, green. Removing it is
+  therefore not a gamble on rate limits -- it is matching the configuration
+  that already works.
+
+- **The dead Composer auth step is gone from the stub tree too.** A scaffolded
+  pack was being born with a step configuring `GH_PACKAGES_PAT` for
+  dependencies that are all public, so it authenticated nothing from the first
+  commit. Removed from `stubs/.github/workflows/{code-quality,tests}.yml.stub`
+  alongside this repository's own workflows.
+
+  This is the second pass a repository-wide sweep needs and usually does not
+  get: the estate fix and the stub fix are separate edits, and nothing here
+  fails when only the first one lands.
+
 - **Dead links to the deleted `ichava/documentation` repository removed.** That repository no
   longer exists, so every cross-reference to it resolved to a 404. The reporting channels in
   `SECURITY.md` were already stated inline and are unchanged; the Code of Conduct now cites the
