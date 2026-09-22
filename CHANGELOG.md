@@ -22,6 +22,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `categorys` -- which is the same `-ies` case the shipped `ResourceShapeTest`
   already handled and nothing had ever exercised against a generated pack.
 
+### Documentation
+
+- `creating-icon-packages.md` documents the six axis tokens, and states what
+  `--axis` does **not** reach: `icon-sets-emoji` needs two enums rather than a
+  different value for one, and `icon-sets-bundled`'s `set-licenses.md` has no
+  counterpart in any other pack. Both are one-offs; the guide says to scaffold
+  the closest axis and add the rest by hand.
+
+- Corrected a stale path. The guide told readers to copy stubs from
+  `vendor/ichava/core/stubs/icon-package/`, which has not existed since
+  scaffolding left core in `0.3.0`.
+
 ### Fixed
 
 - **A scaffolded `Category` pack wrote its axis values into the wrong

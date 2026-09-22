@@ -115,7 +115,12 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 | `{{year}}` | `date('Y')` at scaffold time. |
 | `{{date}}` | `date('Y-m-d')` at scaffold time. |
 | `{{iconSetType}}` | `single` or `multi` (`--type` flag). |
-| `{{variantsJson}}` | Pretty-printed JSON of the `--variants` list (used by `config.json`). |
+| `{{variantsJson}}` | Pretty-printed JSON of the `--variants` list, for `config.json`'s `metadata.data.variants`. Empty (`{}`) for a category pack. |
+| `{{categoriesJson}}` | The same list under `metadata.data.categories`. Empty for a variant pack. Both keys are always emitted -- `JsonConfigConstants` reads each by its literal name, so a config that shipped only the one matching its axis would make `getVariants()` answer an empty array. |
+| `{{axis}}` | `variant` or `category` (`--axis` flag). |
+| `{{axisStudly}}` | `Variant` / `Category` -- the enum's class name, and the name of the file it lands in. |
+| `{{axisPlural}}` | `variants` / `categories` -- the lang group, and the docs page filename. Spelled out, not suffixed: `categories`, never `categorys`. |
+| `{{axisStudlyPlural}}` | `Variants` / `Categories` -- prose and headings. |
 
 > **Version constraints**. PHP, Laravel, Testbench, Pest etc.. are *not*
 > tokenised. They live as literals inside `composer.json.stub` because the
@@ -124,13 +129,13 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 
 #### Customising or extending the stubs
 
-The stubs ship inside the core package at
-`vendor/ichava/core/stubs/icon-package/`. To customise them for your
+The stubs ship inside this package at
+`vendor/ichava/icon-sets-package-scaffolder/stubs/`. To customise them for your
 organisation:
 
 ```bash
 # 1. Copy the stubs into your application
-cp -R vendor/ichava/core/stubs/icon-package resources/stubs/
+cp -R vendor/ichava/icon-sets-package-scaffolder/stubs resources/stubs/
 
 # 2. Edit them, add files, remove files, change boilerplate
 $EDITOR resources/stubs/icon-package/README.md.stub
@@ -151,6 +156,29 @@ To add a new file to the scaffold:
 To remove a file from the scaffold, just delete it from the stubs tree.
 
 ---
+
+#### What the scaffolder does not reach
+
+`--axis` covers the two shapes the estate actually repeats: `icon-sets-flag`
+is a `Variant` pack, `icon-sets-metronic` a `Category` one, and a scaffolded
+pack now matches either exactly. Two of the five packs are still beyond it,
+and both are one-offs rather than a missing flag. Measured against
+`origin/main`, 2026-09-21:
+
+| Pack | Shape | Why it is not generated |
+|---|---|---|
+| `icon-sets-emoji` | **Two** enums, `Category` *and* `Set`, with four labelled groups (`categories`, `category_descriptions`, `sets`, `set_descriptions`) | `--axis` picks one axis. A second is not a different value, it is a second enum, a second docs page and a second pair of lang groups. |
+| `icon-sets-bundled` | `docs/icon-sets.md` + `docs/set-licenses.md`, and no variants or categories page at all | It aggregates many upstream sets under their own separate licences. The licence page has no counterpart in any other pack. |
+
+Scaffold the closest axis and add the second enum or the extra page by
+hand. Note the shipped `ResourceShapeTest` already handles both: it
+**discovers** its labelled groups rather than hardcoding `variants`, so an
+added `sets`/`set_descriptions` pair is checked against a `Set` enum the
+moment you add one -- which is how `icon-sets-emoji` is guarded today.
+
+Do not widen the generator to cover a shape that exists once. The rule this
+estate follows is to extract what a defect indicted, not what is merely
+large.
 
 ### Authoring a package by hand
 
