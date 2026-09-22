@@ -1,8 +1,6 @@
-[← Docs index](../README.md#documentation)
-
 # {{axisStudlyPlural}}
 
-*Reference.*
+The {{axisPlural}} {{humanName}} ships, how to name one in an icon path, and when to reach for each.
 
 {{humanName}} ships the following {{axisPlural}}. Reference any icon as `{{packageName}}::<{{axis}}>/<icon-name>` (or just `<icon-name>` for the default {{axis}}).
 
