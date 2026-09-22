@@ -18,7 +18,6 @@
                 "url": "https://github.com/{{vendorKebab}}"
             }
         ],
-        "homepage": "https://github.com/{{packageName}}",
         "repository": "https://github.com/{{packageName}}",
         "data": {
             "variants": {{variantsJson}},

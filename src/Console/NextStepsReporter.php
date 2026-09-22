@@ -40,7 +40,12 @@ final readonly class NextStepsReporter
         $step = count($result->directories);
 
         $output->writeln(sprintf(
-            '  %d. Fine-tune <fg=cyan>resources/assets/svg/config.json</> (description, homepage, repository).',
+            '  %d. Fine-tune <fg=cyan>resources/assets/svg/config.json</> (description, repository).',
+            ++$step,
+        ));
+        $output->writeln(sprintf(
+            '  %d. If this pack vendors someone else\'s icons, add <fg=cyan>metadata.homepage</>'
+            . ' pointing at <fg=yellow>their</> project, and fill in the <fg=cyan>upstream</> block.',
             ++$step,
         ));
         $output->writeln(sprintf(
