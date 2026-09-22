@@ -57,6 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `vendor/ichava/core/stubs/icon-package/`, which has not existed since
   scaffolding left core in `0.3.0`.
 
+### Changed
+
+- **Dead links to the deleted `ichava/documentation` repository removed.** That repository no
+  longer exists, so every cross-reference to it resolved to a 404. The reporting channels in
+  `SECURITY.md` were already stated inline and are unchanged; the Code of Conduct now cites the
+  Contributor Covenant directly. Historical mentions in this changelog are left as written.
+
 ### Fixed
 
 - **A scaffolded `Category` pack wrote its axis values into the wrong
