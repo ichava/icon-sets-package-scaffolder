@@ -361,6 +361,4 @@ $this->registerBulkIconSets(
 
 ---
 
----
-
 [← Docs index](../README.md#documentation)

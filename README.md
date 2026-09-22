@@ -54,6 +54,7 @@ Hosted at
 - [Configuration](docs/configuration.md) - pointing it at your own stub tree
 - [Architecture](docs/architecture.md) - actions, services, domain, and why
 - [Release](docs/release.md) - how a version ships
+- [Creating icon packages](docs/creating-icon-packages.md) - the anatomy of a pack, by hand or generated
 
 ### Reference
 
@@ -64,6 +65,7 @@ Hosted at
 
 - [Scaffold from your own stubs](docs/recipes/custom-stubs.md)
 - [Scaffold from code, without a terminal](docs/recipes/programmatic-scaffolding.md)
+- [Build your own pack](docs/recipes/build-your-own-pack.md)
 
 ## Contributing & security
 
