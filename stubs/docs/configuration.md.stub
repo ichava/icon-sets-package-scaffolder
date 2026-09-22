@@ -1,0 +1,32 @@
+# Configuration
+
+*Reference.* What this pack's config file holds, and what belongs to core instead.
+
+## The file and its key
+
+`config/{{bladeNamespace}}.php`, merged at `ichava.{{bladeNamespace}}`. **The filename must
+match the package short name** -- a different name silently doubles the key and every read returns
+`null`, which shipped undetected in this ecosystem once before.
+
+```bash
+php artisan vendor:publish --tag=ichava::{{bladeNamespace}}-config
+```
+
+Publishing is optional; the defaults are merged either way.
+
+## What is here
+
+Only what is specific to this pack -- the set name and prefix it registers under, and its own
+addressing defaults. Read the published file for the current list rather than a copy of it here.
+
+## What is not here
+
+Cache, queue, database, logging, security and the `ICHAVA_*` environment surface are **core's**, and
+apply to every pack at once. See core's [configuration guide](https://opensource.simtabi.com/documentation/ichava/core/configuration) and
+[environment variables](https://opensource.simtabi.com/documentation/ichava/core/environment).
+
+A value set here cannot change how core seeds, caches or sanitises; that is the point of the split.
+
+---
+
+[← Docs index](../README.md#documentation)
