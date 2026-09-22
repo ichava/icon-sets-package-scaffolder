@@ -19,18 +19,18 @@ declare(strict_types=1);
 | A non-English locale MAY add `name` and `description` to override the
 | config.json values. The `en` file must not, and a test enforces that.
 |
-| Keys under `variants` match {{namespace}}\Enums\Variant. Add a case there
+| Keys under `{{axisPlural}}` match {{namespace}}\Enums\{{axisStudly}}. Add a case there
 | and add its label here in the same change; the shipped test compares the two
 | and fails if they diverge.
 |
 */
 
 return [
-    'variants' => [
+    '{{axisPlural}}' => [
         'default' => 'Default',
     ],
 
-    'variant_descriptions' => [
+    '{{axisDescriptions}}' => [
         'default' => 'The default {{studlyName}} icon style',
     ],
 
@@ -43,6 +43,6 @@ return [
     'info' => [
         'version'      => 'Version :version',
         'total_icons'  => ':count icons available',
-        'variant_info' => ':variant: :count icons',
+        '{{axis}}_info' => ':{{axis}}: :count icons',
     ],
 ];

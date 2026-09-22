@@ -26,7 +26,7 @@ This pack's configuration is registered by `laranail/package-tools` from the pro
 
 ### This pack
 
-- [Variants](docs/variants.md) -- the variants this pack ships and how to address them
+- [{{axisStudlyPlural}}](docs/{{axisPlural}}.md) -- the {{axisPlural}} this pack ships and how to address them
 - [Customisation](docs/customization.md) -- colour, size, adding your own icons
 - [Attribution](docs/attribution.md) -- upstream project, licence terms, and credit
 

@@ -10,6 +10,7 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\confirm;
 
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconAxis;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconSetType;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
@@ -72,6 +73,18 @@ final readonly class PackageDefinitionPrompter
             default: IconSetType::Single->value,
         ), IconSetType::Single->value);
 
+        // Asked separately from the type above, because the two are orthogonal:
+        // `icon-sets-bundled` is a category pack whose SVGs sit in per-set
+        // directories. One prompt for both would force a false choice.
+        $axis = $this->filled($supplied, 'axis') ?? $this->ask($interactive, fn (): string => select(
+            label: 'How does this pack subdivide its icons?',
+            options: [
+                IconAxis::Variant->value  => 'Variants (outline, solid, duotone, ...)',
+                IconAxis::Category->value => 'Categories (brands, weather, ui, ...)',
+            ],
+            default: IconAxis::Variant->value,
+        ), IconAxis::Variant->value);
+
         $variants = $this->variants($supplied, IconSetType::fromInput((string) $type), $interactive);
 
         // A missing required answer arrives here as an empty string rather than
@@ -85,6 +98,7 @@ final readonly class PackageDefinitionPrompter
             prefix: $prefix === null ? null : (string) $prefix,
             type: (string) $type,
             variants: $variants,
+            axis: (string) $axis,
         );
     }
 

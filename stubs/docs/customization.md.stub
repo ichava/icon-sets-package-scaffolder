@@ -41,7 +41,7 @@ The bundled SVGs are <!-- e.g. 24×24 with viewBox="0 0 24 24" -->. Use any widt
 
    <x-ichava::icon name="{{packageName}}::home" stroke-width="1.5" class="w-6 h-6" />
 
-   ...if your variants have a stroke-width concept. -->
+   ...if your {{axisPlural}} have a stroke-width concept. -->
 
 ## Default class globally
 
@@ -69,7 +69,7 @@ Decorative icons (next to a text label) can omit the label, the renderer adds `a
 Relocated from the README, which is now a slim pointer.
 
 1. Place your SVG files in `resources/assets/svg/files/`.
-2. For multi-variant icons, organise by variant: `files/regular/`, `files/solid/`, and so on.
+2. For multi-{{axis}} icons, organise by {{axis}}: `files/regular/`, `files/solid/`, and so on.
 3. Record the metadata in `resources/assets/svg/config.json`.
 4. Clear the cache: `php artisan ichava::ichava-core.cache clear`.
 
@@ -90,7 +90,7 @@ For the visual browser, install [`ichava/browser`](https://opensource.simtabi.co
 
 ## See also
 
-- [Variants](variants.md)
+- [{{axisStudlyPlural}}]({{axisPlural}}.md)
 - [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components)
 - [Global helper](https://opensource.simtabi.com/documentation/ichava/core/tools/global-helper)
 

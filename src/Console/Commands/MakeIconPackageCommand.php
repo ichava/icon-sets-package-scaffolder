@@ -42,6 +42,7 @@ final class MakeIconPackageCommand extends Command
                            {--path= : Destination directory}
                            {--prefix= : Blade component prefix, defaults to the kebab-case name}
                            {--type= : Icon set type: single or multi}
+                           {--axis= : Taxonomy axis: variant or category}
                            {--variants= : Comma-separated variants for a multi-set pack}
                            {--force : Overwrite a non-empty destination}';
 
@@ -71,6 +72,7 @@ final class MakeIconPackageCommand extends Command
                 'email'    => $this->option('email'),
                 'prefix'   => $this->option('prefix'),
                 'type'     => $this->option('type'),
+                'axis'     => $this->option('axis'),
                 'variants' => $this->option('variants'),
             ], $interactive);
 
