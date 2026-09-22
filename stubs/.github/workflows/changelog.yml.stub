@@ -1,6 +1,6 @@
 # The changelog guard needs a trigger that fires on a changelog.
 #
-# It lived in code-quality.yml, which carries `paths-ignore: '*.md'` so that
+# It lived in code-quality.yml, which carries `paths-ignore: '**.md'` so that
 # Pint and PHPStan skip documentation-only changes. That filter is applied to
 # the whole workflow, so the changelog job inherited it -- and a changelog-only
 # pull request is precisely what a release is.
