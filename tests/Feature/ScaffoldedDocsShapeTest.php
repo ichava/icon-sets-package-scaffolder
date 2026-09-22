@@ -85,6 +85,38 @@ it('scaffolds docs in the shape every pack in the estate uses', function (): voi
             ->toBeFalse("{$name} links a blob path");
     }
 
+    // The five concern pages, by name.
+    //
+    // `StubEstateParityTest` already compares the scaffolded docs against
+    // whatever `icon-sets-flag` ships, and that comparison is SYMMETRIC:
+    // delete a page from the pack and from the stub together and it stays
+    // green. It pins agreement between two things, not the decision they are
+    // both meant to encode, so the decision is named here instead.
+    //
+    // Settled 2026-09-22 on measurement rather than taste:
+    // `laranail/authkit-ldap` is one source file and 45 lines and ships all
+    // five, and across 67 laranail repositories the twenty thinnest average
+    // 3.6 of 5. A thin package writes shorter pages, not fewer.
+    foreach ([
+        'installation.md',
+        'getting-started.md',
+        'configuration.md',
+        'architecture.md',
+        'release.md',
+    ] as $concern) {
+        expect(is_file($root . '/docs/' . $concern))
+            ->toBeTrue("scaffolded packages are missing docs/{$concern}, which the standard requires");
+    }
+
+    // The generated pack has to carry its own guard, or the shape above holds
+    // only until someone edits a page in the new repository. `docs.yml` is the
+    // other half: tests.yml skips `**.md`, so without it a markdown-only pull
+    // request in a scaffolded pack runs nothing at all.
+    expect(is_file($root . '/tests/Unit/DocsShapeTest.php'))
+        ->toBeTrue('scaffolded packages ship no docs guard of their own');
+    expect(is_file($root . '/.github/workflows/docs.yml'))
+        ->toBeTrue('scaffolded packages ship no workflow that runs the docs guard');
+
     // Every page the README advertises actually exists.
     preg_match_all('/\]\(docs\/([A-Za-z0-9_-]+\.md)\)/', $readme, $m);
     expect($m[1])->not->toBeEmpty('the README lists no docs pages');

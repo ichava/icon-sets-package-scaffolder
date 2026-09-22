@@ -1,0 +1,43 @@
+name: Docs
+
+# `tests.yml` and `code-quality.yml` both carry `paths-ignore: ['**.md']`, so a
+# markdown-only pull request runs neither -- and a markdown-only pull request is
+# exactly what deletes a docs page. This workflow is the other half of that
+# filter: it runs on the changes they skip, and nothing else.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.md'
+      - 'tests/Unit/DocsShapeTest.php'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  shape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    name: Docs shape
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Assert the docs shape
+        run: vendor/bin/pest --filter=DocsShapeTest
