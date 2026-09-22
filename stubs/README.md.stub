@@ -1,15 +1,16 @@
 # {{packageName}}
 
+<!-- Badges go here, in the standard's order: registry version, Tests, Static
+     analysis, License MIT -- but only the ones whose claim is true for THIS
+     repository. A registry badge for a package the registry does not have
+     renders as a broken "invalid" pill while asserting the package is
+     installable, and a CI badge on a private repository answers 404 for every
+     logged-out reader. Add a one-line note under them saying why any of the
+     four is absent, so the next reader does not restore the count. -->
+
 > {{humanName}} icons for the Ichava Laravel icon ecosystem.
 
-<!-- Badges: add only the ones whose claim is true for THIS repository.
-     A registry badge for a package the registry does not have renders as a
-     broken "invalid" pill and asserts the package is installable; a CI badge
-     on a private repository answers 404 for every logged-out reader. Add a
-     one-line note here saying why any of the four is absent, so the next
-     reader does not restore the count. -->
-
-Requires [`ichava/core`](https://opensource.simtabi.com/documentation/ichava/core/); targets PHP `^8.4.1 || ^8.5` on Laravel `^13`. The authoritative versions are in `composer.json` -- do not restate them here, or the two drift.
+Requires [`ichava/core`](https://opensource.simtabi.com/documentation/ichava/core/); targets PHP `^8.4.1 || ^8.5` on Laravel `^13`.
 
 ## Install
 
@@ -18,31 +19,33 @@ composer require {{packageName}}
 php artisan ichava::ichava-core.database seed --package={{packageName}}
 ```
 
-The seed is not optional -- until it runs the registry holds no rows for this pack and every lookup returns nothing.
+The seed is not optional — until it runs the registry holds no rows for this pack and every lookup returns nothing.
 
 This pack's configuration is registered by `laranail/package-tools` from the provider's `hasConfigFile()` call; see core's [configuration guide](https://opensource.simtabi.com/documentation/ichava/core/configuration) for publishing and overriding it.
 
 ## <a name="documentation"></a>Documentation
 
+Full documentation is at **[opensource.simtabi.com/documentation/{{packageName}}](https://opensource.simtabi.com/documentation/{{packageName}}/)**.
+
 ### This pack
 
-- [{{axisStudlyPlural}}](docs/{{axisPlural}}.md) -- the {{axisPlural}} this pack ships and how to address them
-- [Customisation](docs/customization.md) -- colour, size, adding your own icons
-- [Attribution](docs/attribution.md) -- upstream project, licence terms, and credit
+- [{{axisStudlyPlural}}](docs/{{axisPlural}}.md) — the {{axisPlural}} this pack ships and how to address them
+- [Customisation](docs/customization.md) — colour, size, adding your own icons
+- [Attribution](docs/attribution.md) — upstream project, licence terms, and credit
 
 ### Shared across every pack
 
-- [Use an icon pack](https://opensource.simtabi.com/documentation/ichava/core/recipes/use-an-icon-pack) -- addressing icons, in Blade and in PHP
-- [Seed pack icons](https://opensource.simtabi.com/documentation/ichava/core/recipes/seed-pack-icons) -- the seeding pipeline and its options
-- [Check pack updates](https://opensource.simtabi.com/documentation/ichava/core/recipes/check-pack-updates) -- the update checker and what its statuses mean
-- [Serve icons from a CDN](https://opensource.simtabi.com/documentation/ichava/core/recipes/serve-icons-from-a-cdn) -- reading this pack's CDN templates out of `config.json`
-- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format) -- the grammar both spellings normalise to
-- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components) -- `<x-ichava::icon>` and its attributes
+- [Use an icon pack](https://opensource.simtabi.com/documentation/ichava/core/recipes/use-an-icon-pack) — addressing icons, in Blade and in PHP
+- [Seed pack icons](https://opensource.simtabi.com/documentation/ichava/core/recipes/seed-pack-icons) — the seeding pipeline and its options
+- [Check pack updates](https://opensource.simtabi.com/documentation/ichava/core/recipes/check-pack-updates) — the update checker and what its statuses mean
+- [Serve icons from a CDN](https://opensource.simtabi.com/documentation/ichava/core/recipes/serve-icons-from-a-cdn) — reading this pack's CDN templates out of `config.json`
+- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format) — the grammar both spellings normalise to
+- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components) — `<x-ichava::icon>` and its attributes
 
 ## Contributing & security
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through [SECURITY.md](SECURITY.md) -- never in a public issue.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through [SECURITY.md](SECURITY.md) — never in a public issue.
 
 ## License
 
-MIT. (c) {{vendor}}. See [LICENSE.md](LICENSE.md).
+MIT. © {{vendor}}. See [LICENSE](LICENSE).
