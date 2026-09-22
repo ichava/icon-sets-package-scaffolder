@@ -82,7 +82,7 @@ Relocated from the README, which is now a slim pointer.
 php artisan ichava::ichava-core.info icons --package={{packageName}}
 ```
 
-For the visual browser, install [`ichava/browser`](https://opensource.simtabi.com/documentation/ichava/browser/) and visit `/{prefix}/icons`.
+For the visual browser, install [`ichava/icon-browser`](https://opensource.simtabi.com/documentation/ichava/icon-browser/) and visit `/{prefix}/icons`.
 
 ## See also
 

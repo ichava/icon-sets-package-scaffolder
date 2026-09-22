@@ -10,7 +10,7 @@ declare(strict_types=1);
  * appends the filename to the namespace whenever the two differ, so a file named
  * anything else would merge at `ichava.icon-sets-package-scaffolder.<filename>.*`
  * while every read site used the shorter key -- returning null for the whole
- * file, silently. That defect shipped in ichava/core and ichava/browser for
+ * file, silently. That defect shipped in ichava/core and ichava/icon-browser for
  * months (V39).
  */
 
