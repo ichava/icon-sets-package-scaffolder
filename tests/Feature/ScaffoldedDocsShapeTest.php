@@ -53,17 +53,24 @@ it('scaffolds docs in the shape every pack in the estate uses', function (): voi
         // needle, not a failure message. Asserting a boolean is the only way
         // to attach one here, and writing it the other way is how this test
         // first failed on a file that was perfectly correct.
-        // The page template gained a breadcrumb above the H1: the same link the
-        // page closes with, so a reader at the top of a long page can leave
-        // without scrolling. It is asserted exactly, rather than as "starts
-        // with `[`", because the defect this replaced was four different
-        // spellings across the estate and sixteen of them pointing at an
-        // anchor no README carried.
-        expect(str_starts_with($body, '[← Docs index](../README.md#documentation)' . "\n\n# "))
-            ->toBeTrue("{$name} does not open with the breadcrumb, a blank line, then an H1");
+        // Settled 2026-09-22: the index link is a FOOTER, and the H1 is the
+        // first line. That is the standard's page template and what every
+        // `laranail` docs page does -- measured across `package-management`
+        // and `console`, not inferred.
+        //
+        // This assertion used to require the breadcrumb ABOVE the H1. The two
+        // shapes were adopted in different repos within the same hour, and the
+        // estate ended up with the link twice on sixteen pages: once at the
+        // top, once in the footer it already had. Asserting the count is what
+        // catches that, because a page with both satisfies "has a footer" and
+        // "opens with a breadcrumb" at the same time.
+        expect(str_starts_with($body, '# '))
+            ->toBeTrue("{$name} does not open with its H1");
 
-        expect(str_contains($body, '[← Docs index](../README.md#documentation)'))
-            ->toBeTrue("{$name} has no footer");
+        expect(substr_count($body, '[← Docs index](../README.md#documentation)'))
+            ->toBe(1, "{$name} should carry the index link exactly once, as its footer");
+
+        expect(rtrim($body))->toEndWith('[← Docs index](../README.md#documentation)');
 
         // A scaffolder token, not any `{{`. The convention is mustache with no
         // internal spaces, which is exactly what distinguishes `{{packageName}}`
