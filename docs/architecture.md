@@ -1,5 +1,3 @@
-[← Docs index](../README.md#documentation)
-
 # Architecture
 
 How the package is laid out, and why it is laid out that way rather than as the
