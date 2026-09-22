@@ -1,0 +1,53 @@
+[← Docs index](../README.md#documentation)
+
+# {{axisStudlyPlural}}
+
+*Reference.*
+
+{{humanName}} ships the following {{axisPlural}}. Reference any icon as `{{packageName}}::<{{axis}}>/<icon-name>` (or just `<icon-name>` for the default {{axis}}).
+
+| {{axisStudly}} | Path prefix | Style |
+|---|---|---|
+| `default` | `<name>` (no prefix needed) | <!-- describe the default {{axis}} --> |
+| <!-- add rows for additional {{axisPlural}} --> | | |
+
+## Examples
+
+```blade
+{{-- Default {{axis}} --}}
+<x-ichava::icon name="{{packageName}}::home" class="w-6 h-6" />
+
+{{-- Explicit {{axis}} path --}}
+<x-ichava::icon name="{{packageName}}::default/home" class="w-6 h-6" />
+```
+
+Fluent helper:
+
+```blade
+{{ ichava('{{packageName}}::home')->color('#4338ca')->class('w-6 h-6') }}
+```
+
+## {{axisStudly}} enum (PHP)
+
+```php
+use {{namespace}}\Enums\{{axisStudly}};
+
+{{axisStudly}}::DEFAULT->value;            // 'default'
+{{axisStudly}}::DEFAULT->isDefault();      // true
+{{axisStudly}}::default();                 // {{axisStudly}}::DEFAULT
+```
+
+The enum implements `IconSetVariantInterface` from core, so it works wherever core's registry expects a {{axis}}.
+
+## When to use which
+
+<!-- Brief guidance: which {{axis}} fits which use case. -->
+
+## See also
+
+- [Customisation](customization.md)
+- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format)
+
+---
+
+[← Docs index](../README.md#documentation)

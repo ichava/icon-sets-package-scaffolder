@@ -7,7 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **The generator can scaffold a `Category` pack.** It emitted `Variant`
+  unconditionally, so a scaffolded pack could not look like
+  `icon-sets-bundled`, `icon-sets-metronic` or `icon-sets-emoji` --
+  **three of the five packs in its own estate.** `IconAxis` now carries the
+  choice through `PackageDefinition`, the CLI and the prompter, and four
+  tokens (`{{axis}}`, `{{axisStudly}}`, `{{axisPlural}}`,
+  `{{axisStudlyPlural}}`) render it. Two stubs carry the token in their
+  *path*: `src/Enums/{{axisStudly}}.php.stub` and `docs/{{axisPlural}}.md.stub`.
+
+  `plural()` is spelled out rather than suffixed -- `categories`, not
+  `categorys` -- which is the same `-ies` case the shipped `ResourceShapeTest`
+  already handled and nothing had ever exercised against a generated pack.
+
 ### Fixed
+
+- **A scaffolded `Category` pack wrote its axis values into the wrong
+  `config.json` key.** `metadata.data` carries both `variants` and
+  `categories`, and `JsonConfigConstants` reads each **by its literal name**,
+  so a config renaming the key to match its axis would leave
+  `getVariants()` answering an empty array. Read off `origin/main`
+  2026-09-21: metronic, bundled and flag all ship both keys whatever enum
+  they expose. Both are always emitted now and the axis decides which one
+  carries the values.
+
+  The first version of the guard for this could not fail: it rendered a pack
+  with **no** axis values, so both slots were `{}` and either assignment
+  passed. It renders values now, and the mutation is caught.
+
+- Core's contract names are not axis words. `IconsConstants`' docblock
+  describes `getVariants()` / `getCategories()` on `JsonConfigConstants`, and
+  templating those would have produced a `Category` pack whose docblock said
+  `getVariants()` returns category slugs. Left alone deliberately, alongside
+  `HasIconSetVariants` and `IconSetVariantInterface`, which a real `Category`
+  pack still uses verbatim.
+
 
 - **The stub tree linked at documentation pages that have moved out of `ichava/documentation`.**
   Eight links across `stubs/README.md.stub`, `stubs/docs/customization.md.stub` and

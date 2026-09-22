@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services;
 
 use Illuminate\Support\Str;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconAxis;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
 /**
@@ -43,10 +44,20 @@ final readonly class TokenMapFactory
             '{{packageName}}'      => $definition->packageName(),
             '{{bladeNamespace}}'   => $definition->bladeNamespace(),
 
-            '{{prefix}}'       => $definition->prefix,
-            '{{email}}'        => $definition->email,
-            '{{iconSetType}}'  => $definition->type->value,
-            '{{variantsJson}}' => $this->variantsJson($definition),
+            '{{prefix}}'      => $definition->prefix,
+            '{{email}}'       => $definition->email,
+            '{{iconSetType}}' => $definition->type->value,
+
+            // The taxonomy axis, distinct from iconSetType above: that one is
+            // filesystem layout, these name the enum class, the docs page and
+            // the translation groups a pack ships.
+            '{{axis}}'             => $definition->axis->value,
+            '{{axisStudly}}'       => $definition->axis->studly(),
+            '{{axisPlural}}'       => $definition->axis->plural(),
+            '{{axisStudlyPlural}}' => $definition->axis->studlyPlural(),
+            '{{axisDescriptions}}' => $definition->axis->descriptionsKey(),
+            '{{variantsJson}}'     => $this->axisJson($definition, IconAxis::Variant),
+            '{{categoriesJson}}'   => $this->axisJson($definition, IconAxis::Category),
 
             '{{year}}' => date('Y'),
             '{{date}}' => date('Y-m-d'),
@@ -54,14 +65,20 @@ final readonly class TokenMapFactory
     }
 
     /**
-     * The `variants` block for `resources/assets/svg/config.json`.
+     * One `metadata.data` block for `resources/assets/svg/config.json`.
      *
-     * `{}` for a single-set pack, not `[]`: the consumer reads this as a map,
-     * and an empty PHP array encodes to a JSON array, which is the wrong type.
+     * Both `variants` and `categories` are always emitted, because every pack
+     * in the estate ships both and `JsonConfigConstants` reads each by its
+     * literal name -- `getVariants()` would return an empty array against a
+     * config that renamed the key to match its axis. The axis decides which
+     * of the two carries the values; the other stays empty.
+     *
+     * `{}` for the empty one, not `[]`: the consumer reads this as a map, and
+     * an empty PHP array encodes to a JSON array, which is the wrong type.
      */
-    private function variantsJson(PackageDefinition $definition): string
+    private function axisJson(PackageDefinition $definition, IconAxis $slot): string
     {
-        $config = $definition->variantsConfig();
+        $config = $definition->axis === $slot ? $definition->variantsConfig() : [];
 
         if ($config === []) {
             return '{}';

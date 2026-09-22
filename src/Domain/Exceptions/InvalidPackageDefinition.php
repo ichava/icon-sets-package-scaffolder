@@ -43,6 +43,11 @@ final class InvalidPackageDefinition extends InvalidArgumentException
         return new self(sprintf('Unknown icon set type "%s"; expected "single" or "multi".', $type));
     }
 
+    public static function unknownIconAxis(string $axis): self
+    {
+        return new self(sprintf('Unknown icon axis "%s"; expected "variant" or "category".', $axis));
+    }
+
     public static function multiSetWithoutVariants(): self
     {
         return new self('A multi-variant package needs at least one variant.');

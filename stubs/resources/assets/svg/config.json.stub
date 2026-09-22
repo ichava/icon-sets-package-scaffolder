@@ -22,7 +22,7 @@
         "repository": "https://github.com/{{packageName}}",
         "data": {
             "variants": {{variantsJson}},
-            "categories": {}
+            "categories": {{categoriesJson}}
         }
     },
     "config": {

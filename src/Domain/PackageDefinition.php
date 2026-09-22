@@ -34,10 +34,16 @@ final readonly class PackageDefinition
         public string $prefix,
         public IconSetType $type,
         public array $variants,
+        public IconAxis $axis = IconAxis::Variant,
     ) {}
 
     /**
      * @param list<string> $variants raw variant names; ignored for single-set packs
+     *
+     * `$axis` defaults to Variant so every existing caller keeps its meaning.
+     * That default is a decision, not an accident -- it is pinned by a test,
+     * because silently changing it would rename the enum class, the docs page
+     * and the translation groups of every pack scaffolded afterwards.
      */
     public static function create(
         string $name,
@@ -46,6 +52,7 @@ final readonly class PackageDefinition
         ?string $prefix = null,
         string|IconSetType $type = IconSetType::Single,
         array $variants = [],
+        string|IconAxis $axis = IconAxis::Variant,
     ): self {
         $name = trim($name);
         $vendor = trim($vendor);
@@ -80,6 +87,7 @@ final readonly class PackageDefinition
             prefix: trim((string) $prefix) !== '' ? trim((string) $prefix) : $kebabName,
             type: $type,
             variants: $type->hasVariantDirectories() ? self::buildVariants($variants) : [],
+            axis: is_string($axis) ? IconAxis::fromInput($axis) : $axis,
         );
     }
 
