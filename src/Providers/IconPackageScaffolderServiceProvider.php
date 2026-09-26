@@ -30,6 +30,7 @@ final class IconPackageScaffolderServiceProvider extends PackageServiceProvider
             ->setName('ichava/icon-sets-package-scaffolder')
             ->setPathFrom(source: $this, levelsUp: 2)
             ->hasConfigFile('icon-sets-package-scaffolder')
+            ->hasTranslations()
             ->hasCommands(MakeIconPackageCommand::class);
     }
 

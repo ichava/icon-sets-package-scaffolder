@@ -18,10 +18,10 @@ declare(strict_types=1);
 const SCAFFOLDER_LANG_NAMESPACE = 'ichava/icon-sets-package-scaffolder';
 
 /**
- * Measured 2026-09-26: 44 before any migration. Lower it when a literal is
+ * Measured 2026-09-26: 44 before the migration, 0 after. Lower it when a literal is
  * translated; never raise it.
  */
-const SCAFFOLDER_CONSOLE_LITERAL_CEILING = 44;
+const SCAFFOLDER_CONSOLE_LITERAL_CEILING = 0;
 
 /** @return array<string, string> relative path => source */
 function scaffolderConsoleSources(): array
@@ -61,6 +61,10 @@ function scaffolderConsoleLiterals(string $source): array
         '/=>\s*[\'"][A-Z][a-z]+ [^\'"]*[\'"]/',
     ];
 
+    // Symfony markup (`<fg=cyan>`, `<options=bold>`, `</>`) is not English;
+    // strip it so a styled wrapper around a translated string does not count.
+    $source = (string) preg_replace('#</?[a-z]*(=[a-z;,=]+)?>#i', '', $source);
+
     $found = [];
 
     foreach ($patterns as $pattern) {
@@ -73,6 +77,29 @@ function scaffolderConsoleLiterals(string $source): array
 
 it('reads the console sources it guards', function (): void {
     expect(count(scaffolderConsoleSources()))->toBeGreaterThanOrEqual(4);
+});
+
+it('registers its translations under the vendor-scoped namespace', function (): void {
+    $hints = app('translator')->getLoader()->namespaces();
+
+    $this->assertArrayHasKey(SCAFFOLDER_LANG_NAMESPACE, $hints);
+    $this->assertSame('Next steps', __(SCAFFOLDER_LANG_NAMESPACE . '::console.next_steps.heading'));
+});
+
+it('resolves every translation key the console references', function (): void {
+    $keys = [];
+
+    foreach (scaffolderConsoleSources() as $source) {
+        preg_match_all('/Messages::get\(\s*[\'"]([a-z0-9_.]+)[\'"]/', $source, $matches);
+        array_push($keys, ...$matches[1]);
+    }
+
+    $this->assertNotEmpty($keys, 'The console references no translation keys at all.');
+
+    foreach (array_unique($keys) as $key) {
+        $full = SCAFFOLDER_LANG_NAMESPACE . '::console.' . $key;
+        $this->assertNotSame($full, __($full), "Translation key does not resolve: {$full}");
+    }
 });
 
 it('does not add English literals to console output', function (): void {

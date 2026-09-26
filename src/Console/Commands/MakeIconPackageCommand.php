@@ -10,6 +10,7 @@ use function Laravel\Prompts\intro;
 use function Laravel\Prompts\outro;
 
 use Simtabi\Laranail\Console\Tools\Commands\Command;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Messages;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\NextStepsReporter;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
@@ -60,7 +61,7 @@ final class MakeIconPackageCommand extends Command
         $interactive = $this->input->isInteractive();
 
         if ($interactive) {
-            intro('Create a new Ichava icon package');
+            intro(Messages::get('make.intro'));
         }
 
         $force = (bool) $this->option('force');
@@ -94,7 +95,7 @@ final class MakeIconPackageCommand extends Command
         $reporter->report($this->getOutput(), $result);
 
         if ($interactive) {
-            outro('Icon package scaffolded');
+            outro(Messages::get('make.outro'));
         }
 
         return self::SUCCESS;

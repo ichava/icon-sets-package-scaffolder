@@ -36,39 +36,39 @@ final readonly class PackageDefinitionPrompter
     public function prompt(array $supplied, bool $interactive = true): PackageDefinition
     {
         $name = $this->filled($supplied, 'name') ?? $this->ask($interactive, fn (): string => text(
-            label: 'Package name',
-            placeholder: 'e.g. Hero, FontAwesome, Feather',
-            required: 'Package name is required',
-            hint: 'Type the bare noun -- `Hero`, not `HeroIcons`; the Icons suffix is added for you.',
+            label: Messages::get('prompt.name.label'),
+            placeholder: Messages::get('prompt.name.placeholder'),
+            required: Messages::get('prompt.name.required'),
+            hint: Messages::get('prompt.name.hint'),
         ));
 
         $vendor = $this->filled($supplied, 'vendor') ?? $this->ask($interactive, fn (): string => text(
-            label: 'Vendor name',
-            placeholder: 'e.g. YourCompany, MyOrg',
+            label: Messages::get('prompt.vendor.label'),
+            placeholder: Messages::get('prompt.vendor.placeholder'),
             default: 'YourVendor',
-            required: 'Vendor name is required',
-            hint: 'Used in the namespace and the composer package name',
+            required: Messages::get('prompt.vendor.required'),
+            hint: Messages::get('prompt.vendor.hint'),
         ));
 
         $email = $this->filled($supplied, 'email') ?? $this->ask($interactive, fn (): string => text(
-            label: 'Author email address',
-            placeholder: 'you@example.com',
-            required: 'Email address is required',
-            hint: 'Used in the composer.json author field',
+            label: Messages::get('prompt.email.label'),
+            placeholder: Messages::get('prompt.email.placeholder'),
+            required: Messages::get('prompt.email.required'),
+            hint: Messages::get('prompt.email.hint'),
         ));
 
         $prefix = $this->filled($supplied, 'prefix') ?? $this->ask($interactive, fn (): string => text(
-            label: 'Blade component prefix',
+            label: Messages::get('prompt.prefix.label'),
             placeholder: Str::kebab((string) $name),
             default: Str::kebab((string) $name),
-            hint: 'Used for Blade components: <x-{prefix}-icon name="..." />',
+            hint: Messages::get('prompt.prefix.hint'),
         ));
 
         $type = $this->filled($supplied, 'type') ?? $this->ask($interactive, fn (): string => select(
-            label: 'Icon set type',
+            label: Messages::get('prompt.type.label'),
             options: [
-                IconSetType::Single->value => 'Single set (one flat collection of icons)',
-                IconSetType::Multi->value  => 'Multi variant (outline, solid, duotone, ...)',
+                IconSetType::Single->value => Messages::get('prompt.type.single'),
+                IconSetType::Multi->value  => Messages::get('prompt.type.multi'),
             ],
             default: IconSetType::Single->value,
         ), IconSetType::Single->value);
@@ -77,10 +77,10 @@ final readonly class PackageDefinitionPrompter
         // `icon-sets-bundled` is a category pack whose SVGs sit in per-set
         // directories. One prompt for both would force a false choice.
         $axis = $this->filled($supplied, 'axis') ?? $this->ask($interactive, fn (): string => select(
-            label: 'How does this pack subdivide its icons?',
+            label: Messages::get('prompt.axis.label'),
             options: [
-                IconAxis::Variant->value  => 'Variants (outline, solid, duotone, ...)',
-                IconAxis::Category->value => 'Categories (brands, weather, ui, ...)',
+                IconAxis::Variant->value  => Messages::get('prompt.axis.variant'),
+                IconAxis::Category->value => Messages::get('prompt.axis.category'),
             ],
             default: IconAxis::Variant->value,
         ), IconAxis::Variant->value);
@@ -130,11 +130,11 @@ final readonly class PackageDefinitionPrompter
         }
 
         $answer = text(
-            label: 'Variants',
-            placeholder: 'outline, solid, duotone',
+            label: Messages::get('prompt.variants.label'),
+            placeholder: Messages::get('prompt.variants.placeholder'),
             default: 'outline, solid',
-            required: 'A multi-variant package needs at least one variant',
-            hint: 'Comma separated. The first is the default, and its icon files carry no suffix.',
+            required: Messages::get('prompt.variants.required'),
+            hint: Messages::get('prompt.variants.hint'),
         );
 
         $variants = $this->split($answer);
@@ -142,7 +142,7 @@ final readonly class PackageDefinitionPrompter
         // Stated rather than left to be discovered when the default icons do
         // not resolve: the first variant owns the unsuffixed filenames.
         confirm(
-            label: sprintf('"%s" will be the default variant. Continue?', $variants[0] ?? ''),
+            label: Messages::get('prompt.variants.confirm_default', ['variant' => $variants[0] ?? '']),
             default: true,
         ) || exit(1);
 
