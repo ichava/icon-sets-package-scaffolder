@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console;
 
 use Illuminate\Console\OutputStyle;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\ScaffoldResult;
 
 /**
@@ -22,50 +23,51 @@ final readonly class NextStepsReporter
         $definition = $result->definition;
 
         $output->newLine();
-        $output->writeln(sprintf(
-            '<options=bold>%s</> - %d files, %d icon directories',
-            $definition->packageName(),
-            $result->fileCount(),
-            count($result->directories),
-        ));
+        $output->writeln('<options=bold>' . Messages::get('next_steps.summary', [
+            'package'     => $definition->packageName(),
+            'files'       => $result->fileCount(),
+            'directories' => count($result->directories),
+        ]) . '</>');
         $output->writeln(sprintf('  <fg=gray>%s</>', $result->path));
 
         $output->newLine();
-        $output->writeln('<options=bold>Next steps</>');
+        $output->writeln('<options=bold>' . Messages::get('next_steps.heading') . '</>');
 
-        foreach ($result->directories as $index => $directory) {
-            $output->writeln(sprintf('  %d. Drop your SVG icons into <fg=cyan>%s/</>', $index + 1, $directory));
+        $step = 0;
+
+        foreach ($result->directories as $directory) {
+            $this->step($output, ++$step, Messages::get('next_steps.drop_icons', ['directory' => $this->code($directory . '/')]));
         }
 
-        $step = count($result->directories);
-
-        $output->writeln(sprintf(
-            '  %d. Fine-tune <fg=cyan>resources/assets/svg/config.json</> (description, repository).',
-            ++$step,
-        ));
-        $output->writeln(sprintf(
-            '  %d. If this pack vendors someone else\'s icons, add <fg=cyan>metadata.homepage</>'
-            . ' pointing at <fg=yellow>their</> project, and fill in the <fg=cyan>upstream</> block.',
-            ++$step,
-        ));
-        $output->writeln(sprintf(
-            '  %d. Run <fg=cyan>composer install</> inside the package to install its dev dependencies.',
-            ++$step,
-        ));
-        $output->writeln(sprintf(
-            '  %d. From a host app: <fg=cyan>composer require %s</>',
-            ++$step,
-            $definition->packageName(),
-        ));
-        $output->writeln('     The service provider is auto-discovered; no config/app.php edit is needed.');
+        $this->step($output, ++$step, Messages::get('next_steps.config', ['file' => $this->code('resources/assets/svg/config.json')]));
+        $this->step($output, ++$step, Messages::get('next_steps.upstream', [
+            'homepage' => $this->code('metadata.homepage'),
+            'upstream' => $this->code('upstream'),
+        ]));
+        $this->step($output, ++$step, Messages::get('next_steps.install', ['command' => $this->code('composer install')]));
+        $this->step($output, ++$step, Messages::get('next_steps.require', ['command' => $this->code('composer require ' . $definition->packageName())]));
+        $output->writeln('     ' . Messages::get('next_steps.autodiscovered'));
 
         $output->newLine();
-        $output->writeln(sprintf(
-            '  Icons render as <fg=cyan><x-%s-icon name="..." /></> and the pack ships <fg=cyan>%s</>.',
-            $definition->prefix,
-            $definition->updateCommandName(),
-        ));
-        $output->writeln('  All package metadata is driven by config.json; nothing is hardcoded.');
+        $output->writeln('  ' . Messages::get('next_steps.usage', [
+            'component' => $this->code(sprintf('<x-%s-icon name="..." />', $definition->prefix)),
+            'command'   => $this->code($definition->updateCommandName()),
+        ]));
+        $output->writeln('  ' . Messages::get('next_steps.metadata'));
         $output->newLine();
+    }
+
+    private function step(OutputStyle $output, int $number, string $text): void
+    {
+        $output->writeln(sprintf('  %d. %s', $number, $text));
+    }
+
+    /**
+     * A path or command, styled. The value is escaped so a `<` in it (the Blade
+     * tag in the usage line) is printed rather than parsed as markup.
+     */
+    private function code(string $value): string
+    {
+        return '<fg=cyan>' . OutputFormatter::escape($value) . '</>';
     }
 }

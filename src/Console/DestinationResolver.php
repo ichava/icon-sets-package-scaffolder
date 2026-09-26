@@ -37,16 +37,16 @@ final readonly class DestinationResolver
         $suggestion = $this->suggestion($definition);
 
         if (($supplied === null || trim($supplied) === '') && ! $interactive) {
-            throw new RuntimeException('A destination path is required. Pass --path when running non-interactively.');
+            throw new RuntimeException(Messages::get('destination.required_headless'));
         }
 
         if ($supplied === null || trim($supplied) === '') {
             $supplied = text(
-                label: 'Destination path for the icon package',
+                label: Messages::get('destination.label'),
                 placeholder: $suggestion,
                 default: $this->basePath() . DIRECTORY_SEPARATOR . $suggestion,
-                required: 'A destination path is required',
-                hint: sprintf('Absolute, or relative to the project root. The ecosystem convention is `%s`.', $suggestion),
+                required: Messages::get('destination.required'),
+                hint: Messages::get('destination.hint', ['suggestion' => $suggestion]),
             );
         }
 
@@ -76,19 +76,19 @@ final readonly class DestinationResolver
             // A non-interactive caller passed the path explicitly, which is the
             // consent the prompt would have been asking for.
             $create = $force || ! $interactive || confirm(
-                label: sprintf('Parent directory "%s" does not exist. Create it?', $parent),
+                label: Messages::get('destination.create_parent', ['parent' => $parent]),
                 default: true,
             );
 
             if (! $create) {
-                throw new RuntimeException('Cannot create a package without a valid parent directory.');
+                throw new RuntimeException(Messages::get('destination.no_parent'));
             }
 
             $this->files->ensureDirectoryExists($parent);
         }
 
         if (! $this->files->isWritable($parent)) {
-            throw new RuntimeException(sprintf('Parent directory is not writable: %s', $parent));
+            throw new RuntimeException(Messages::get('destination.not_writable', ['parent' => $parent]));
         }
     }
 
