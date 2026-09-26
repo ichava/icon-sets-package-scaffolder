@@ -8,11 +8,13 @@ use Throwable;
 
 use function Laravel\Prompts\intro;
 use function Laravel\Prompts\outro;
+use function Laravel\Prompts\warning;
 
 use Simtabi\Laranail\Console\Tools\Commands\Command;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\Messages;
 use Simtabi\Laranail\Console\Tools\Commands\Concerns\SupportsNamespacedNames;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\NextStepsReporter;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\ScaffoldCancelled;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackage;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\DestinationResolver;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console\PackageDefinitionPrompter;
@@ -80,6 +82,11 @@ final class MakeIconPackageCommand extends Command
             $path = $destinations->resolve($definition, $this->option('path'), $force, $interactive);
 
             $result = $scaffold($definition, $path, $force);
+        } catch (ScaffoldCancelled $e) {
+            // Declining is an answer, not a failure.
+            warning($e->getMessage());
+
+            return self::SUCCESS;
         } catch (InvalidPackageDefinition $e) {
             // Separated from the generic catch because this one is the user's
             // input, not a fault: it gets the message and nothing else.

@@ -141,10 +141,12 @@ final readonly class PackageDefinitionPrompter
 
         // Stated rather than left to be discovered when the default icons do
         // not resolve: the first variant owns the unsuffixed filenames.
-        confirm(
+        if (! confirm(
             label: Messages::get('prompt.variants.confirm_default', ['variant' => $variants[0] ?? '']),
             default: true,
-        ) || exit(1);
+        )) {
+            throw new ScaffoldCancelled(Messages::get('prompt.variants.declined'));
+        }
 
         return $variants;
     }

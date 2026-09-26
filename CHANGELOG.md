@@ -13,6 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   require it, and Composer reads `repositories` from the root package only, so a
   consumer that does not declare it cannot resolve core at all. The entry is harmless
   until then. Nothing here is on Packagist.
+- **Console output is translated.** Every prompt, hint, next-steps line and user-facing exception
+  under `src/Console/` now resolves from `resources/lang/en/console.php`, under the vendor-scoped
+  `ichava/icon-sets-package-scaffolder` namespace registered with `hasTranslations()`. Publish and
+  override it like any package's translations. Markup is kept out of the strings: styled paths and
+  commands arrive as `:placeholders`.
+- `ConsoleTranslationsTest` checks that every referenced key resolves, and ratchets English literals
+  in console output from 44 to 0.
+
+### Fixed
+
+- **Declining the default-variant confirmation no longer kills the process.** The prompter ended
+  with `confirm(...) || exit(1)`, so answering "no" terminated the whole PHP process with no message:
+  the host application, or the test runner. It now throws `Console\ScaffoldCancelled`, which the
+  command reports as a cancellation and exits 0, the way every ichava command treats a declined
+  confirmation.
 
 ## [0.1.3] - 2026-09-26
 

@@ -98,3 +98,28 @@ it('refuses an occupied destination and says so', function (): void {
 
     removeDirectory($root);
 });
+
+it('treats declining the default variant as a cancellation, not a process exit', function (): void {
+    // This used to be `confirm(...) || exit(1)` inside the prompter: declining
+    // ended the whole PHP process -- the host application, or the test runner --
+    // with no message. It is an answer, so the command says so and exits 0.
+    $root = scratchDirectory('declined');
+
+    $this->artisan(MakeIconPackageCommand::class, [
+        'name'     => 'Hero',
+        '--vendor' => 'Acme',
+        '--email'  => 'dev@example.com',
+        '--prefix' => 'hero',
+        '--path'   => $root . '/acme-hero-icons',
+        '--type'   => 'multi',
+        '--axis'   => 'variant',
+    ])
+        ->expectsQuestion('Variants', 'outline, solid')
+        ->expectsConfirmation('"outline" will be the default variant. Continue?', 'no')
+        ->expectsOutputToContain('Scaffolding cancelled')
+        ->assertExitCode(0);
+
+    expect(is_dir($root . '/acme-hero-icons'))->toBeFalse();
+
+    removeDirectory($root);
+});
