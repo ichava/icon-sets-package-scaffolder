@@ -40,6 +40,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/laranail/enumerator.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/db-tools.git"
         }
     ],
     "require-dev": {
