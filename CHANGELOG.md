@@ -5,6 +5,15 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **`composer.json` and the scaffolded stub list `laranail/db-tools` as a VCS repository.** `ichava/core` is about to
+  require it, and Composer reads `repositories` from the root package only, so a
+  consumer that does not declare it cannot resolve core at all. The entry is harmless
+  until then. Nothing here is on Packagist.
+
 ## [0.1.3] - 2026-09-26
 
 ### Added
