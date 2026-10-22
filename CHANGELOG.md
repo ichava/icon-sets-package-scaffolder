@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **References follow the repository renames.** `ichava/maintainer-toolkit` is now `ichava/icon-sets-sync`, `ichava/motion` is `ichava/js-motion` and `ichava/react-browser` is `ichava/react-icon-browser`. GitHub redirects the old names, but redirects are not permanent.
 - **`composer.json` and the scaffolded stub list `laranail/db-tools` as a VCS repository.** `ichava/core` is about to
   require it, and Composer reads `repositories` from the root package only, so a
   consumer that does not declare it cannot resolve core at all. The entry is harmless
