@@ -71,12 +71,14 @@ For the icon path grammar, see
 https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format
 ```
 
-## 5. Tag and publish
+## 5. Release and publish
 
-```bash
-git tag -a v1.0.0 -m "Release 1.0.0"
-git push origin main v1.0.0
-```
+The pack starts on the family's 0.1 line: its `CHANGELOG.md` opens at `[0.1.0]` and
+`release-please-config.json` sets `initial-version` to `0.1.0`. Push `main`, then run *Release
+Please* from the Actions tab. It opens a release pull request; merging it tags `v0.1.0` and
+`release.yml` publishes the changelog section. The workflow needs the organisation's Refresh Bot
+credentials (`REFRESH_APP_CLIENT_ID`, `REFRESH_APP_PRIVATE_KEY`), copied to the repository if it is
+private.
 
 Submit to [Packagist](https://packagist.org) so users can `composer require <vendor>/<pkg>`.
 
@@ -87,7 +89,7 @@ Every Ichava pack follows the same shape:
 - Class short names are constants (`IconsServiceProvider`, `IconsConstants`, `Variant` or `Category`, `IconComponent`). Disambiguation is by namespace.
 - Composer name is `<vendor>/<short>-icons`. GitHub repo is `<vendor>/<short>-icons` (no extra prefix).
 - Pack-specific docs live in `docs/`.
-- Tag releases as `v<x.y.z>`.
+- Releases are tagged `v<x.y.z>` by release-please, on the family's shared 0.x minor.
 
 ## See also
 

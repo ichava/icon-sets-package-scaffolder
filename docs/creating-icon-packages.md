@@ -212,7 +212,7 @@ your-icons/
     "name": "your/icons",
     "title": "Your Icons",
     "description": "Your custom icon set",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "license": "MIT",
     "author": "Your Name",
     "homepage": "https://example.com",
