@@ -23,6 +23,14 @@ every merge.
 GitHub release body. A release whose description is auto-generated notes or a
 bare "see CHANGELOG" is incomplete.
 
+## The 0.1.0 re-base
+
+Versioning was re-based on 2026-10-23, with every other ichava package. The tags `v0.1.0` to
+`v0.1.3` (2026-09-21 to 2026-09-26) and their GitHub releases were removed, and `main` was tagged `v0.1.0`. Every
+commit those tags pointed at is on `main`, so no code was lost; their notes are kept in
+`CHANGELOG.md` under *Archived pre-reset history*. Version numbers in older changelog entries and
+issues refer to that earlier series.
+
 ## Versioning
 
 Semantic versioning. For this package specifically:

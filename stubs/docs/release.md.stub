@@ -9,8 +9,8 @@ publishes. So a release is two acts: land the change through a pull request, the
 commit.
 
 ```bash
-git tag v0.1.1
-git push origin v0.1.1
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 ## The changelog is the release body
@@ -22,8 +22,9 @@ descend.
 
 ## The core constraint is the release decision
 
-`composer.json` requires `ichava/core`. Below `1.0` a caret pins the **minor**, so a multi-arm
-constraint is doing real work: it admits several core series rather than trapping consumers on one.
+`composer.json` requires `ichava/core`. Below `1.0` a caret pins the **minor**, so a new core minor
+reaches this pack only once the constraint is widened to admit it (`^0.1 || ^0.2`), never by raising
+it alone, which would trap consumers who stay on the older series.
 
 - **Widen** when a new core minor is compatible and this pack never used what changed.
 - **Raise the floor** when core ships a security fix in code this pack runs; the old constraint
