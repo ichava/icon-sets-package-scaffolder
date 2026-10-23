@@ -4,20 +4,34 @@ How a version of this package ships.
 
 ## Tag-driven
 
-`release.yml` triggers on `push` of a `v*.*.*` tag and nothing else. Every other
+`release.yml` triggers on `push` of a `v*.*.*` tag, plus a `workflow_dispatch`
+recovery path that refuses any ref but a release tag. Every other
 workflow triggers on `pull_request` plus `workflow_dispatch`: a job that runs
 after a change has landed is at the wrong end of the process, and double-runs on
 every merge.
 
 ## Cutting one
 
-1. Open a pull request. Nothing reaches `main` directly, a one-line docs fix
-   included -- the value is that everything on the default branch went through
-   the same gate.
-2. Add the version's section to `CHANGELOG.md`, Keep-a-Changelog format,
-   `## [X.Y.Z] - YYYY-MM-DD`.
-3. Merge once CI is green.
-4. Tag `vX.Y.Z` on the merge commit and push the tag.
+Releases are prepared by [release-please](https://github.com/googleapis/release-please).
+Nothing reaches `main` directly, a one-line docs fix included.
+
+1. Every pull request that changes behaviour adds to the one `## [Unreleased]` section of
+   `CHANGELOG.md`, and uses a Conventional Commit subject.
+2. Run *Release Please* from the Actions tab (it also runs every Monday). It opens or refreshes one
+   release pull request that bumps `.release-please-manifest.json`, and closes `[Unreleased]` as
+   `## [X.Y.Z] - date` on that branch. It fails when `[Unreleased]` is empty.
+3. Merge the release pull request once CI is green. That run tags `vX.Y.Z` and creates the release;
+   the tag starts `release.yml`, which publishes the changelog section as the body.
+
+On 0.x a breaking change (`feat!:` or a `BREAKING CHANGE:` footer) bumps the minor and everything
+else bumps the patch. The minor moves in lockstep across the coupled ichava packages: when one of
+them needs `0.N.0`, every coupled repository gets a pull request carrying a `Release-As: 0.N.0`
+footer alongside its constraint change.
+Never edit the release pull request by hand: release-please rebuilds its branch and drops anything
+it did not write. Change the notes on `main` instead.
+
+If a tag ever starts nothing, run `release.yml` by hand against it:
+`gh workflow run release.yml --ref vX.Y.Z`. It refuses any ref that is not a release tag.
 
 `release.yml` extracts that version's CHANGELOG section and passes it as the
 GitHub release body. A release whose description is auto-generated notes or a

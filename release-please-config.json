@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v17.11.2/schemas/config.json",
+  "release-type": "php",
+  "bootstrap-sha": "e105d6620399dfbd51f6a90bd35fdb2a8b5ebaf6",
+  "include-v-in-tag": true,
+  "include-component-in-tag": false,
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "skip-changelog": true,
+  "packages": {
+    ".": {
+      "package-name": "ichava/icon-sets-package-scaffolder"
+    }
+  }
+}
