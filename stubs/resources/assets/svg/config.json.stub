@@ -5,7 +5,7 @@
         "title": "{{studlyName}} Icons",
         "description": "Beautiful {{studlyName}} icons for Laravel applications",
         "keywords": ["icons", "svg", "{{kebabName}}", "laravel"],
-        "version": "1.0.0",
+        "version": "0.1.0",
         "type": "{{iconSetType}}",
         "license": "MIT"
     },
