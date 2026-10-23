@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
+Versioning re-based to 0.1.0. This release contains everything previously tagged v0.1.0 through v0.1.3 (2026-09-21 to 2026-09-26) plus the changes below, and the stub now requires `ichava/core` `^0.1`, the re-based core. Those tags and their GitHub releases were removed; every commit they pointed at is on `main`, and their sections are kept under *Archived pre-reset history*.
+
 ### Changed
 
 - **References follow the repository renames.** `ichava/maintainer-toolkit` is now `ichava/icon-sets-sync`, `ichava/motion` is `ichava/js-motion` and `ichava/react-browser` is `ichava/react-icon-browser`. GitHub redirects the old names, but redirects are not permanent.
@@ -30,9 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   command reports as a cancellation and exits 0, the way every ichava command treats a declined
   confirmation.
 
-## [0.1.3] - 2026-09-26
+## [Archived pre-reset history]
 
-### Added
+> Versioning was re-based to 0.1.0 on 2026-10-23. The tags and GitHub releases below were removed;
+> every commit they pointed at is on `main`. Sections reproduced verbatim, one heading level down.
+
+### [0.1.3] - 2026-09-26
+
+#### Added
 
 - **A test pins the `docs/` shape, and a workflow runs it on the changes that
   break it.** the scaffolded `DocsShapeTest` asserts the five concern pages the
@@ -72,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   It is mutation-checked: removing either new stub turns it red.
 
-### Changed
+#### Changed
 
 - **`SECURITY.md` removed; the organization policy serves this repository now.**
   The file was byte-identical across six ichava repositories and held nothing
@@ -88,9 +97,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   went, so it now points at `/security/policy` directly. `composer.json` and the
   issue-template link already did.
 
-## [0.1.2] - 2026-09-22
+### [0.1.2] - 2026-09-22
 
-### Added
+#### Added
 
 - **A scaffolded pack ships the five concern pages the estate packs ship.**
   `stubs/docs/{installation,getting-started,configuration,architecture,release}.md.stub`,
@@ -133,7 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   top-level `it()` sharing a file with a PHPUnit class makes Pest skip the
   class, which silently switched off 19 assertions across three packs.
 
-### Changed
+#### Changed
 
 - **The "Authenticate Composer for private GitHub deps" step is gone.** It
   configured a `GH_PACKAGES_PAT` against `github-oauth.github.com` because
@@ -162,7 +171,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `SECURITY.md` were already stated inline and are unchanged; the Code of Conduct now cites the
   Contributor Covenant directly. Historical mentions in this changelog are left as written.
 
-### Fixed
+#### Fixed
 
 - **A scaffolded `Category` pack wrote its axis values into the wrong
   `config.json` key.** `metadata.data` carries both `variants` and
@@ -210,7 +219,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the first check said `MISSING` for all four, because the local ref was stale. Fetch before
   believing a `cat-file -e`.
 
-### Documentation
+#### Documentation
 
 - `creating-icon-packages.md` documents the six axis tokens, and states what
   `--axis` does **not** reach: `icon-sets-emoji` needs two enums rather than a
@@ -222,9 +231,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `vendor/ichava/core/stubs/icon-package/`, which has not existed since
   scaffolding left core in `0.3.0`.
 
-## [0.1.1] - 2026-09-21
+### [0.1.1] - 2026-09-21
 
-### Added
+#### Added
 
 - **Two parity cases over the generated `src/` tree**, both mutation-checked by reintroducing the
   stub and confirming they go red:
@@ -328,7 +337,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   workflows from its first pull request rather than inheriting the gap the five existing packs
   just closed.
 
-### Fixed
+#### Fixed
 
 - **The stubs publish destination named a directory that no longer exists.** The bundled tree
   became `stubs/` when `stubs/icon-package/` was flattened, but the provider still published to
@@ -461,12 +470,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   carries `continue-on-error: true` and the publish step sets `fail_on_unmatched_files: false`.
   The stale section has been removed rather than reconciled.
 
-## [0.1.0] - 2026-09-21
+### [0.1.0] - 2026-09-21
 
 First release. Extracted from `ichava/core`, where the generator was a single
 737-line command class reachable only by driving interactive prompts.
 
-### Added
+#### Added
 
 - `ichava::icon-package-scaffolder.make`, the scaffolding command. Namespaced per
   `V59`; no bare alias is registered, so nothing claims Laravel's `make:` namespace
@@ -505,14 +514,14 @@ First release. Extracted from `ichava/core`, where the generator was a single
   both a single-set and a multi-variant pack -- 24 files and 25 files, `diff -r` clean against
   core at `a902a5e`.
 
-### Changed
+#### Changed
 
 - Generation refuses a non-empty destination unless forced, rather than prompting
   and proceeding.
 - Running with `--no-interaction` completes from options instead of blocking on a
   TTY that is not there.
 
-### Known behaviour, inherited and pinned
+#### Known behaviour, inherited and pinned
 
 - The `Icons` suffix is appended to the name you type, so `HeroIcons` yields
   `acme/hero-icons-icons` and `Acme\HeroIconsIcons`. Pinned by a test rather than
