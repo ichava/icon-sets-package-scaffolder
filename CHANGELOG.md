@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **The worked examples name public packs only.** `creating-icon-packages.md`, the source and test comments, and the `ResourceShapeTest` stub used two packs that are now private as examples. They now use `icon-sets-tabler` and `icon-sets-flag` for variant packs (`outline`/`filled`, `4x3`/`1x1`), and `icon-sets-emoji` where the point is a category pack with per-set directories, the one public pack of that shape. The `IchavaRegistrar` and `registerBulkIconSets()` examples register `icon-sets-tabler`'s two variant directories instead of a hypothetical 72-set bundle, and the "what the scaffolder does not reach" table drops the row for a private pack. Comments only in PHP; no behaviour changes.
+
 - **A scaffolded pack starts on the family's 0.1 line, not 1.0.0.** The coupled ichava packages share one 0.x minor, so `^0.1` means the 0.1 line of the whole family. The scaffolded `CHANGELOG.md` now opens at `[0.1.0]`, release-please's `initial-version` and `resources/assets/svg/config.json`'s `package.version` start at `0.1.0`, and release-please moves that `package.version` with each release (`extra-files`). `ichava/core: ^0.1` and the `0.1.x-dev` branch alias already matched. `ReleasePleaseStubTest` now fails unless the first release, the branch alias, the core constraint and `package.version` all name the same minor. The build-your-own-pack recipe describes the release pull request instead of a hand-made `v1.0.0` tag.
 
 ### Fixed

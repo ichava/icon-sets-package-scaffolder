@@ -15,12 +15,11 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidP
  * *means*, which determines the enum class, the docs page and the translation
  * groups a pack ships.
  *
- * They are orthogonal, and the estate proves it: `icon-sets-bundled` is a
+ * They are orthogonal, and the estate proves it: `icon-sets-emoji` is a
  * category pack whose SVGs sit in per-set directories, and `icon-sets-flag` is
  * a variant pack with two. Folding them into one four-case enum makes the two
  * questions look like one, which is the conflation that left this generator
- * able to emit only variant packs while three of the five real packs are
- * category packs.
+ * able to emit only variant packs while category packs exist in the estate.
  */
 enum IconAxis: string
 {
