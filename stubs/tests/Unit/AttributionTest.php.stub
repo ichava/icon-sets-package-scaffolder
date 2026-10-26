@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * The icons are not this package's own work, and the package has to say so wherever it goes.
+ *
+ * `LICENSE` covers the package code only and stays the plain MIT text, so GitHub
+ * and Packagist keep detecting it as MIT: a third-party notice appended to it made
+ * the detector answer NOASSERTION in the sibling packs. The upstream notice lives in
+ * `ATTRIBUTION.md` at the root, because `docs/` is export-ignored and never reaches
+ * a consumer's vendor directory.
+ */
+function attribution_root(): string
+{
+    return dirname(__DIR__, 2);
+}
+
+it(description: 'ships ATTRIBUTION.md at the package root', closure: function () {
+    expect(is_file(attribution_root() . '/ATTRIBUTION.md'))->toBeTrue();
+});
+
+it(description: 'never export-ignores ATTRIBUTION.md, so the notice reaches every install', closure: function () {
+    $lines = file(attribution_root() . '/.gitattributes', FILE_IGNORE_NEW_LINES) ?: [];
+    expect(count($lines))->toBeGreaterThan(0);
+    foreach ($lines as $line) {
+        if (str_contains($line, 'export-ignore')) {
+            $pattern = ltrim(trim(strtok($line, " \t")), '/');
+            $this->assertFalse(fnmatch($pattern, 'ATTRIBUTION.md'), "'{$line}' would drop ATTRIBUTION.md from the dist archive");
+        }
+    }
+});
+
+it(description: 'says the package claims no authorship of the icons', closure: function () {
+    $text = (string) file_get_contents(attribution_root() . '/ATTRIBUTION.md');
+    $this->assertStringContainsString('claims no authorship', $text);
+    $this->assertStringContainsString('covers ONLY the package code', $text);
+});
+
+it(description: 'keeps LICENSE to the package code, held by {{vendor}}', closure: function () {
+    $license = (string) file_get_contents(attribution_root() . '/LICENSE');
+    expect(preg_match_all('/^Copyright /m', $license))->toBe(1);
+    $this->assertStringContainsString('{{vendor}}', $license);
+    $this->assertStringEndsWith("DEALINGS IN THE\nSOFTWARE.\n", $license, 'LICENSE must end where the MIT text ends; anything appended belongs in ATTRIBUTION.md');
+});
+
+it(description: 'points the README licence section at ATTRIBUTION.md', closure: function () {
+    $readme = (string) file_get_contents(attribution_root() . '/README.md');
+    expect(preg_match('/^## License\n(.*?)(?=^## |\z)/ms', $readme, $m))->toBe(1);
+    $this->assertStringContainsString('(ATTRIBUTION.md)', $m[1]);
+    $this->assertStringContainsString('claims no authorship', $m[1]);
+});

@@ -53,4 +53,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through
 
 ## License
 
-MIT. © {{vendor}}. See [LICENSE](LICENSE).
+The package code is MIT, © {{vendor}}. See [LICENSE](LICENSE).
+
+The icons keep their upstream authors' licence, and {{vendor}} claims no authorship of them. Their notice is in [ATTRIBUTION.md](ATTRIBUTION.md), which ships with the package and must accompany any copy of the icons.

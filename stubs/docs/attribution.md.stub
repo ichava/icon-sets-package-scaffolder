@@ -20,9 +20,9 @@
      - CC-BY: visible attribution required, document where credit goes.
      - Commercial: document who needs a licence and where to buy it.       -->
 
-This Composer package is [MIT](../LICENSE).
+This Composer package's code is [MIT](../LICENSE). The upstream icon assets are <!-- specify --> licensed; they are their authors' work, and the package claims no authorship of them.
 
-The upstream icon assets are <!-- specify --> licensed.
+The notice the upstream licence requires lives in [`ATTRIBUTION.md`](../ATTRIBUTION.md) at the package root, which ships in the dist archive (`docs/` does not). Keep this page and that file in agreement.
 
 ## Credit
 
