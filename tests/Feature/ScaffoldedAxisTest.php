@@ -17,8 +17,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackag
 | that looks right is not evidence the output is.
 |
 | Before this, the generator emitted `Variant` unconditionally: a scaffolded
-| pack could not look like `icon-sets-bundled`, `icon-sets-metronic` or
-| `icon-sets-emoji`, which is three of the five packs in its own estate.
+| pack could not look like a category pack such as `icon-sets-emoji`.
 |
 */
 
@@ -155,9 +154,9 @@ it('puts the axis values in the config.json key core reads them from', function 
 ) {
     // Both keys are always present and `JsonConfigConstants` reads each by
     // its literal name, so a config that renamed `variants` to match its axis
-    // would make `getVariants()` answer an empty array. Read off a real pack
-    // 2026-09-21: metronic, bundled and flag all ship `variants` AND
-    // `categories` under `metadata.data`, whatever enum they expose.
+    // would make `getVariants()` answer an empty array. Read off the real
+    // packs: tabler, flag and emoji all ship `variants` AND `categories` under
+    // `metadata.data`, whatever enum they expose.
     // Values are required here. With none, BOTH slots render `{}` and the
     // assertion below passes whichever slot the generator filled -- which is
     // exactly how the first version of this test passed its own mutation.

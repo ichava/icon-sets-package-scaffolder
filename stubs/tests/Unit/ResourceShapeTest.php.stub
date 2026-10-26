@@ -79,8 +79,8 @@ it('matches every labelled group to its enum exactly', function () {
         }
 
         // `categories` -> `Category`, not `Categorie`. A bare rtrim('s') is
-        // wrong for every -ies plural, and the estate has one: icon-sets-
-        // bundled and icon-sets-metronic both ship a `Category` enum.
+        // wrong for every -ies plural, and the estate has one: icon-sets-emoji
+        // ships a `Category` enum.
         $singular = str_ends_with($group, 'ies')
             ? substr($group, 0, -3) . 'y'
             : rtrim($group, 's');

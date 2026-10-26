@@ -31,7 +31,7 @@ package is `composer install`-ready; just drop SVG files into
 
 > **Directory naming convention.** New packages should live in a directory
 > named `ichava-<kebabName>-icons`, matching the existing siblings
-> (`ichava-tabler-icons`, `ichava-bundled-icons`, `ichava-metronic-icons`).
+> (`ichava-tabler-icons`, `ichava-flag-icons`).
 > The interactive prompt defaults to `base_path("ichava-{kebabName}-icons")`.
 
 The full flag reference lives with the command, in
@@ -158,18 +158,17 @@ To remove a file from the scaffold, just delete it from the stubs tree.
 #### What the scaffolder does not reach
 
 `--axis` covers the two shapes the estate actually repeats: `icon-sets-flag`
-is a `Variant` pack, `icon-sets-metronic` a `Category` one, and a scaffolded
-pack now matches either exactly. Two of the five packs are still beyond it,
-and both are one-offs rather than a missing flag. Measured against
-`origin/main`, 2026-09-21:
+and `icon-sets-tabler` are `Variant` packs (`4x3`/`1x1` and
+`outline`/`filled`), and a pack organised by one `Category` enum is the
+other. A scaffolded pack matches either exactly. One public pack is still
+beyond it, and it is a one-off rather than a missing flag. Measured against
+`origin/main`:
 
 | Pack | Shape | Why it is not generated |
 |---|---|---|
 | `icon-sets-emoji` | **Two** enums, `Category` *and* `Set`, with four labelled groups (`categories`, `category_descriptions`, `sets`, `set_descriptions`) | `--axis` picks one axis. A second is not a different value, it is a second enum, a second docs page and a second pair of lang groups. |
-| `icon-sets-bundled` | `docs/icon-sets.md` + `docs/set-licenses.md`, and no variants or categories page at all | It aggregates many upstream sets under their own separate licences. The licence page has no counterpart in any other pack. |
 
-Scaffold the closest axis and add the second enum or the extra page by
-hand. Note the shipped `ResourceShapeTest` already handles both: it
+Scaffold the closest axis and add the second enum by hand. Note the shipped `ResourceShapeTest` already handles both: it
 **discovers** its labelled groups rather than hardcoding `variants`, so an
 added `sets`/`set_descriptions` pair is checked against a `Set` enum the
 moment you add one -- which is how `icon-sets-emoji` is guarded today.
@@ -257,17 +256,17 @@ class YourIconsServiceProvider extends ServiceProvider
 }
 ```
 
-**For large bundles** (72 sets), use `registerBulkIconSets()` instead:
+**For a pack with several set directories**, use `registerBulkIconSets()` instead:
 
 ```php
 public function bootingPackage(): void
 {
-    $this->loadBladeComponent(YourBundleComponent::class, 'your-bundle');
+    $this->loadBladeComponent(YourIconComponent::class, 'your-icons');
 
     $this->registerBulkIconSets(
         basePath: $this->svgAssetsPath(),
-        iconSets: $this->iconSets,   // ['fontawesome' => [...], 'bootstrap' => [...]]
-        vendor:   'Your Bundle',
+        iconSets: $this->iconSets,   // ['outline' => [...], 'filled' => [...]]
+        vendor:   'Your Icons',
     )->trackStatistics()->enableLogging();
 }
 ```
@@ -344,21 +343,22 @@ public function bootingPackage(): void
 
 > Messages routed through `IchavaLogger` to the dedicated `ichava*` channels do **not** need a `[Ichava]` prefix, the channel name already scopes them. Use the `[Ichava]` prefix only when writing directly to the default Laravel `stack`/`daily` channel from outside the logger service.
 
-### 8. Using IchavaRegistrar for Large Bundles
+### 8. Using IchavaRegistrar for Several Icon Set Directories
 
-For bundles with many icon set sub-directories call `IchavaRegistrar` directly (or use the inherited `registerBulkIconSets()` helper):
+For a pack with several icon set sub-directories -- `icon-sets-tabler` ships
+`outline/` and `filled/` -- call `IchavaRegistrar` directly (or use the inherited `registerBulkIconSets()` helper):
 
 ```php
 public function bootingPackage(): void
 {
-    $this->loadBladeComponent(IconsBundleComponent::class, 'icons-bundle');
+    $this->loadBladeComponent(IconComponent::class, 'icon-sets-tabler');
 
-    IchavaRegistrar::register('icons-bundle')
+    IchavaRegistrar::register('icon-sets-tabler')
         ->basePath($this->svgAssetsPath())
-        ->packagePrefix('icons-bundle')
-        ->bladeNamespace('icons-bundle')
+        ->packagePrefix('icon-sets-tabler')
+        ->bladeNamespace('icon-sets-tabler')
         ->providerClass(self::class)
-        ->vendor('Icons Bundle')
+        ->vendor('Tabler')
         ->configure($this->iconSets)   // triggers registration immediately
         ->trackStatistics()
         ->enableLogging();
@@ -371,7 +371,7 @@ Or via the inherited helper (shorthand):
 $this->registerBulkIconSets(
     basePath: $this->svgAssetsPath(),
     iconSets: $this->iconSets,
-    vendor:   'Icons Bundle',
+    vendor:   'Tabler',
 )->trackStatistics()->enableLogging();
 ```
 

@@ -15,10 +15,10 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidP
 | `IconSetType` answers "one SVG directory or one per variant?". `IconAxis`
 | answers "is this pack organised by variant or by category?". The generator
 | had only the first and assumed the answer to the second, which is why it
-| could emit only variant packs while three of the five real packs --
-| bundled, metronic and emoji -- are category packs.
+| could emit only variant packs while the estate has category packs, emoji
+| among them.
 |
-| They are orthogonal, and the estate proves it: bundled is a category pack
+| They are orthogonal, and the estate proves it: emoji is a category pack
 | whose SVGs sit in per-set directories.
 |
 */
@@ -52,7 +52,7 @@ it('defaults to variant, and that is a decision', function () {
 
 it('accepts an axis independently of the layout type', function () {
     // The orthogonality, asserted rather than asserted-about: a category pack
-    // with per-variant directories is exactly `icon-sets-bundled`.
+    // with per-set directories is exactly `icon-sets-emoji`.
     $definition = PackageDefinition::create(
         name: 'Beacon',
         vendor: 'Acme',
