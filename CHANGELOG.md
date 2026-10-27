@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-27
+
 ### Added
 
 - **Scaffolded packs ship release-please, as every estate pack now does.** The stub tree gains `.github/workflows/release-please.yml`, `release-please-config.json`, an empty `.release-please-manifest.json` and a `.github/actionlint.yaml` scoping the create-github-app-token v3 false positives; the scaffolded `release.yml` gains the same `workflow_dispatch` recovery path, and `docs/release.md` describes the release pull request. The first release is the version the scaffolded `CHANGELOG.md` already holds (`initial-version`), so the first release pull request finds its section in place; `ReleasePleaseStubTest` fails if the two disagree. `StubEstateParityTest` had gone red on `main` the moment icon-sets-flag shipped `release-please.yml`, because the stub tree did not.
