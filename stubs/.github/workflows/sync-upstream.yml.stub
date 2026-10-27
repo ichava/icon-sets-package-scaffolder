@@ -1,12 +1,13 @@
 # .github/workflows/sync-upstream.yml
 #
 # Drop-in template for any Ichava icon pack that wants automated
-# upstream-asset refreshes. Runs the ichava/icon-sets-sync docker image (which
-# bundles Python + Node + gh + every fetch strategy) and opens a PR
-# when upstream has moved.
+# upstream-asset refreshes. Builds the ichava/icon-sets-sync docker image
+# (the Go binary, with git, gh and Node) from the toolkit's main branch and
+# opens a PR when upstream has moved.
 #
-# A human reviews the PR diff and merges; the tag-driven release.yml
-# then ships the bump to Packagist.
+# A human reviews the PR diff and merges. release-please then opens the
+# release PR, and its tag starts release.yml, which publishes the GitHub
+# release. Nothing is published to Packagist; installs come from the tags.
 #
 # Required:
 #   GITHUB_TOKEN (automatic) for PR creation.
