@@ -114,6 +114,8 @@ it('treats declining the default variant as a cancellation, not a process exit',
         '--type'   => 'multi',
         '--axis'   => 'variant',
     ])
+        // Asked when --kind is absent, after the axis and before the variants.
+        ->expectsQuestion('What are the SVGs?', 'icon')
         ->expectsQuestion('Variants', 'outline, solid')
         ->expectsConfirmation('"outline" will be the default variant. Continue?', 'no')
         ->expectsOutputToContain('Scaffolding cancelled')

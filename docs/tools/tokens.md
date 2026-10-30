@@ -27,6 +27,7 @@ For `name: Hero`, `vendor: Acme Labs`, `email: dev@example.com`:
 | `{{prefix}}` | `hero` | Blade component prefix. |
 | `{{email}}` | `dev@example.com` | |
 | `{{iconSetType}}` | `single` or `multi` | |
+| `{{kind}}` | `icon` or `illustration` | `package.kind` in `config.json`. |
 | `{{variantsJson}}` | `{}` or a JSON object | Pretty-printed, already ordered. |
 | `{{year}}` | `2026` | |
 | `{{date}}` | `2026-09-21` | |

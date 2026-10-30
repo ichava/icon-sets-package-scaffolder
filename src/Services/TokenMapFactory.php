@@ -47,6 +47,7 @@ final readonly class TokenMapFactory
             '{{prefix}}'      => $definition->prefix,
             '{{email}}'       => $definition->email,
             '{{iconSetType}}' => $definition->type->value,
+            '{{kind}}'        => $definition->kind->value,
 
             // The taxonomy axis, distinct from iconSetType above: that one is
             // filesystem layout, these name the enum class, the docs page and

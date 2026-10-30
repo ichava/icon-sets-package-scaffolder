@@ -113,6 +113,7 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 | `{{year}}` | `date('Y')` at scaffold time. |
 | `{{date}}` | `date('Y-m-d')` at scaffold time. |
 | `{{iconSetType}}` | `single` or `multi` (`--type` flag). |
+| `{{kind}}` | `icon` or `illustration` (`--kind` flag, default `icon`), written to `config.json` as `package.kind`. A category can still declare its own `kind`, and an illustration category can pair `-dark` files as theme twins with `"theme_variants": {"dark": "-dark"}`; see core's kinds guide. |
 | `{{variantsJson}}` | Pretty-printed JSON of the `--variants` list, for `config.json`'s `metadata.data.variants`. Empty (`{}`) for a category pack. |
 | `{{categoriesJson}}` | The same list under `metadata.data.categories`. Empty for a variant pack. Both keys are always emitted -- `JsonConfigConstants` reads each by its literal name, so a config that shipped only the one matching its axis would make `getVariants()` answer an empty array. |
 | `{{axis}}` | `variant` or `category` (`--axis` flag). |
