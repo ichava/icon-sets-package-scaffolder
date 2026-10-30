@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **The generator asks for the pack's SVG kind and writes it to `config.json`.** A new `--kind` option (and prompt), `icon` or `illustration`, defaulting to `icon`, lands as `package.kind` through a new `{{kind}}` token: the pack-wide kind ichava/core resolves for every category that declares none (from ichava/core#148). `Domain\IconKind` holds the two values, and `PackageDefinition::create()` takes a `kind` argument that defaults to `icon`, so existing callers are unchanged; an unknown kind fails as `InvalidPackageDefinition`. The generated `ResourceShapeTest` checks the pack and category kinds. `tests/Feature/ScaffoldedKindTest.php` asserts the rendered `config.json` for both kinds and for `--kind`.
+
 ### Changed
 
 - **Every workflow runs on every pull request.** The `paths-ignore: '**.md'` and `paths:` filters are removed from the `pull_request` triggers, so every check reports on every pull request and can be a required status check on `main`. A path-filtered required check never reports on the pull requests it skips, and blocks them for good. The workflow stubs change the same way, so scaffolded packs inherit it.
@@ -17,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- **The `commands` and `info` translation groups from the generated `icons.php`, and the prefix copy (`cache.prefix`) from the generated config file**, matching the estate packs. A pack ships no update command, core's about section reads the registry, and the prefix is read from `config.json` (`config.icon_prefix`); none of the three was read. The generated `ResourceShapeTest` keeps the translation groups out.
 - `PackageDefinition::updateCommandName()`. It named `ichava::<pack>.update`, a command no scaffolded pack registers. Upstream syncing is icon-sets-sync's, run by the pack's `sync-upstream.yml`. Removed rather than deprecated, under the owner's 2026-10-30 rule that nothing deprecated ships.
 
 ### Fixed
