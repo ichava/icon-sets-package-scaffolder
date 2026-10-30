@@ -33,16 +33,4 @@ return [
     '{{axisDescriptions}}' => [
         'default' => 'The default {{studlyName}} icon style',
     ],
-
-    'commands' => [
-        'update'   => 'Update {{studlyName}} icons from their upstream source',
-        'fetching' => 'Fetching the latest {{studlyName}} icons...',
-        'complete' => '{{studlyName}} icons updated successfully!',
-    ],
-
-    'info' => [
-        'version'      => 'Version :version',
-        'total_icons'  => ':count icons available',
-        '{{axis}}_info' => ':{{axis}}: :count icons',
-    ],
 ];
