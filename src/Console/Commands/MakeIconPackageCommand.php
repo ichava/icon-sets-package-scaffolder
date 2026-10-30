@@ -79,7 +79,9 @@ final class MakeIconPackageCommand extends Command
                 'variants' => $this->option('variants'),
             ], $interactive);
 
-            $path = $destinations->resolve($definition, $this->option('path'), $force, $interactive);
+            $suppliedPath = $this->option('path');
+
+            $path = $destinations->resolve($definition, is_string($suppliedPath) ? $suppliedPath : null, $force, $interactive);
 
             $result = $scaffold($definition, $path, $force);
         } catch (ScaffoldCancelled $e) {
