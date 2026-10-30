@@ -45,6 +45,7 @@
         }
     ],
     "require-dev": {
+        "composer/semver": "^3.4",
         "orchestra/testbench": "^11.0",
         "pestphp/pest": "^4.6 || ^5.0",
         "phpstan/phpstan": "^2.1",

@@ -42,6 +42,12 @@ it alone, which would trap consumers who stay on the older series.
 - **Raise the floor** when core ships a security fix in code this pack runs; the old constraint
   still resolves the vulnerable release otherwise.
 
+Until the first release, 0.1.0 is the only core version that exists, so a raised floor such as
+`^0.1.2` cannot resolve. `tests/Unit/SiblingConstraintsTest.php` fails on any `ichava/*` constraint
+that 0.1.0 does not satisfy. CI still tests against core's `main`: each job aliases it into the 0.1
+line before the install and restores `composer.json` afterwards, so the committed constraint never
+changes.
+
 Check before doing either:
 
 ```bash
