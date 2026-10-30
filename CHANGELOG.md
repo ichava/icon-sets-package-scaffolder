@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **`composer.json` names Simtabi LLC (`ichava@simtabi.com`) as the author** instead of a person (W-20), and the `sync-upstream.yml` stub commits as `github-actions[bot]` rather than through a personal noreply address, so a scaffolded pack publishes no personal name either. A test scans the manifest, README, `docs/`, `src/` and `stubs/` and fails on a personal name or address.
 - **The `sync-upstream.yml` stub describes what the workflow runs.** Its header said the image bundles Python and that a release ships to Packagist. The image is icon-sets-sync's Go binary with git, gh and Node, built from the toolkit's `main`, and a release is the GitHub release that release-please and `release.yml` make; nothing is published to Packagist. Packs scaffolded from now on carry the corrected header; comments only.
 
 ## [0.1.1] - 2026-10-27
