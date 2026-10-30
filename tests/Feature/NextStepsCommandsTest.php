@@ -41,7 +41,8 @@ it('names only commands and files the scaffolded pack has', function (): void {
             $this->assertStringContainsString($command, $source, "Next steps name `{$command}`, which the pack does not register.");
         }
 
-        $this->assertStringNotContainsString($definition->updateCommandName(), $text);
+        // No `.update` command: upstream syncing is icon-sets-sync's, run by the pack's workflow.
+        $this->assertDoesNotMatchRegularExpression('/ichava::[a-z0-9-]+\.update\b/', $text);
 
         // The workflow the advice points at is one the pack actually ships.
         $this->assertStringContainsString(NextStepsReporter::SYNC_WORKFLOW, $text);

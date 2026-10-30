@@ -46,14 +46,6 @@ it('still doubles a name that already carries an Icons suffix', function (): voi
         ->and($definition->packageName())->toBe('acme/icon-sets-hero-icons');
 });
 
-it('namespaces the update command with the vendor and the slug', function (): void {
-    // V59: a bare `icons:update` is a generic key in Artisan's flat map, and a
-    // second package claiming it replaces the first silently.
-    expect(definition(['name' => 'Hero'])->updateCommandName())
-        ->toBe('ichava::icon-sets-hero.update')
-        ->toMatch('/^[a-z0-9-]+::[a-z0-9-]+\./');
-});
-
 it('falls back to the kebab name when no prefix is given', function (): void {
     expect(definition(['name' => 'Hero'])->prefix)->toBe('hero')
         ->and(definition(['name' => 'Hero', 'prefix' => ''])->prefix)->toBe('hero')

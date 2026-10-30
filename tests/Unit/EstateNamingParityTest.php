@@ -30,8 +30,7 @@ it('derives the names the estate uses', function (): void {
     $d = estateDefinition();
 
     expect($d->bladeNamespace())->toBe('icon-sets-flag')
-        ->and($d->packageName())->toBe('ichava/icon-sets-flag')
-        ->and($d->updateCommandName())->toBe('ichava::icon-sets-flag.update');
+        ->and($d->packageName())->toBe('ichava/icon-sets-flag');
 });
 
 it('does not double the prefix when the name already carries it', function (): void {
