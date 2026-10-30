@@ -52,6 +52,12 @@ return [
             'variant'  => 'Variants (outline, solid, duotone, ...)',
             'category' => 'Categories (brands, weather, ui, ...)',
         ],
+        'kind' => [
+            'label'        => 'What are the SVGs?',
+            'icon'         => 'Icons (glyphs on a square grid)',
+            'illustration' => 'Illustrations (scenes with their own aspect ratio)',
+            'hint'         => 'Written to config.json as package.kind. A category can still declare its own.',
+        ],
         'variants' => [
             'label'           => 'Variants',
             'placeholder'     => 'outline, solid, duotone',

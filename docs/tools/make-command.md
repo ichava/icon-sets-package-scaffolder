@@ -12,6 +12,7 @@ The one command this package registers. Scaffolds a complete icon package.
 | `--path` | option | prompted | Destination. Absolute, or relative to the application root. |
 | `--prefix` | option | kebab name | Blade prefix: `<x-{prefix}-icon name="..." />`. |
 | `--type` | option | `single` | `single` or `multi`. |
+| `--kind` | option | prompted, `icon` | `icon` or `illustration`. Written to `config.json` as `package.kind`, the pack-wide SVG kind ichava/core resolves for every category that declares none of its own. |
 | `--variants` | option | prompted for `multi` | Comma separated. The first is the default. |
 | `--force` | flag | off | Overwrite a non-empty destination. |
 

@@ -47,6 +47,5 @@ return [
 
     'cache' => [
         'enabled' => true,
-        'prefix'  => '{{prefix}}',
     ],
 ];

@@ -137,3 +137,35 @@ it('declares itself as this package in config.json', function () {
 
     expect($config['package']['name'])->toBe('{{packageName}}');
 });
+
+it('declares an SVG kind core recognises, for the pack and every category', function () {
+    // ichava/core resolves a category's kind as its own `kind`, then
+    // `package.kind`, then `icon`, and skips a value that names no kind. A
+    // typo here would quietly file every SVG as an icon; this makes it fail.
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+    $kinds = ['icon', 'illustration'];
+
+    expect(in_array($config['package']['kind'] ?? null, $kinds, true))
+        ->toBeTrue('config.json package.kind must be "icon" or "illustration"');
+
+    $declared = [];
+
+    foreach ($config['metadata']['data']['categories'] ?? [] as $slug => $category) {
+        if (is_array($category) && array_key_exists('kind', $category)) {
+            $declared[$slug] = $category['kind'];
+        }
+    }
+
+    expect(array_diff($declared, $kinds))->toBe([]);
+});
+
+it('ships no translations for an update command or an about block', function () {
+    // A pack registers no Artisan command, and core's about section reads the
+    // registry, so strings for either are read by nothing.
+    expect(langLines())->not->toHaveKey('commands')
+        ->and(langLines())->not->toHaveKey('info');
+});

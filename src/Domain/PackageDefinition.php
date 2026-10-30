@@ -35,6 +35,7 @@ final readonly class PackageDefinition
         public IconSetType $type,
         public array $variants,
         public IconAxis $axis = IconAxis::Variant,
+        public IconKind $kind = IconKind::Icon,
     ) {}
 
     /**
@@ -44,6 +45,9 @@ final readonly class PackageDefinition
      * That default is a decision, not an accident -- it is pinned by a test,
      * because silently changing it would rename the enum class, the docs page
      * and the translation groups of every pack scaffolded afterwards.
+     *
+     * `$kind` defaults to Icon for the same reason: every pack in the estate
+     * declares `icon`, and a caller that predates kinds must keep getting it.
      */
     public static function create(
         string $name,
@@ -53,6 +57,7 @@ final readonly class PackageDefinition
         string|IconSetType $type = IconSetType::Single,
         array $variants = [],
         string|IconAxis $axis = IconAxis::Variant,
+        string|IconKind $kind = IconKind::Icon,
     ): self {
         $name = trim($name);
         $vendor = trim($vendor);
@@ -88,6 +93,7 @@ final readonly class PackageDefinition
             type: $type,
             variants: $type->hasVariantDirectories() ? self::buildVariants($variants) : [],
             axis: is_string($axis) ? IconAxis::fromInput($axis) : $axis,
+            kind: is_string($kind) ? IconKind::fromInput($kind) : $kind,
         );
     }
 

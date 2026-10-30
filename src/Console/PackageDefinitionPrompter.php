@@ -12,6 +12,7 @@ use function Laravel\Prompts\select;
 use function Laravel\Prompts\confirm;
 
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconAxis;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconKind;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\IconSetType;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
@@ -86,6 +87,18 @@ final readonly class PackageDefinitionPrompter
             default: IconAxis::Variant->value,
         ), IconAxis::Variant->value);
 
+        // What the SVGs are, written into config.json as `package.kind`.
+        // Orthogonal to both questions above, and to colour.
+        $kind = $this->filled($supplied, 'kind') ?? $this->ask($interactive, fn (): string => (string) select(
+            label: Messages::get('prompt.kind.label'),
+            options: [
+                IconKind::Icon->value         => Messages::get('prompt.kind.icon'),
+                IconKind::Illustration->value => Messages::get('prompt.kind.illustration'),
+            ],
+            default: IconKind::Icon->value,
+            hint: Messages::get('prompt.kind.hint'),
+        ), IconKind::Icon->value);
+
         $variants = $this->variants($supplied, IconSetType::fromInput($type ?? ''), $interactive);
 
         // A missing required answer arrives here as an empty string rather than
@@ -100,6 +113,7 @@ final readonly class PackageDefinitionPrompter
             type: $type ?? '',
             variants: $variants,
             axis: $axis ?? '',
+            kind: $kind ?? '',
         );
     }
 
