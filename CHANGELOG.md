@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **A freshly scaffolded pack passes `laranail-pint --test`.** Its own `composer pint` failed on five files: the PHP stubs carried `@package` tags, public methods after protected or private ones, a fully qualified `@see`, a missing trailing comma and an extra blank line at the end of the enum. Those are fixed in the stubs. Import order is set after rendering by a new `PhpImportOrderer`, because where a pack's own imports sort among the fixed ones depends on the length of the vendor and package names, so no order written in a stub is right for every pack. `ScaffoldedPintTest` renders four packs (single and multi, short and long names) and runs the shared Pint config over them; against the old stubs it fails on 16 files, and without the import ordering on 9.
 - **The next steps name only what a scaffolded pack has** (F-F1). They told every new pack's author that it ships `ichava::<pack>.update`, a command no stub registers: upstream syncing is ichava/icon-sets-sync's job, run by the pack's `.github/workflows/sync-upstream.yml`. The usage line now points at that workflow. `NextStepsCommandsTest` scaffolds a pack and fails if the next steps name an `ichava::` command its source does not contain, or a workflow it does not ship.
 
 ## [0.1.1] - 2026-10-27

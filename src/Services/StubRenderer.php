@@ -17,7 +17,10 @@ use Illuminate\Filesystem\Filesystem;
  */
 final readonly class StubRenderer
 {
-    public function __construct(private Filesystem $files) {}
+    public function __construct(
+        private Filesystem $files,
+        private PhpImportOrderer $imports,
+    ) {}
 
     /**
      * @param array<string, string> $tokens
@@ -28,7 +31,8 @@ final readonly class StubRenderer
     }
 
     /**
-     * Read a stub, substitute, write to $destination, creating parents.
+     * Read a stub, substitute, order a PHP file's imports, write to $destination,
+     * creating parents.
      *
      * @param array<string, string> $tokens
      */
@@ -38,7 +42,15 @@ final readonly class StubRenderer
             throw new RuntimeException(sprintf('Stub file not found: %s', $stubPath));
         }
 
+        $contents = $this->render($this->files->get($stubPath), $tokens);
+
+        // Import order depends on the substituted names, so it is settled here
+        // rather than in the stub; see PhpImportOrderer.
+        if (str_ends_with($destination, '.php')) {
+            $contents = $this->imports->order($contents);
+        }
+
         $this->files->ensureDirectoryExists(dirname($destination));
-        $this->files->put($destination, $this->render($this->files->get($stubPath), $tokens));
+        $this->files->put($destination, $contents);
     }
 }

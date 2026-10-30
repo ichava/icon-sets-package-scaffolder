@@ -23,8 +23,6 @@ use {{namespace}}\Constants\IconsConstants;
  *   case OUTLINE = 'outline';
  *   case FILLED = 'filled';
  *   case SOLID = 'solid';
- *
- * @package {{namespace}}\Enums
  */
 enum {{axisStudly}}: string implements IconSetVariantInterface
 {
@@ -48,22 +46,6 @@ enum {{axisStudly}}: string implements IconSetVariantInterface
     public function getPath(): string
     {
         return IconsConstants::getSvgPath($this->value);
-    }
-
-    /**
-     * Get the default {{axis}} value
-     */
-    private static function getDefaultValue(): string
-    {
-        return IconsConstants::getDefaultVariant() ?? 'default';
-    }
-
-    /**
-     * Get the class prefix for this icon set
-     */
-    private static function getClassPrefix(): string
-    {
-        return IconsConstants::getPrefix();
     }
 
     /**
@@ -93,5 +75,20 @@ enum {{axisStudly}}: string implements IconSetVariantInterface
             // self::SOLID => 'Solid filled icons',
         };
     }
-}
 
+    /**
+     * Get the default {{axis}} value
+     */
+    private static function getDefaultValue(): string
+    {
+        return IconsConstants::getDefaultVariant() ?? 'default';
+    }
+
+    /**
+     * Get the class prefix for this icon set
+     */
+    private static function getClassPrefix(): string
+    {
+        return IconsConstants::getPrefix();
+    }
+}
