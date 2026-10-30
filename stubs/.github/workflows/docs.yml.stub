@@ -1,16 +1,11 @@
 name: Docs
 
-# `tests.yml` and `code-quality.yml` both carry `paths-ignore: ['**.md']`, so a
-# markdown-only pull request runs neither -- and a markdown-only pull request is
-# exactly what deletes a docs page. This workflow is the other half of that
-# filter: it runs on the changes they skip, and nothing else.
+# Checks the shape of the docs/ tree. Like every workflow here since 2026-10-30
+# it runs on every pull request: a path-filtered check never reports on a pull
+# request it skips, so it could not be a required status check.
 on:
   pull_request:
     branches: [main]
-    paths:
-      - '**.md'
-      - 'tests/Unit/DocsShapeTest.php'
-      - '.github/workflows/docs.yml'
   workflow_dispatch:
 
 concurrency:
