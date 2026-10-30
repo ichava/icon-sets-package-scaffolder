@@ -18,6 +18,14 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\ScaffoldResult;
  */
 final readonly class NextStepsReporter
 {
+    /**
+     * The workflow every scaffolded pack ships for upstream refreshes. A pack
+     * registers no Artisan command of its own: syncing is ichava/icon-sets-sync's
+     * job, run by this workflow, so the advice names the file rather than a
+     * command the pack does not have.
+     */
+    public const string SYNC_WORKFLOW = '.github/workflows/sync-upstream.yml';
+
     public function report(OutputStyle $output, ScaffoldResult $result): void
     {
         $definition = $result->definition;
@@ -51,7 +59,8 @@ final readonly class NextStepsReporter
         $output->newLine();
         $output->writeln('  ' . Messages::get('next_steps.usage', [
             'component' => $this->code(sprintf('<x-%s-icon name="..." />', $definition->prefix)),
-            'command'   => $this->code($definition->updateCommandName()),
+            'workflow'  => $this->code(self::SYNC_WORKFLOW),
+            'sync'      => $this->code('ichava/icon-sets-sync'),
         ]));
         $output->writeln('  ' . Messages::get('next_steps.metadata'));
         $output->newLine();

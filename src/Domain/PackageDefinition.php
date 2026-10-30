@@ -151,12 +151,6 @@ final readonly class PackageDefinition
         return ucwords(str_replace('-', ' ', $this->kebabName));
     }
 
-    /** `ichava::hero-icons.update` -- `V59`, never a bare `ichava:` name. */
-    public function updateCommandName(): string
-    {
-        return 'ichava::' . $this->bladeNamespace() . '.update';
-    }
-
     /** The `variants` map `core`'s JsonConfigConstants reads, already ordered. */
     /** @return array<string, array<string, scalar|object>> */
     public function variantsConfig(): array

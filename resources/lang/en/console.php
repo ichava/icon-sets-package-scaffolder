@@ -81,7 +81,7 @@ return [
         'install'        => 'Run :command inside the package to install its dev dependencies.',
         'require'        => 'From a host app: :command',
         'autodiscovered' => 'The service provider is auto-discovered; no config/app.php edit is needed.',
-        'usage'          => 'Icons render as :component and the pack ships :command.',
+        'usage'          => 'Icons render as :component. Upstream refreshes run from :workflow, which uses :sync; the pack registers no Artisan command.',
         'metadata'       => 'All package metadata is driven by config.json; nothing is hardcoded.',
     ],
 
