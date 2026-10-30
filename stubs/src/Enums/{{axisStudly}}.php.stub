@@ -53,7 +53,7 @@ enum {{axisStudly}}: string implements IconSetVariantInterface
     /**
      * Get the default {{axis}} value
      */
-    protected static function getDefaultValue(): string
+    private static function getDefaultValue(): string
     {
         return IconsConstants::getDefaultVariant() ?? 'default';
     }
@@ -61,7 +61,7 @@ enum {{axisStudly}}: string implements IconSetVariantInterface
     /**
      * Get the class prefix for this icon set
      */
-    protected static function getClassPrefix(): string
+    private static function getClassPrefix(): string
     {
         return IconsConstants::getPrefix();
     }

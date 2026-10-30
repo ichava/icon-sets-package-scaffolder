@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Console;
 
+use Stringable;
 use Illuminate\Support\Str;
 
 use function Laravel\Prompts\text;
@@ -59,12 +60,12 @@ final readonly class PackageDefinitionPrompter
 
         $prefix = $this->filled($supplied, 'prefix') ?? $this->ask($interactive, fn (): string => text(
             label: Messages::get('prompt.prefix.label'),
-            placeholder: Str::kebab((string) $name),
-            default: Str::kebab((string) $name),
+            placeholder: Str::kebab($name ?? ''),
+            default: Str::kebab($name ?? ''),
             hint: Messages::get('prompt.prefix.hint'),
         ));
 
-        $type = $this->filled($supplied, 'type') ?? $this->ask($interactive, fn (): string => select(
+        $type = $this->filled($supplied, 'type') ?? $this->ask($interactive, fn (): string => (string) select(
             label: Messages::get('prompt.type.label'),
             options: [
                 IconSetType::Single->value => Messages::get('prompt.type.single'),
@@ -76,7 +77,7 @@ final readonly class PackageDefinitionPrompter
         // Asked separately from the type above, because the two are orthogonal:
         // `icon-sets-emoji` is a category pack whose SVGs sit in per-set
         // directories. One prompt for both would force a false choice.
-        $axis = $this->filled($supplied, 'axis') ?? $this->ask($interactive, fn (): string => select(
+        $axis = $this->filled($supplied, 'axis') ?? $this->ask($interactive, fn (): string => (string) select(
             label: Messages::get('prompt.axis.label'),
             options: [
                 IconAxis::Variant->value  => Messages::get('prompt.axis.variant'),
@@ -85,21 +86,33 @@ final readonly class PackageDefinitionPrompter
             default: IconAxis::Variant->value,
         ), IconAxis::Variant->value);
 
-        $variants = $this->variants($supplied, IconSetType::fromInput((string) $type), $interactive);
+        $variants = $this->variants($supplied, IconSetType::fromInput($type ?? ''), $interactive);
 
         // A missing required answer arrives here as an empty string rather than
         // a prompt, so the failure is `InvalidPackageDefinition` naming the
         // field -- which is a better answer for a scripted run than a process
         // that blocks forever on a TTY that is not there.
         return PackageDefinition::create(
-            name: (string) $name,
-            vendor: (string) $vendor,
-            email: (string) $email,
-            prefix: $prefix === null ? null : (string) $prefix,
-            type: (string) $type,
+            name: $name ?? '',
+            vendor: $vendor ?? '',
+            email: $email ?? '',
+            prefix: $prefix,
+            type: $type ?? '',
             variants: $variants,
-            axis: (string) $axis,
+            axis: $axis ?? '',
         );
+    }
+
+    /**
+     * What a `(string)` cast gives for a console value, without casting mixed.
+     *
+     * Arguments and options arrive as strings, booleans or null; anything
+     * that cannot be read as a string becomes empty, which PackageDefinition
+     * then refuses by field name.
+     */
+    private static function string(mixed $value): string
+    {
+        return is_scalar($value) || $value instanceof Stringable ? (string) $value : '';
     }
 
     /**
@@ -116,7 +129,7 @@ final readonly class PackageDefinitionPrompter
         $supplied = $supplied['variants'] ?? null;
 
         if (is_array($supplied) && $supplied !== []) {
-            return array_values(array_map('strval', $supplied));
+            return array_values(array_map(self::string(...), $supplied));
         }
 
         if (is_string($supplied) && trim($supplied) !== '') {
@@ -173,11 +186,19 @@ final readonly class PackageDefinitionPrompter
         return $interactive ? $prompt() : $fallback;
     }
 
-    /** @param array<string, mixed> $supplied */
-    private function filled(array $supplied, string $key): mixed
+    /**
+     * The supplied value as a string, or null when it is missing or blank.
+     *
+     * @param array<string, mixed> $supplied
+     */
+    private function filled(array $supplied, string $key): ?string
     {
         $value = $supplied[$key] ?? null;
 
-        return is_string($value) && trim($value) === '' ? null : $value;
+        if ($value === null || (is_string($value) && trim($value) === '')) {
+            return null;
+        }
+
+        return self::string($value);
     }
 }
