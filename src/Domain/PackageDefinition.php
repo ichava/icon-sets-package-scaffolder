@@ -151,7 +151,15 @@ final readonly class PackageDefinition
         return ucwords(str_replace('-', ' ', $this->kebabName));
     }
 
-    /** `ichava::hero-icons.update` -- `V59`, never a bare `ichava:` name. */
+    /**
+     * `ichava::hero-icons.update` -- `V59`, never a bare `ichava:` name.
+     *
+     * @deprecated 0.1.2 No scaffolded pack registers this command: upstream
+     *             syncing moved to ichava/icon-sets-sync, run by the pack's
+     *             `.github/workflows/sync-upstream.yml`, so `NextStepsReporter`
+     *             no longer names it. Kept working for any caller; earliest
+     *             removal 0.2.0.
+     */
     public function updateCommandName(): string
     {
         return 'ichava::' . $this->bladeNamespace() . '.update';

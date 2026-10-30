@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **The `sync-upstream.yml` stub describes what the workflow runs.** Its header said the image bundles Python and that a release ships to Packagist. The image is icon-sets-sync's Go binary with git, gh and Node, built from the toolkit's `main`, and a release is the GitHub release that release-please and `release.yml` make; nothing is published to Packagist. Packs scaffolded from now on carry the corrected header; comments only.
 
+### Deprecated
+
+- `PackageDefinition::updateCommandName()` names a command no scaffolded pack registers. It still returns the same string; earliest removal 0.2.0.
+
+### Fixed
+
+- **The next steps name only what a scaffolded pack has** (F-F1). They told every new pack's author that it ships `ichava::<pack>.update`, a command no stub registers: upstream syncing is ichava/icon-sets-sync's job, run by the pack's `.github/workflows/sync-upstream.yml`. The usage line now points at that workflow. `NextStepsCommandsTest` scaffolds a pack and fails if the next steps name an `ichava::` command its source does not contain, or a workflow it does not ship.
+
 ## [0.1.1] - 2026-10-27
 
 ### Added
