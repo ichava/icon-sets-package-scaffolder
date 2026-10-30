@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace {{namespace}}\Constants;
 
-use Simtabi\Laranail\Ichava\Constants\JsonConfigConstants;
 use Simtabi\Laranail\Ichava\Support\PathResolver;
+use Simtabi\Laranail\Ichava\Constants\JsonConfigConstants;
 
 /**
  * IconsConstants
@@ -22,24 +22,23 @@ use Simtabi\Laranail\Ichava\Support\PathResolver;
  * - getVariants(): array          - Variant slugs from metadata.data.variants
  * - getDefaultVariant(): ?string  - Default variant slug
  *
- * @see \Simtabi\Laranail\Ichava\Constants\JsonConfigConstants
- * @package {{namespace}}\Constants
+ * @see JsonConfigConstants
  */
 final class IconsConstants extends JsonConfigConstants
 {
-    /**
-     * Get path to config.json directory
-     */
-    protected static function getConfigPath(): string
-    {
-        return PathResolver::resolvePackagePath(self::class, levelsUp: 3, append: 'resources/assets/svg');
-    }
-
     /**
      * Get default CSS class for icons
      */
     public static function getDefaultClass(): string
     {
         return self::getPrefix() . '-icon';
+    }
+
+    /**
+     * Get path to config.json directory
+     */
+    protected static function getConfigPath(): string
+    {
+        return PathResolver::resolvePackagePath(self::class, levelsUp: 3, append: 'resources/assets/svg');
     }
 }

@@ -7,6 +7,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubLocator;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\StubRenderer;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\TokenMapFactory;
+use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Services\PhpImportOrderer;
 
 function bundledStubs(): StubLocator
 {
@@ -126,7 +127,7 @@ it('substitutes content tokens and creates parent directories', function (): voi
     $stub = $root . '/source.stub';
     file_put_contents($stub, 'namespace {{namespace}};');
 
-    (new StubRenderer(new Filesystem))->renderTo(
+    (new StubRenderer(new Filesystem, new PhpImportOrderer))->renderTo(
         $stub,
         $root . '/deep/nested/Out.php',
         ['{{namespace}}' => 'Acme\\HeroIcons'],
@@ -138,5 +139,5 @@ it('substitutes content tokens and creates parent directories', function (): voi
 });
 
 it('refuses to render a stub that is not there', function (): void {
-    (new StubRenderer(new Filesystem))->renderTo('/nope.stub', '/tmp/out.php', []);
+    (new StubRenderer(new Filesystem, new PhpImportOrderer))->renderTo('/nope.stub', '/tmp/out.php', []);
 })->throws(RuntimeException::class);

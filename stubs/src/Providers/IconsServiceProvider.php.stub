@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace {{namespace}}\Providers;
 
-use Simtabi\Laranail\Ichava\Support\ServiceProvider;
-use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPackage;
-use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPath;
 use Simtabi\Laranail\Package\Tools\Package;
 use Simtabi\Laranail\Ichava\Services\IconRegistry;
+use Simtabi\Laranail\Ichava\Support\ServiceProvider;
+use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPath;
+use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPackage;
 use {{namespace}}\Constants\IconsConstants;
 use {{namespace}}\View\Components\IconComponent;
 
@@ -19,8 +19,6 @@ use {{namespace}}\View\Components\IconComponent;
  * Icons are automatically discovered and made available via:
  * - Blade component: <x-{{bladeNamespace}}-icon name="icon-name" />
  * - Helper function: ichava('{{packageName}}::icon-name')
- *
- * @package {{namespace}}
  */
 final class IconsServiceProvider extends ServiceProvider
 {
@@ -48,7 +46,7 @@ final class IconsServiceProvider extends ServiceProvider
         $registry = $this->app->make(IconRegistry::class);
         $registry->fromDirectory(
             $this->package->basePath('resources/assets/svg'),
-            self::class
+            self::class,
         );
     }
 }

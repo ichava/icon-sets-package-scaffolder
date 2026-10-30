@@ -23,8 +23,6 @@ use {{namespace}}\Constants\IconsConstants;
  * Or using the ichava helper:
  * {!! ichava('{{packageName}}::home') !!}
  * {!! ichava('{{packageName}}::category/icon-name') !!}
- *
- * @package {{namespace}}\View\Components
  */
 final class IconComponent extends BaseIconComponent
 {
