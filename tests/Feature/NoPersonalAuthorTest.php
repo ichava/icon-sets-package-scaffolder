@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * The package, and every pack it scaffolds, is published under Simtabi LLC
- * with the role address ichava@simtabi.com; no personal name or email ships.
+ * with the role address opensource@simtabi.com; no personal name or email ships.
  * The stub tree is scanned too, so a generated pack is not born with one.
  */
 it('publishes no personal author name or email, here or in a scaffolded pack', function (): void {
@@ -37,5 +37,5 @@ it('publishes no personal author name or email, here or in a scaffolded pack', f
         }
     }
 
-    $this->assertSame([], $offenders, 'Name Simtabi LLC (ichava@simtabi.com), not a person.');
+    $this->assertSame([], $offenders, 'Name Simtabi LLC (opensource@simtabi.com), not a person.');
 });

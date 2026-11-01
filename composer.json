@@ -8,14 +8,16 @@
         "generator",
         "icons",
         "svg",
-        "ichava"
+        "ichava",
+        "icon-sets",
+        "blade"
     ],
     "homepage": "https://opensource.simtabi.com/products/ichava/icon-sets-package-scaffolder",
     "license": "MIT",
     "authors": [
         {
             "name": "Simtabi LLC",
-            "email": "ichava@simtabi.com",
+            "email": "opensource@simtabi.com",
             "homepage": "https://simtabi.com",
             "role": "Developer"
         }
