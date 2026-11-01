@@ -19,6 +19,7 @@ First release of `ichava/icon-sets-package-scaffolder`. The repository is publis
 
 ### Changed
 
+- **A scaffolded pack states the release and tag rules.** Its `CONTRIBUTING.md` gains *Releases and versioning* (version tags only for final code, `-rc.N` for test builds, a public tag never moved, deleted or reused, a tag ruleset, retract and fix forward) and its `docs/release.md` a *Tags are final* section pointing at it.
 - **Release tooling starts from 0.1.0.** `.release-please-manifest.json` reads `0.1.0` and `release-please-config.json` no longer names a `bootstrap-sha`, so after the hand-cut `v0.1.0` tag release-please proposes `0.1.1` next. The README gains the Packagist badge and a quick start.
 - **Every workflow runs on every pull request.** The `paths-ignore: '**.md'` and `paths:` filters are removed from the `pull_request` triggers, so every check reports on every pull request and can be a required status check on `main`. A path-filtered required check never reports on the pull requests it skips, and blocks them for good. The workflow stubs change the same way, so scaffolded packs inherit it.
 - **PHPStan analyses at level `max`, up from 6.** `PackageDefinitionPrompter` narrows console input to `?string` instead of casting `mixed`, the two `select()` prompts cast the `int|string` key they return, and the command passes `--path` on only when it is a string. Every value a console argument or option can hold behaves as before. No baseline; `PhpstanLevelTest` fails if the level is anything but `max`.
