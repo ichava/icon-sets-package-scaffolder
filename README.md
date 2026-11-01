@@ -1,5 +1,6 @@
 # ichava/icon-sets-package-scaffolder
 
+[![Packagist](https://img.shields.io/packagist/v/ichava/icon-sets-package-scaffolder)](https://packagist.org/packages/ichava/icon-sets-package-scaffolder)
 [![Tests](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/tests.yml/badge.svg)](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/tests.yml)
 [![Static analysis](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ichava/icon-sets-package-scaffolder/actions/workflows/code-quality.yml)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -7,14 +8,25 @@
 > Scaffolds a complete Ichava icon package from one command: a token-substituted
 > stub tree, the icon directory layout, and the CI the ecosystem's conventions expect.
 
-Requires PHP 8.4.1+ and Laravel 13. No registry version badge: nothing in this
-ecosystem is published to Packagist yet, so a Packagist badge would render as
-`invalid` and claim the package is installable when it is not.
+Requires PHP `^8.4.1 || ^8.5` and Laravel `^13`.
 
 ## Install
 
+The package is on Packagist, but two of its dependencies, `laranail/console` and
+`laranail/package-tools`, are not yet, so add them as VCS repositories to your
+application's `composer.json` first:
+
+```json
+{
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/laranail/package-tools.git" },
+        { "type": "vcs", "url": "https://github.com/laranail/console.git" }
+    ]
+}
+```
+
 ```bash
-composer require --dev ichava/icon-sets-package-scaffolder
+composer require --dev ichava/icon-sets-package-scaffolder:^0.1
 ```
 
 A dev dependency on purpose. Scaffolding is something you do once per pack, on a
@@ -24,7 +36,15 @@ It does not require `ichava/core`. That direction is deliberate: core takes this
 as a `require-dev`, and a package that both generates core's packs and depends on
 core would be a cycle.
 
-## Usage
+## Quick start guide and usage
+
+### Getting started
+
+Nothing to publish or configure: the service provider registers itself through
+package discovery, and the command reads its stubs from this package. Point it at
+your own stub tree only if you want one ([Configuration](docs/configuration.md)).
+
+### Usage
 
 ```bash
 php artisan ichava::icon-sets-package-scaffolder.make
@@ -41,6 +61,9 @@ php artisan ichava::icon-sets-package-scaffolder.make Hero \
 
 Type the bare noun. `Hero` yields `acme/hero-icons` and `Acme\HeroIcons`; the
 `Icons` suffix is added for you.
+
+See [Getting started](docs/getting-started.md) for the full walkthrough, and the
+[documentation index](#documentation) for everything else.
 
 ## <a name="documentation"></a>Documentation
 

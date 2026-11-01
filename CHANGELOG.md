@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - TBD
+
+First release of `ichava/icon-sets-package-scaffolder`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.1) are folded into this release, and their notes are kept below under *Archived history*.
+
 ### Added
 
 - **The generator asks for the pack's SVG kind and writes it to `config.json`.** A new `--kind` option (and prompt), `icon` or `illustration`, defaulting to `icon`, lands as `package.kind` through a new `{{kind}}` token: the pack-wide kind ichava/core resolves for every category that declares none (from ichava/core#148). `Domain\IconKind` holds the two values, and `PackageDefinition::create()` takes a `kind` argument that defaults to `icon`, so existing callers are unchanged; an unknown kind fails as `InvalidPackageDefinition`. The generated `ResourceShapeTest` checks the pack and category kinds. `tests/Feature/ScaffoldedKindTest.php` asserts the rendered `config.json` for both kinds and for `--kind`.
@@ -15,10 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Release tooling starts from 0.1.0.** `.release-please-manifest.json` reads `0.1.0` and `release-please-config.json` no longer names a `bootstrap-sha`, so after the hand-cut `v0.1.0` tag release-please proposes `0.1.1` next. The README gains the Packagist badge and a quick start.
 - **Every workflow runs on every pull request.** The `paths-ignore: '**.md'` and `paths:` filters are removed from the `pull_request` triggers, so every check reports on every pull request and can be a required status check on `main`. A path-filtered required check never reports on the pull requests it skips, and blocks them for good. The workflow stubs change the same way, so scaffolded packs inherit it.
 - **PHPStan analyses at level `max`, up from 6.** `PackageDefinitionPrompter` narrows console input to `?string` instead of casting `mixed`, the two `select()` prompts cast the `int|string` key they return, and the command passes `--path` on only when it is a string. Every value a console argument or option can hold behaves as before. No baseline; `PhpstanLevelTest` fails if the level is anything but `max`.
 - **Scaffolded packs get a `phpstan.neon.dist` at level `max`.** The stub tree shipped a code-quality workflow running `composer analyse` but no PHPStan config, so a generated pack's PHPStan job stopped at "At least one path must be specified to analyse". The new stub has the estate packs' shape, and the axis enum stub declares its two `HasIconSetVariants` hooks `private`, as the packs do and as the config's counted ignore expects. Verified by rendering a variant pack and a category pack and analysing both clean at `max`; `PhpstanLevelTest` pins the stub's level too.
-- **`composer.json` names Simtabi LLC (`ichava@simtabi.com`) as the author** instead of a person (W-20), and the `sync-upstream.yml` stub commits as `github-actions[bot]` rather than through a personal noreply address, so a scaffolded pack publishes no personal name either. A test scans the manifest, README, `docs/`, `src/` and `stubs/` and fails on a personal name or address.
+- **`composer.json` names Simtabi LLC (`opensource@simtabi.com`, the community role address) as the author** instead of a person (W-20), and the `sync-upstream.yml` stub commits as `github-actions[bot]` rather than through a personal noreply address, so a scaffolded pack publishes no personal name either. A test scans the manifest, README, `docs/`, `src/` and `stubs/` and fails on a personal name or address.
 - **The `sync-upstream.yml` stub describes what the workflow runs.** Its header said the image bundles Python and that a release ships to Packagist. The image is icon-sets-sync's Go binary with git, gh and Node, built from the toolkit's `main`, and a release is the GitHub release that release-please and `release.yml` make; nothing is published to Packagist. Packs scaffolded from now on carry the corrected header; comments only.
 
 ### Removed
@@ -31,29 +36,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **A freshly scaffolded pack passes `laranail-pint --test`.** Its own `composer pint` failed on five files: the PHP stubs carried `@package` tags, public methods after protected or private ones, a fully qualified `@see`, a missing trailing comma and an extra blank line at the end of the enum. Those are fixed in the stubs. Import order is set after rendering by a new `PhpImportOrderer`, because where a pack's own imports sort among the fixed ones depends on the length of the vendor and package names, so no order written in a stub is right for every pack. `ScaffoldedPintTest` renders four packs (single and multi, short and long names) and runs the shared Pint config over them; against the old stubs it fails on 16 files, and without the import ordering on 9.
 - **The next steps name only what a scaffolded pack has** (F-F1). They told every new pack's author that it ships `ichava::<pack>.update`, a command no stub registers: upstream syncing is ichava/icon-sets-sync's job, run by the pack's `.github/workflows/sync-upstream.yml`. The usage line now points at that workflow. `NextStepsCommandsTest` scaffolds a pack and fails if the next steps name an `ichava::` command its source does not contain, or a workflow it does not ship.
 
-## [0.1.1] - 2026-10-27
+## [Archived history]
 
-### Added
+> The first sections below are the 0.1.x releases folded into 0.1.0 (v0.1.0 to v0.1.1, 2026-10-23 to 2026-10-27); their tags and GitHub releases are removed
+> by the single-commit publication. After them come the sections from before the 2026-10-23 re-base.
+> Both are reproduced verbatim, one heading level down.
+>
+> Versioning was re-based to 0.1.0 on 2026-10-23. The tags and GitHub releases below were removed;
+> every commit they pointed at was on `main`
+> until the single-commit publication. Sections reproduced verbatim, one heading level down.
+
+### [0.1.1] - 2026-10-27
+
+#### Added
 
 - **Scaffolded packs ship release-please, as every estate pack now does.** The stub tree gains `.github/workflows/release-please.yml`, `release-please-config.json`, an empty `.release-please-manifest.json` and a `.github/actionlint.yaml` scoping the create-github-app-token v3 false positives; the scaffolded `release.yml` gains the same `workflow_dispatch` recovery path, and `docs/release.md` describes the release pull request. The first release is the version the scaffolded `CHANGELOG.md` already holds (`initial-version`), so the first release pull request finds its section in place; `ReleasePleaseStubTest` fails if the two disagree. `StubEstateParityTest` had gone red on `main` the moment icon-sets-flag shipped `release-please.yml`, because the stub tree did not.
 - **Releases are prepared by release-please.** A *Release Please* workflow reads the Conventional Commit log, keeps one release pull request open that bumps `.release-please-manifest.json`, and tags the release when that pull request merges; the tag starts `release.yml` as before. On 0.x a breaking change bumps the minor and everything else bumps the patch. The minor moves in lockstep with the other coupled ichava packages: a breaking change anywhere in the family reaches every coupled repository as a `Release-As: 0.N.0` footer, so `^0.N` means the same line everywhere. Release notes stay hand-written: release-please is set to `skip-changelog`, and the workflow closes this `[Unreleased]` section under the new version on the release branch, failing if it is empty. It runs on `workflow_dispatch`, a weekly schedule, and the merge of a release pull request, so the only `push` trigger is still the tag. The pull request and the tag are made with a per-run Refresh Bot token, because ones made with `GITHUB_TOKEN` start no workflows. `release.yml` gains a `workflow_dispatch` recovery path for a tag push that started nothing; its first step refuses any ref that is not a `vX.Y.Z` tag.
 
-### Changed
+#### Changed
 
 - **The worked examples name public packs only.** `creating-icon-packages.md`, the source and test comments, and the `ResourceShapeTest` stub used two packs that are now private as examples. They now use `icon-sets-tabler` and `icon-sets-flag` for variant packs (`outline`/`filled`, `4x3`/`1x1`), and `icon-sets-emoji` where the point is a category pack with per-set directories, the one public pack of that shape. The `IchavaRegistrar` and `registerBulkIconSets()` examples register `icon-sets-tabler`'s two variant directories instead of a hypothetical 72-set bundle, and the "what the scaffolder does not reach" table drops the row for a private pack. Comments only in PHP; no behaviour changes.
 
 - **A scaffolded pack starts on the family's 0.1 line, not 1.0.0.** The coupled ichava packages share one 0.x minor, so `^0.1` means the 0.1 line of the whole family. The scaffolded `CHANGELOG.md` now opens at `[0.1.0]`, release-please's `initial-version` and `resources/assets/svg/config.json`'s `package.version` start at `0.1.0`, and release-please moves that `package.version` with each release (`extra-files`). `ichava/core: ^0.1` and the `0.1.x-dev` branch alias already matched. `ReleasePleaseStubTest` now fails unless the first release, the branch alias, the core constraint and `package.version` all name the same minor. The build-your-own-pack recipe describes the release pull request instead of a hand-made `v1.0.0` tag.
 
-### Fixed
+#### Fixed
 
 - **A scaffolded pack separates its code from the icons it redistributes.** The stub tree gains `ATTRIBUTION.md.stub`: an owners table (the icons are their upstream authors', under their licence; the code is the vendor's, MIT), a statement that the package claims no authorship of the icons, and commented guidance on what each licence family requires the file to carry (MIT/ISC/BSD verbatim notice, Apache NOTICE, CC-BY credit line and changes, commercial terms). The README stub's License section and `docs/attribution.md.stub` point at it, because `docs/` is export-ignored. The guidance says to keep notices out of `LICENSE`, since an appended notice makes licence detection answer `NOASSERTION`. A generated pack also gets `tests/Unit/AttributionTest.php`, which checks that the file ships and that `LICENSE` ends where the MIT text ends. `ScaffoldedAttributionTest` asserts all of this on a rendered pack, and it failed without the stub first. Matches the five estate packs' attribution PRs of 2026-10-26.
 - **The release pull request is found in the same run that opens it.** The step that hands the release branch to the changelog close asked `gh pr list --label 'autorelease: pending'`, which goes through GitHub's search index; on the first live run (js-motion#30) the index had not caught up with the pull request opened seconds earlier, so the close was skipped and a second dispatch was needed. It now takes the branch from release-please's own `pr` output, and only when the action reports nothing (the pull request was already current) falls back to the open pull requests, matched by the `release-please--branches--main` prefix rather than the label.
 
-## [0.1.0] - 2026-10-23
+### [0.1.0] - 2026-10-23
 
 Versioning re-based to 0.1.0. This release contains everything previously tagged v0.1.0 through v0.1.3 (2026-09-21 to 2026-09-26) plus the changes below, and the stub now requires `ichava/core` `^0.1`, the re-based core. Those tags and their GitHub releases were removed; every commit they pointed at is on `main`, and their sections are kept under *Archived pre-reset history*.
 
-### Changed
+#### Changed
 
 - **References follow the repository renames.** `ichava/maintainer-toolkit` is now `ichava/icon-sets-sync`, `ichava/motion` is `ichava/js-motion` and `ichava/react-browser` is `ichava/react-icon-browser`. GitHub redirects the old names, but redirects are not permanent.
 - **`composer.json` and the scaffolded stub list `laranail/db-tools` as a VCS repository.** `ichava/core` is about to
@@ -68,18 +83,13 @@ Versioning re-based to 0.1.0. This release contains everything previously tagged
 - `ConsoleTranslationsTest` checks that every referenced key resolves, and ratchets English literals
   in console output from 44 to 0.
 
-### Fixed
+#### Fixed
 
 - **Declining the default-variant confirmation no longer kills the process.** The prompter ended
   with `confirm(...) || exit(1)`, so answering "no" terminated the whole PHP process with no message:
   the host application, or the test runner. It now throws `Console\ScaffoldCancelled`, which the
   command reports as a cancellation and exits 0, the way every ichava command treats a declined
   confirmation.
-
-## [Archived pre-reset history]
-
-> Versioning was re-based to 0.1.0 on 2026-10-23. The tags and GitHub releases below were removed;
-> every commit they pointed at is on `main`. Sections reproduced verbatim, one heading level down.
 
 ### [0.1.3] - 2026-09-26
 

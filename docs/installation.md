@@ -11,16 +11,14 @@ What this package needs, and how it attaches to a Laravel application.
 | `laranail/package-tools` | `^0.1.0` |
 | `laranail/console` | `^0.1.0` |
 
-Nothing here is on Packagist yet, so a plain `composer require` cannot resolve it.
-Add the VCS repositories first:
+This package is on Packagist, but `laranail/package-tools` and `laranail/console` are not
+yet, so a plain `composer require` cannot resolve them. Add their VCS repositories first:
 
 ```json
 {
     "repositories": [
-        { "type": "vcs", "url": "https://github.com/ichava/icon-sets-package-scaffolder" },
         { "type": "vcs", "url": "https://github.com/laranail/package-tools.git" },
-        { "type": "vcs", "url": "https://github.com/laranail/console.git" },
-        { "type": "vcs", "url": "https://github.com/laranail/enumerator.git" }
+        { "type": "vcs", "url": "https://github.com/laranail/console.git" }
     ]
 }
 ```
