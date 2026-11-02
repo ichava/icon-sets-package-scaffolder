@@ -1,0 +1,18 @@
+parameters:
+    level: max
+    paths:
+        - src
+    tmpDir: .phpstan.cache
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        # The axis enum implements HasIconSetVariants' two abstract hooks, which the
+        # trait calls through static::. PHPStan does not follow that call and reports
+        # both as unused. Pint's protected_to_private fixer makes them private in a
+        # final enum, so they cannot be protected either. Two errors, measured
+        # 2026-10-30 on a rendered pack; reportUnmatched fails the run if either
+        # stops occurring.
+        -
+            identifier: method.unused
+            path: src/Enums/{{axisStudly}}.php
+            count: 2
+    reportUnmatchedIgnoredErrors: true

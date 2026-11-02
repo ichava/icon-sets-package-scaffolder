@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Pins the canonical `resources/` shape every ichava icon pack shares.
+ *
+ * Three of these assertions exist because of bugs the estate actually shipped,
+ * all of them the same shape: a file nothing loads cannot fail loudly.
+ *
+ * - One pack shipped a verbatim copy of another pack's translation file --
+ *   wrong product name, and the other pack's categories against its own. The
+ *   enum comparison below is what makes a copied file fail.
+ * - One pack's translation file claimed an MIT licence while its config.json
+ *   said Commercial. Package facts belong in config.json alone.
+ * - Every pack that kept `name` and `description` in both places had let them
+ *   drift, because nothing read the translation copy.
+ */
+function resourcesPath(): string
+{
+    return dirname(__DIR__, 2) . '/resources';
+}
+
+/** @return array<string, mixed> */
+function langLines(): array
+{
+    return require resourcesPath() . '/lang/en/icons.php';
+}
+
+it('ships every path of the canonical resource shape', function () {
+    foreach ([
+        'assets/svg/config.json',
+        'assets/svg/files',
+        'lang/en/icons.php',
+        'views/components',
+    ] as $path) {
+        expect(file_exists(resourcesPath() . '/' . $path))->toBeTrue("missing resources/{$path}");
+    }
+});
+
+it('does not name the translation group after the locale', function () {
+    // `lang/en/en.php` makes the group `en`, so every key reads
+    // `<namespace>::en.name` with the locale doubled.
+    expect(file_exists(resourcesPath() . '/lang/en/en.php'))->toBeFalse();
+});
+
+it('does not duplicate config.json metadata in english', function () {
+    // config.json is canonical for name and description -- IconRegistry reads
+    // it. A copy here is a second source that nothing compares.
+    expect(langLines())->not->toHaveKey('name')
+        ->and(langLines())->not->toHaveKey('description');
+});
+
+it('states no licence in the translations', function () {
+    // Package facts belong in config.json. A licence string here is a claim
+    // nothing validates, and one estate pack shipped the wrong one for months.
+    expect(langLines())->not->toHaveKey('features');
+});
+
+it('matches every labelled group to its enum exactly', function () {
+    // Discovered, not hardcoded to `variants`.
+    //
+    // A pack that starts variant-style and later adds `categories` or `sets`
+    // -- which three of the five estate packs did -- would otherwise keep a
+    // test that checks `variants` and says nothing about the new group. That
+    // is not hypothetical: icon-sets-emoji shipped `sets`/`set_descriptions`
+    // guarded by nothing at all, so its `Set` enum could drift from its
+    // translations silently.
+    //
+    // The rule is the convention this estate already follows: a group `x` with
+    // a sibling `x_descriptions` is a labelled group, and its keys must match
+    // the cases of `Enums\<Studly singular of x>`.
+    $lines = langLines();
+    $checked = 0;
+
+    foreach (array_keys($lines) as $group) {
+        if (! is_array($lines[$group])) {
+            continue;
+        }
+
+        // `categories` -> `Category`, not `Categorie`. A bare rtrim('s') is
+        // wrong for every -ies plural, and the estate has one: icon-sets-emoji
+        // ships a `Category` enum.
+        $singular = str_ends_with($group, 'ies')
+            ? substr($group, 0, -3) . 'y'
+            : rtrim($group, 's');
+
+        // The sibling key is SINGULAR: `variants` pairs with
+        // `variant_descriptions`, `categories` with `category_descriptions`,
+        // `sets` with `set_descriptions`. Pairing on the plural finds nothing
+        // and the loop passes over every group in silence.
+        $descriptions = $singular . '_descriptions';
+
+        if (! isset($lines[$descriptions])) {
+            continue;
+        }
+
+        $enum = '{{namespace}}\\Enums\\' . str_replace(
+            ' ',
+            '',
+            ucwords(str_replace('_', ' ', $singular)),
+        );
+
+        expect(enum_exists($enum))->toBeTrue(
+            "resources/lang/en/icons.php has a [{$group}] group but there is no {$enum}. "
+            . 'A labelled group is only meaningful against an enum.',
+        );
+
+        $expected = array_column($enum::cases(), 'value');
+        sort($expected);
+
+        foreach ([$group, $descriptions] as $pair) {
+            $actual = array_keys($lines[$pair]);
+            sort($actual);
+
+            expect($actual)->toBe(
+                $expected,
+                "resources/lang/en/icons.php [{$pair}] does not match {$enum}. "
+                . 'Add the case and its label in the same change.',
+            );
+        }
+
+        $checked++;
+    }
+
+    // Non-vacuous. A discovery loop that matches nothing passes in silence,
+    // which is the failure this whole file exists to prevent.
+    expect($checked)->toBeGreaterThan(0, 'no labelled group found in resources/lang/en/icons.php');
+});
+
+it('declares itself as this package in config.json', function () {
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+
+    expect($config['package']['name'])->toBe('{{packageName}}');
+});
+
+it('declares an SVG kind core recognises, for the pack and every category', function () {
+    // ichava/core resolves a category's kind as its own `kind`, then
+    // `package.kind`, then `icon`, and skips a value that names no kind. A
+    // typo here would quietly file every SVG as an icon; this makes it fail.
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+    $kinds = ['icon', 'illustration'];
+
+    expect(in_array($config['package']['kind'] ?? null, $kinds, true))
+        ->toBeTrue('config.json package.kind must be "icon" or "illustration"');
+
+    $declared = [];
+
+    foreach ($config['metadata']['data']['categories'] ?? [] as $slug => $category) {
+        if (is_array($category) && array_key_exists('kind', $category)) {
+            $declared[$slug] = $category['kind'];
+        }
+    }
+
+    expect(array_diff($declared, $kinds))->toBe([]);
+});
+
+it('ships no translations for an update command or an about block', function () {
+    // A pack registers no Artisan command, and core's about section reads the
+    // registry, so strings for either are read by nothing.
+    expect(langLines())->not->toHaveKey('commands')
+        ->and(langLines())->not->toHaveKey('info');
+});

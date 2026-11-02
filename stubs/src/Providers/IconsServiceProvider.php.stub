@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}}\Providers;
+
+use Simtabi\Laranail\Package\Tools\Package;
+use Simtabi\Laranail\Ichava\Services\IconRegistry;
+use Simtabi\Laranail\Ichava\Support\ServiceProvider;
+use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPath;
+use Simtabi\Laranail\Package\Tools\Exceptions\InvalidPackage;
+use {{namespace}}\Constants\IconsConstants;
+use {{namespace}}\View\Components\IconComponent;
+
+/**
+ * {{studlyName}} Icons Service Provider
+ *
+ * Registers the {{studlyName}} icon set with the Ichava ecosystem.
+ * Icons are automatically discovered and made available via:
+ * - Blade component: <x-{{bladeNamespace}}-icon name="icon-name" />
+ * - Helper function: ichava('{{packageName}}::icon-name')
+ */
+final class IconsServiceProvider extends ServiceProvider
+{
+    /**
+     * @throws InvalidPath
+     * @throws InvalidPackage
+     */
+    public function configurePackage(Package $package): void
+    {
+        $package
+            ->setName(IconsConstants::getVendorPackage())
+            ->setPathFrom(source: $this, levelsUp: 2)
+            ->hasConfigFile('{{bladeNamespace}}');
+    }
+
+    /**
+     * Boot the package - register Blade component and icons
+     */
+    public function bootingPackage(): void
+    {
+        // Register package-specific Blade component: <x-{{bladeNamespace}}-icon name="..." />
+        $this->loadBladeComponent(componentClass: IconComponent::class, packageName: '{{bladeNamespace}}');
+
+        // Register icons with the Ichava registry
+        $registry = $this->app->make(IconRegistry::class);
+        $registry->fromDirectory(
+            $this->package->basePath('resources/assets/svg'),
+            self::class,
+        );
+    }
+}

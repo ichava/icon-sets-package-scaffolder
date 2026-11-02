@@ -1,0 +1,81 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.4, 8.5]
+        laravel: [13.*]
+        stability: [prefer-stable]
+        include:
+          - laravel: 13.*
+            testbench: ^11.0
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Check out the estate pack beside the checkout
+        # tests/Feature/StubEstateParityTest.php measures the scaffolder stubs
+        # against a real pack's manifest read off disk, rather than against
+        # literals that would age silently beside the thing they guard. That
+        # needs a sibling pack, and a runner clones one repository -- without
+        # this the guard skips every case and reports 0 assertions, which is
+        # how the eight stub defects it catalogues accumulated in the first
+        # place. This repo has already paid for that bargain once, with the
+        # react-browser -darwin baselines no CI job compared.
+        #
+        # actions/checkout refuses a path outside the workspace and the
+        # sibling is exactly that, so clone it directly. Failing loudly when
+        # the pack is unreachable is deliberate: a guard that cannot run
+        # should say so rather than pass by skipping.
+        #
+        # The repository and the directory are both `icon-sets-flag`. They
+        # diverged during the 2026-09-21 restructure and the rebrand closed
+        # the gap. `estateCandidatePath()` in the test spells the
+        # directory, so the two move together or the guard silently skips.
+        run: |
+          git clone --depth 1 --no-tags \
+            https://github.com/ichava/icon-sets-flag.git \
+            "$(dirname "$GITHUB_WORKSPACE")/icon-sets-flag"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo
+          coverage: none
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: Execute tests
+        # This job cloned the sibling itself, so a skipped parity case means the
+        # clone broke or the directory name drifted -- not that the pack is
+        # legitimately absent. Pest exits 0 on a skip, so without this the guard
+        # would report green while measuring nothing.
+        env:
+          ICHAVA_REQUIRE_ESTATE: '1'
+        run: vendor/bin/pest

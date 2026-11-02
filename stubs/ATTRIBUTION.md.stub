@@ -1,0 +1,39 @@
+# Attribution
+
+This package has two owners, and each part keeps its own licence.
+
+| Part | Owner | Licence |
+|---|---|---|
+| The SVG icons in `resources/assets/svg/files/` | <!-- the upstream author(s) of {{humanName}} --> | <!-- the upstream licence --> |
+| Everything else: the PHP, configuration, translations, tests and documentation | {{vendor}} | MIT, see [`LICENSE`](LICENSE) |
+
+The MIT licence in `LICENSE` covers ONLY the package code. {{vendor}} packages and redistributes the icons; it did not draw them and claims no authorship of them.
+
+<!-- This file ships in the dist archive; docs/ is export-ignored and never
+     reaches an install. Keep the upstream notice here, not appended to
+     LICENSE: a notice after the MIT text makes GitHub's and Packagist's
+     licence detection answer NOASSERTION instead of MIT.               -->
+
+## {{humanName}}
+
+- **Project**: <!-- name and link -->
+- **Author**: <!-- as upstream states it -->
+- **Vendored version**: <!-- the `upstream.current_version` in resources/assets/svg/config.json -->
+- **Licence**: <!-- SPDX id and link -->
+
+<!-- Reproduce what the upstream licence requires to accompany copies:
+
+     - MIT / ISC / BSD: the upstream LICENSE text verbatim, copyright line
+       included, in a ```text block, from the tag you vendored.
+     - Apache-2.0: the licence, plus upstream's NOTICE file if it has one.
+     - CC-BY / CC-BY-SA: the credit line upstream asks for, the licence URL,
+       and what you changed (renamed files, reformatted markup). Say that any
+       public page showing the icons must carry the credit.
+     - Commercial: who owns the artwork, the licence a user needs, and that
+       installing this package grants none.                              -->
+
+## Crediting
+
+<!-- The credit line to use on a credits or "about" page, e.g.
+
+     > Icons from [{{humanName}}](upstream-link) by <author> (<licence>). -->

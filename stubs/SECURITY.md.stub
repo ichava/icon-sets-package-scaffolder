@@ -1,0 +1,31 @@
+# Security policy
+
+## Reporting a vulnerability
+
+Do not open a public issue for a suspected vulnerability.
+
+**Email [{{email}}](mailto:{{email}}).**
+
+GitHub private vulnerability reporting is the better channel, because it
+attaches the report to the repository with a draft advisory and a CVE request
+path already in place. It is a public-repository feature and it is **off by
+default**, so switch it on before listing it here:
+
+```bash
+gh api -X PUT repos/{{packageName}}/private-vulnerability-reporting
+```
+
+Once the repository's `/security/policy` page shows a *Report a vulnerability*
+button, name that channel above email. Until it does, the channel does not
+exist, and advertising it sends a reporter to a button that is not there.
+
+## Scope
+
+This package ships icon assets and the provider that registers them with
+`ichava/core`.
+
+Core owns sanitisation, caching, seeding and the HTTP surface, so a defect in
+how an icon is sanitised, cached or served belongs to
+[ichava/core](https://github.com/ichava/core) rather than here. What belongs
+here is the vendored assets themselves, this package's own registration code,
+and anything in its build or sync tooling that widens what a refresh can reach.

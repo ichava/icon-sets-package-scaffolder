@@ -1,0 +1,48 @@
+# Contributing
+
+Thanks for helping improve `{{packageName}}`.
+
+## Icons come from upstream
+
+The SVGs under `resources/assets/svg/files` are vendored, and a refresh
+overwrites the directory wholesale. **Do not hand-edit a generated SVG** -- the
+next sync silently reverts it. Fix the upstream source, or the sync recipe that
+transforms it.
+
+That holds even when an icon is malformed. The author of an icon set is not a
+compiler, so a parse or render failure is fixed by hardening the read-time
+pipeline in `ichava/core`, never by repairing the asset here.
+
+## Code
+
+- `declare(strict_types=1);` at the top of every PHP file, and type hints on
+  every public method, parameters and return alike.
+- `vendor/bin/pest` runs the suite.
+- Conventional Commits: `feat:`, `fix:`, `docs:`, `refactor:`, `perf:`, `test:`,
+  `chore:`.
+- No `version` field in `composer.json` -- the version comes from the git tag.
+  No lock file is committed; this is a library, and a lock records a resolution
+  consumers never use.
+
+## Releases and versioning
+
+- **A version tag is pushed only for final code.** `vX.Y.Z` marks a release, nothing else. To try a
+  release build first, push a pre-release tag, `vX.Y.Z-rc.N`, which uses up no release number. It runs
+  the same release workflow and publishes as a GitHub pre-release. It needs no CHANGELOG section of
+  its own: the workflow uses a `## [X.Y.Z-rc.N]` section when the commit has one, and a fixed
+  test-build note otherwise.
+- **A public tag is never moved, deleted or reused.** Once a tag has been fetched, moving it makes
+  consumers of the same version disagree. Composer and npm git dependencies resolve the tag afresh, so
+  new installs get the moved commit while every existing lockfile and cache keeps the old one (an npm
+  registry version cannot be republished at all). For a Go module, the module proxy keeps the copy it
+  first served and `sum.golang.org` records its checksum, so `go` fetches after the move fail
+  verification. The next fix gets the next number.
+- **Give the repository a tag ruleset.** On a public repository, a ruleset blocking deletion,
+  update and force-push of `v*` tags enforces this; GitHub's free plan gives a private
+  repository no rulesets, so there the rule is held by practice.
+- **A bad release is retracted, not replaced.** Name it in the CHANGELOG and the GitHub release notes, and leave it listed on Packagist, which has no per-version retraction (only a whole package can be marked abandoned). Then ship the fix as the next
+  version.
+
+## Reporting a vulnerability
+
+Not here, and not in a public issue. See [SECURITY.md](SECURITY.md).

@@ -1,0 +1,95 @@
+# Customisation
+
+*How-to guide.* Colour, size, accessibility and the pack-specific knobs, from a single tag to an app-wide default.
+
+## Colour
+
+<!-- Document whether the icons use currentColor, fixed colours, or a mix.
+     If currentColor:                                                    -->
+
+All {{humanName}} icons use `currentColor`. Set the colour via Tailwind text utilities:
+
+```blade
+<x-ichava::icon name="{{packageName}}::heart" class="w-6 h-6 text-red-500" />
+```
+
+With the fluent helper:
+
+```blade
+{{ ichava('{{packageName}}::heart')->color('#ef4444')->class('w-6 h-6') }}
+```
+
+<!-- If the pack has fixed colours, document the exceptions here. -->
+
+## Size
+
+The bundled SVGs are <!-- e.g. 24×24 with viewBox="0 0 24 24" -->. Use any width/height utility:
+
+```blade
+<x-ichava::icon name="{{packageName}}::home" class="w-4 h-4" />     {{-- small --}}
+<x-ichava::icon name="{{packageName}}::home" class="w-6 h-6" />     {{-- default --}}
+<x-ichava::icon name="{{packageName}}::home" class="w-12 h-12" />   {{-- large --}}
+```
+
+## Pack-specific knobs
+
+<!-- Document any custom Blade attributes the pack respects, e.g.
+
+   <x-ichava::icon name="{{packageName}}::home" stroke-width="1.5" class="w-6 h-6" />
+
+   ...if your {{axisPlural}} have a stroke-width concept. -->
+
+## Default class globally
+
+In `config/ichava/core.php`:
+
+```php
+'components' => [
+    'enabled'       => true,
+    'default_class' => 'w-5 h-5',
+],
+```
+
+Per-component `class="..."` overrides the default.
+
+## Accessibility
+
+```blade
+<x-ichava::icon name="{{packageName}}::trash" aria-label="Delete" class="w-5 h-5" />
+```
+
+Decorative icons (next to a text label) can omit the label, the renderer adds `aria-hidden="true"` automatically.
+
+## Adding your own icons
+
+Relocated from the README, which is now a slim pointer.
+
+1. Place your SVG files in `resources/assets/svg/files/`.
+2. For multi-{{axis}} icons, organise by {{axis}}: `files/regular/`, `files/solid/`, and so on.
+3. Record the metadata in `resources/assets/svg/config.json`.
+4. Clear the cache: `php artisan ichava::ichava-core.cache clear`.
+
+### Icon guidelines
+
+- Valid SVG, and nothing that the sanitiser will strip -- see core's security model.
+- **Drop `width` and `height`.** The component supplies them, and an SVG carrying both alongside a `viewBox` ignores the size it is asked for.
+- Use `currentColor` for `fill` and `stroke`, or the icon cannot be recoloured.
+- Lowercase, hyphenated filenames: `arrow-left.svg`.
+
+## Browsing what this pack ships
+
+```bash
+php artisan ichava::ichava-core.info icons --package={{packageName}}
+```
+
+For the visual browser, install [`ichava/icon-browser`](https://opensource.simtabi.com/documentation/ichava/icon-browser/) and visit `/{prefix}/icons`.
+
+## See also
+
+- [{{axisStudlyPlural}}]({{axisPlural}}.md)
+- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components)
+- [Global helper](https://opensource.simtabi.com/documentation/ichava/core/tools/global-helper)
+
+---
+
+[← Docs index](../README.md#documentation)
