@@ -44,7 +44,7 @@ The enum implements `IconSetVariantInterface` from core, so it works wherever co
 ## See also
 
 - [Customisation](customization.md)
-- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format)
+- [Icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md)
 
 ---
 

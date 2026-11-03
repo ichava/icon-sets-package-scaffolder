@@ -12,7 +12,7 @@
         "icon-sets",
         "blade"
     ],
-    "homepage": "https://opensource.simtabi.com/products/ichava/icon-sets-package-scaffolder",
+    "homepage": "https://github.com/ichava/icon-sets-package-scaffolder",
     "license": "MIT",
     "authors": [
         {
@@ -93,6 +93,6 @@
         "source": "https://github.com/ichava/icon-sets-package-scaffolder",
         "issues": "https://github.com/ichava/icon-sets-package-scaffolder/issues",
         "security": "https://github.com/ichava/icon-sets-package-scaffolder/security/policy",
-        "docs": "https://opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/"
+        "docs": "https://github.com/ichava/icon-sets-package-scaffolder/tree/main/docs"
     }
 }

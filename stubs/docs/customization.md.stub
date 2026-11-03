@@ -82,13 +82,13 @@ Relocated from the README, which is now a slim pointer.
 php artisan ichava::ichava-core.info icons --package={{packageName}}
 ```
 
-For the visual browser, install [`ichava/icon-browser`](https://opensource.simtabi.com/documentation/ichava/icon-browser/) and visit `/{prefix}/icons`.
+For the visual browser, install [`ichava/icon-browser`](https://github.com/ichava/icon-browser) and visit `/{prefix}/icons`.
 
 ## See also
 
 - [{{axisStudlyPlural}}]({{axisPlural}}.md)
-- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components)
-- [Global helper](https://opensource.simtabi.com/documentation/ichava/core/tools/global-helper)
+- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md)
+- [Global helper](https://github.com/ichava/core/blob/main/docs/tools/global-helper.md)
 
 ---
 

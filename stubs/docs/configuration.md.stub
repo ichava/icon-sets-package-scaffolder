@@ -22,8 +22,8 @@ addressing defaults. Read the published file for the current list rather than a 
 ## What is not here
 
 Cache, queue, database, logging, security and the `ICHAVA_*` environment surface are **core's**, and
-apply to every pack at once. See core's [configuration guide](https://opensource.simtabi.com/documentation/ichava/core/configuration) and
-[environment variables](https://opensource.simtabi.com/documentation/ichava/core/environment).
+apply to every pack at once. See core's [configuration guide](https://github.com/ichava/core/blob/main/docs/configuration.md) and
+[environment variables](https://github.com/ichava/core/blob/main/docs/environment.md).
 
 A value set here cannot change how core seeds, caches or sanitises; that is the point of the split.
 

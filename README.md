@@ -67,8 +67,7 @@ See [Getting started](docs/getting-started.md) for the full walkthrough, and the
 
 ## <a name="documentation"></a>Documentation
 
-Hosted at
-[opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/](https://opensource.simtabi.com/documentation/ichava/icon-sets-package-scaffolder/).
+The documentation lives in this repository, under `docs/`.
 
 ### Guides
 

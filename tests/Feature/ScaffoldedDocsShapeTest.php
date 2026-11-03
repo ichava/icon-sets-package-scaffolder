@@ -79,10 +79,11 @@ it('scaffolds docs in the shape every pack in the estate uses', function (): voi
         expect(preg_match('/\{\{[A-Za-z][A-Za-z0-9]*\}\}/', $body))
             ->toBe(0, "{$name} carries an unrendered scaffolder token");
 
-        // Cross-repo references use the hosted docs, not a GitHub blob path
-        // that breaks the moment a file moves.
-        expect(str_contains($body, 'github.com/ichava/core/blob'))
-            ->toBeFalse("{$name} links a blob path");
+        // Each ichava repo's docs live in that repo (Sim, 2026-11-03), so a
+        // cross-repo reference is a GitHub link to its docs/ file. The hosted
+        // portal this used to require answers 404 for every ichava page.
+        expect(str_contains($body, 'opensource.simtabi.com/documentation'))
+            ->toBeFalse("{$name} links the docs portal, which does not host ichava");
     }
 
     // The five concern pages, by name.
