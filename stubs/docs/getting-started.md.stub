@@ -19,7 +19,7 @@ The component is core's and is generic: the pack is named in the path, not in th
 ```
 
 Both spellings of the path resolve to the same icon; slash and dot are normalised by one resolver,
-documented in core's [icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format).
+documented in core's [icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md).
 
 ## If nothing renders
 
@@ -30,13 +30,13 @@ php artisan ichava::ichava-core.info icons --package={{packageName}}
 ```
 
 Zero rows means [Installation](installation.md) is outstanding. Core's
-[troubleshooting](https://opensource.simtabi.com/documentation/ichava/core/troubleshooting) covers the rest.
+[troubleshooting](https://github.com/ichava/core/blob/main/docs/troubleshooting.md) covers the rest.
 
 ## See also
 
 - [{{axisStudlyPlural}}]({{axisPlural}}.md) -- what this pack ships and how to address it
 - [Customisation](customization.md) -- colour, size, and this pack's own knobs
-- [Use an icon pack](https://opensource.simtabi.com/documentation/ichava/core/recipes/use-an-icon-pack) -- the generic guide, for any pack
+- [Use an icon pack](https://github.com/ichava/core/blob/main/docs/recipes/use-an-icon-pack.md) -- the generic guide, for any pack
 
 ---
 

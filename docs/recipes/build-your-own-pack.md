@@ -68,7 +68,7 @@ Cross-link to the main documentation for shared concerns:
 
 ```markdown
 For the icon path grammar, see
-https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format
+https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md
 ```
 
 ## 5. Release and publish
@@ -94,9 +94,9 @@ Every Ichava pack follows the same shape:
 ## See also
 
 - [`ichava::icon-sets-package-scaffolder.make` flag reference](https://github.com/ichava/icon-sets-package-scaffolder/blob/main/docs/tools/make-command.md)
-- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format)
-- [Database seeding](https://opensource.simtabi.com/documentation/ichava/core/recipes/seed-the-database)
-- [Custom icon sets (in-app, no package)](https://opensource.simtabi.com/documentation/ichava/core/recipes/add-a-custom-icon-set)
+- [Icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md)
+- [Database seeding](https://github.com/ichava/core/blob/main/docs/recipes/seed-the-database.md)
+- [Custom icon sets (in-app, no package)](https://github.com/ichava/core/blob/main/docs/recipes/add-a-custom-icon-set.md)
 
 ---
 

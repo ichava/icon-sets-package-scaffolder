@@ -10,7 +10,7 @@
 
 > {{humanName}} icons for the Ichava Laravel icon ecosystem.
 
-Requires [`ichava/core`](https://opensource.simtabi.com/documentation/ichava/core/); targets PHP `^8.4.1 || ^8.5` on Laravel `^13`.
+Requires [`ichava/core`](https://github.com/ichava/core); targets PHP `^8.4.1 || ^8.5` on Laravel `^13`.
 
 ## Install
 
@@ -21,11 +21,11 @@ php artisan ichava::ichava-core.database seed --package={{packageName}}
 
 The seed is not optional — until it runs the registry holds no rows for this pack and every lookup returns nothing.
 
-This pack's configuration is registered by `laranail/package-tools` from the provider's `hasConfigFile()` call; see core's [configuration guide](https://opensource.simtabi.com/documentation/ichava/core/configuration) for publishing and overriding it.
+This pack's configuration is registered by `laranail/package-tools` from the provider's `hasConfigFile()` call; see core's [configuration guide](https://github.com/ichava/core/blob/main/docs/configuration.md) for publishing and overriding it.
 
 ## <a name="documentation"></a>Documentation
 
-Full documentation is at **[opensource.simtabi.com/documentation/{{packageName}}](https://opensource.simtabi.com/documentation/{{packageName}}/)**.
+The full documentation lives in this repository, under `docs/`, and is indexed below.
 
 ### This pack
 
@@ -40,12 +40,12 @@ Full documentation is at **[opensource.simtabi.com/documentation/{{packageName}}
 
 ### Shared across every pack
 
-- [Use an icon pack](https://opensource.simtabi.com/documentation/ichava/core/recipes/use-an-icon-pack) — addressing icons, in Blade and in PHP
-- [Seed pack icons](https://opensource.simtabi.com/documentation/ichava/core/recipes/seed-pack-icons) — the seeding pipeline and its options
-- [Check pack updates](https://opensource.simtabi.com/documentation/ichava/core/recipes/check-pack-updates) — the update checker and what its statuses mean
-- [Serve icons from a CDN](https://opensource.simtabi.com/documentation/ichava/core/recipes/serve-icons-from-a-cdn) — reading this pack's CDN templates out of `config.json`
-- [Icon path format](https://opensource.simtabi.com/documentation/ichava/core/tools/icon-path-format) — the grammar both spellings normalise to
-- [Blade components](https://opensource.simtabi.com/documentation/ichava/core/tools/blade-components) — `<x-ichava::icon>` and its attributes
+- [Use an icon pack](https://github.com/ichava/core/blob/main/docs/recipes/use-an-icon-pack.md) — addressing icons, in Blade and in PHP
+- [Seed pack icons](https://github.com/ichava/core/blob/main/docs/recipes/seed-pack-icons.md) — the seeding pipeline and its options
+- [Check pack updates](https://github.com/ichava/core/blob/main/docs/recipes/check-pack-updates.md) — the update checker and what its statuses mean
+- [Serve icons from a CDN](https://github.com/ichava/core/blob/main/docs/recipes/serve-icons-from-a-cdn.md) — reading this pack's CDN templates out of `config.json`
+- [Icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md) — the grammar both spellings normalise to
+- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md) — `<x-ichava::icon>` and its attributes
 
 ## Contributing & security
 

@@ -39,7 +39,7 @@ cannot drift from it.
 
 ## See also
 
-- [Core architecture](https://opensource.simtabi.com/documentation/ichava/core/architecture) -- topology, boot order, the registry
+- [Core architecture](https://github.com/ichava/core/blob/main/docs/architecture.md) -- topology, boot order, the registry
 - [Release](release.md)
 
 ---

@@ -59,7 +59,7 @@ An empty result means no consumed code moved.
 ## Refreshing the icons is not a release
 
 New icons arrive by an upstream sync rather than by cutting a tag here. Core's
-[check pack updates](https://opensource.simtabi.com/documentation/ichava/core/recipes/check-pack-updates) reports whether a newer upstream release
+[check pack updates](https://github.com/ichava/core/blob/main/docs/recipes/check-pack-updates.md) reports whether a newer upstream release
 exists; [Attribution](attribution.md) records where this pack's assets come from and how they are
 refreshed.
 
