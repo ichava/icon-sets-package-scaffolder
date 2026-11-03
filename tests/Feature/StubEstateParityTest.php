@@ -174,7 +174,7 @@ function scaffoldForParity(string $root): void
     test()->artisan(MakeIconPackageCommand::class, [
         'name'             => 'Parity',
         '--vendor'         => 'Ichava',
-        '--email'          => 'opensource@simtabi.com',
+        '--email'          => 'ichava@simtabi.com',
         '--prefix'         => 'pa',
         '--type'           => 'single',
         '--path'           => $root,
