@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+use Simtabi\Laranail\Ichava\Services\IconRegistry;
+use {{namespace}}\Enums\{{axisStudly}};
+use {{namespace}}\Constants\IconsConstants;
+use {{namespace}}\Providers\IconsServiceProvider;
+
+it(description: 'boots the provider without error', closure: function () {
+    $providers = array_keys($this->app->getLoadedProviders());
+
+    expect($providers)->toContain(IconsServiceProvider::class);
+});
+
+it(description: 'resolves constants from config json', closure: function () {
+    expect(IconsConstants::getVendorPackage())->toBe('{{packageName}}')
+        ->and(IconsConstants::getTitle())->toBe('{{studlyName}} Icons')
+        ->and(IconsConstants::getPrefix())->toBe('{{prefix}}')
+        ->and(IconsConstants::getDefaultVariant()){{axisDefaultVariantExpectation}};
+});
+
+it(description: 'uses the config prefix in enum class helpers', closure: function () {
+    expect({{axisClassExpectations}};
+});
+
+{{axisDefaultTest}}
+
+it(description: 'picks up the package in the icon registry', closure: function () {
+    $registry = $this->app->make(IconRegistry::class);
+
+    expect($registry->isRegistered('{{packageName}}'))->toBeTrue(
+        'IconRegistry should have {{packageName}} registered after boot.',
+    );
+});
+
+{{axisLayoutTest}}

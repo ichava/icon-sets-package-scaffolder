@@ -1,0 +1,53 @@
+# Attribution and licence
+
+*Reference.* Where these icons come from, the licence they carry, and how to credit the upstream project.
+
+## Upstream
+
+<!-- Replace with the icon set's source, author, and project page.
+     Example:
+     [Acme Icons](https://acme.example/icons) is created and maintained by
+     [Acme Inc.](https://acme.example).                                       -->
+
+## Licence
+
+<!-- Document the licence of the upstream icon assets and of this Composer
+     package. Common cases:
+
+     - Both MIT: "Both the upstream X project and this Composer package are
+       licensed under the MIT License. ..."
+     - Upstream Apache, package MIT: clarify the NOTICE file requirement.
+     - CC-BY: visible attribution required, document where credit goes.
+     - Commercial: document who needs a licence and where to buy it.       -->
+
+This Composer package's code is [MIT](../LICENSE). The upstream icon assets are <!-- specify --> licensed; they are their authors' work, and the package claims no authorship of them.
+
+The notice the upstream licence requires lives in [`ATTRIBUTION.md`](../ATTRIBUTION.md) at the package root, which ships in the dist archive (`docs/` does not). Keep this page and that file in agreement.
+
+## Credit
+
+<!-- Recommended credit text:
+
+     Icons from [{{humanName}}](upstream-link) ({{humanName}} licence).   -->
+
+## Trademark
+
+<!-- If the pack contains brand logos, mention that trademark rights stay
+     with their holders and brand-mark usage follows each company's brand
+     guidelines.                                                            -->
+
+## Updating from upstream
+
+```bash
+php artisan ichava::ichava-core.check-updates --package={{packageName}}
+```
+
+Pulls the latest upstream snapshot, replaces the bundled SVGs, and re-seeds.
+
+## See also
+
+- Upstream project page: <!-- link -->
+
+---
+
+[← Docs index](../README.md#documentation)

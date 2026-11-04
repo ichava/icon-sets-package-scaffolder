@@ -1,0 +1,90 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Pins the docs shape the authoring standard specifies, by name.
+ *
+ * The estate already had a parity guard, and it could not have caught this:
+ * `StubEstateParityTest` derives the required page set from whatever
+ * `icon-sets-flag` happens to ship, so deleting a page from the pack and from
+ * the stub together leaves it green. It pins agreement, not the decision.
+ *
+ * The five concern pages are named here deliberately. Settled 2026-09-22 on
+ * measurement rather than taste: `laranail/authkit-ldap` is one source file and
+ * 45 lines and ships all five, and across 67 laranail repositories the twenty
+ * thinnest average 3.6 of 5. A thin package writes shorter pages, not fewer.
+ *
+ * This file is only a gate if something runs it on a markdown change.
+ * `tests.yml` carries `paths-ignore: ['**.md']`, so it skips exactly the change
+ * that would delete a page -- which is why `docs.yml` exists beside it.
+ */
+function docs_root(): string
+{
+    return dirname(__DIR__, 2) . '/docs';
+}
+
+function docs_readme(): string
+{
+    return (string) file_get_contents(dirname(__DIR__, 2) . '/README.md');
+}
+
+it(description: 'ships the five concern pages the standard requires', closure: function () {
+    foreach ([
+        'installation.md',
+        'getting-started.md',
+        'configuration.md',
+        'architecture.md',
+        'release.md',
+    ] as $page) {
+        expect(file_exists(docs_root() . '/' . $page))
+            ->toBeTrue("missing docs/{$page}, which the authoring standard requires");
+    }
+});
+
+it(description: 'ships this pack own addressing page', closure: function () {
+    expect(file_exists(docs_root() . '/{{axisPlural}}.md'))
+        ->toBeTrue('missing docs/{{axisPlural}}.md, the page this pack is addressed by');
+});
+
+it(description: 'indexes every docs page from the README, and lists none that is absent', closure: function () {
+    $readme = docs_readme();
+
+    foreach (glob(docs_root() . '/*.md') ?: [] as $path) {
+        $name = basename($path);
+        // `toContain()` is variadic: a second string is another needle, not a
+        // message. Assert the predicate so the message survives.
+        expect(str_contains($readme, 'docs/' . $name))
+            ->toBeTrue("docs/{$name} exists but the README does not link it");
+    }
+
+    preg_match_all('/\]\(docs\/([A-Za-z0-9_.-]+)\)/', $readme, $m);
+    expect($m[1])->not->toBeEmpty('the README lists no docs pages');
+
+    foreach (array_unique($m[1]) as $listed) {
+        expect(is_file(docs_root() . '/' . $listed))
+            ->toBeTrue("the README lists docs/{$listed}, which does not exist");
+    }
+});
+
+it(description: 'opens every page at its title and closes it with one index link', closure: function () {
+    $footer = '[← Docs index](../README.md#documentation)';
+    $pages = glob(docs_root() . '/*.md') ?: [];
+
+    // A glob that matches nothing makes every assertion below vacuous, and the
+    // test then passes over a docs directory it never read.
+    expect($pages)->not->toBeEmpty('no docs pages were inspected');
+
+    foreach ($pages as $path) {
+        $name = basename($path);
+        $body = (string) file_get_contents($path);
+
+        expect(str_starts_with($body, '# '))
+            ->toBeTrue("{$name} does not open with its H1");
+
+        expect(substr_count($body, $footer))
+            ->toBe(1, "{$name} should carry the index link exactly once, as its footer");
+
+        expect(rtrim($body))->toEndWith($footer);
+    }
+});
