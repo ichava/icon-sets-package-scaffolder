@@ -8,20 +8,20 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
 
 $definition = PackageDefinition::create(
-    name: 'Hero',
-    vendor: 'Acme',
-    email: 'dev@example.com',
+    name: 'tabler',
+    vendor: 'Ichava',
+    email: 'ichava@simtabi.com',
     type: 'multi',
-    variants: ['outline', 'solid'],
+    variants: ['outline', 'filled'],
 );
 
 $result = app(ScaffoldIconPackage::class)(
     $definition,
-    TargetPath::absolute('/srv/packages/acme-hero-icons'),
+    TargetPath::absolute('/srv/packages/icon-sets-tabler'),
 );
 
-$result->definition->packageName();   // acme/hero-icons
-$result->fileCount();                 // 26
+$result->definition->packageName();   // ichava/icon-sets-tabler
+$result->fileCount();                 // 44
 $result->files;                       // package-root-relative, sorted
 $result->directories;                 // resources/assets/svg/files/outline, ...
 ```

@@ -6,11 +6,11 @@ The one command this package registers. Scaffolds a complete icon package.
 
 | Name | Kind | Default | Notes |
 |---|---|---|---|
-| `name` | argument | prompted | The bare noun. `Hero`, not `HeroIcons`. |
+| `name` | argument | prompted | The bare slug. `tabler`, not `icon-sets-tabler`; the `icon-sets-` prefix is added once, so either spelling gives `icon-sets-tabler`. See [the mapping](../getting-started.md#type-the-bare-slug). |
 | `--vendor` | option | prompted | Vendor name. Studly for the namespace, kebab for the composer name. |
 | `--email` | option | prompted | Author email. Validated; a malformed one fails the run. |
-| `--path` | option | prompted | Destination. Absolute, or relative to the application root. |
-| `--prefix` | option | kebab name | Blade prefix: `<x-{prefix}-icon name="..." />`. |
+| `--path` | option | prompted | Destination. Absolute, or relative to the application root. Name it `icon-sets-<slug>`; the prompt's own suggestion is `<vendor>-<slug>-icons`. |
+| `--prefix` | option | kebab name | Icon prefix: written to `config.json` as `icon_prefix`, and the pack's icons render as `<x-{prefix}-icon name="..." />` (`ti` for Tabler, `flag` for Flag). It does not name the package; that is `icon-sets-<slug>`. |
 | `--type` | option | `single` | `single` or `multi`. |
 | `--kind` | option | prompted, `icon` | `icon` or `illustration`. Written to `config.json` as `package.kind`, the pack-wide SVG kind ichava/core resolves for every category that declares none of its own. |
 | `--variants` | option | prompted for `multi` | Comma separated. The first is the default. |

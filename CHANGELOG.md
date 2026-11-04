@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- **The documented command now reproduces the real pack names.** The README, `docs/getting-started.md`, the `make` reference, the token tables, `docs/creating-icon-packages.md` and both recipes still described the retired `-icons` suffix (`Hero` giving `acme/hero-icons` and `Acme\HeroIcons`). The generator has derived the `icon-sets-` prefix since the 2026-09-21 rename, so `tabler` gives `ichava/icon-sets-tabler`, `Ichava\IconSetsTabler` and `config/icon-sets-tabler.php`, matching `icon-sets-tabler`, `-flag`, `-emoji`, `-metronic` and `-bundled`. Typing the full slug gives the same names; typing `TablerIcons` gives `icon-sets-tabler-icons`. `docs/getting-started.md` gains an input-to-names table, produced by running the generator. The pages also say that `--path` should be `icon-sets-<slug>` (the prompt suggests `<vendor>-<slug>-icons`), that `--prefix` is the `icon_prefix` in `config.json`, that a pack ships no update command, and that a scaffold is 44 files. Documentation only; no PHP changed.
+
 ### Changed
 
 - **Documentation links point at each repository's own `docs/`** (Sim, 2026-11-03: "all ichava repos have docs in their respective repos. thats by design"). Links to `opensource.simtabi.com/documentation/ichava/...` and the `opensource.simtabi.com/products/ichava/...` homepage, which answer 404 for every ichava page, now go to the matching `docs/*.md` on GitHub, or to the repository itself. Each target was checked to exist on that repository's `main`. The manifest's `homepage` and `support.docs` follow. The stub README and docs do the same for every pack scaffolded from now on, and `ScaffoldedDocsShapeTest` now forbids the docs portal where it used to forbid GitHub blob paths.

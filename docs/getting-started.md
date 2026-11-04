@@ -11,31 +11,39 @@ php artisan ichava::icon-sets-package-scaffolder.make
 It asks for a name, a vendor, an author email, a Blade prefix, a set type and --
 for a multi-variant pack -- the variants, then a destination.
 
-## Type the bare noun
+## Type the bare slug
 
-`Hero`, not `HeroIcons`. The suffix is appended for you:
+`tabler`, not `icon-sets-tabler`. The `icon-sets-` prefix is added for you, and
+it is added once: typing the full slug gives the same names. The mapping below
+was produced by running the generator with vendor `Ichava`:
 
-| You type | Composer name | Namespace | Blade tag |
+| You type | Composer name | Namespace | Config file |
 |---|---|---|---|
-| `Hero` | `acme/hero-icons` | `Acme\HeroIcons` | `<x-hero-icon name="..." />` |
-| `HeroIcons` | `acme/hero-icons-icons` | `Acme\HeroIconsIcons` | `<x-hero-icons-icon ... />` |
+| `tabler` or `Tabler` | `ichava/icon-sets-tabler` | `Ichava\IconSetsTabler` | `config/icon-sets-tabler.php` |
+| `flag` | `ichava/icon-sets-flag` | `Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
+| `icon-sets-flag` or `IconSetsFlag` | `ichava/icon-sets-flag` | `Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
+| `TablerIcons` | `ichava/icon-sets-tabler-icons` | `Ichava\IconSetsTablerIcons` | `config/icon-sets-tabler-icons.php` |
 
-The second row is not a typo. It is what the generator does, inherited from core
-and pinned by a test rather than changed, because changing it would rename every
-class in a pack scaffolded before the change.
+The last row is not a typo. A trailing `Icons` in what you type is kept, so
+`TablerIcons` is a different pack from `tabler`. Type the bare slug.
+
+The destination directory is yours to name. The prompt suggests
+`<vendor>-<slug>-icons`, which is not how the existing packs are laid out, so
+pass `--path` and name it `icon-sets-<slug>` (`icon-sets-tabler`, `icon-sets-flag`,
+`icon-sets-emoji`, `icon-sets-metronic`, `icon-sets-bundled`).
 
 ## Non-interactively
 
 Supply everything and it never reaches a prompt:
 
 ```bash
-php artisan ichava::icon-sets-package-scaffolder.make Hero \
-  --vendor=Acme \
-  --email=dev@example.com \
-  --path=../acme-hero-icons \
-  --prefix=hero \
+php artisan ichava::icon-sets-package-scaffolder.make tabler \
+  --vendor=Ichava \
+  --email=ichava@simtabi.com \
+  --path=../icon-sets-tabler \
+  --prefix=ti \
   --type=multi \
-  --variants=outline,solid \
+  --variants=outline,filled \
   --no-interaction
 ```
 
@@ -45,15 +53,15 @@ behind it blocks rather than fails.
 
 ## What lands
 
-25 files for a single-set pack, 26 for a multi-variant one:
+44 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
 
 ```
-acme-hero-icons/
+icon-sets-tabler/
 ├── composer.json                    name, PSR-4 map, provider discovery
 ├── README.md  CHANGELOG.md  LICENSE.md
 ├── .github/workflows/               tests, code-quality, release, sync-upstream
 ├── .gitignore  .gitattributes  phpunit.xml.dist
-├── config/hero-icons.php            the config file, named for the pack
+├── config/icon-sets-tabler.php      the config file, named for the pack
 ├── docs/                            variants, attribution, customization
 ├── resources/assets/svg/
 │   ├── config.json                  every piece of pack metadata
@@ -62,7 +70,6 @@ acme-hero-icons/
 ├── src/Constants/IconsConstants.php
 ├── src/Enums/Variant.php
 ├── src/View/Components/IconComponent.php
-├── src/Commands/UpdateIconsCommand.php
 └── tests/
 ```
 
@@ -71,7 +78,7 @@ acme-hero-icons/
 1. Drop SVGs into `resources/assets/svg/files/` (one sub-directory per variant).
 2. Edit `resources/assets/svg/config.json` -- description, homepage, repository.
 3. `composer install` inside the pack.
-4. From a host application, `composer require acme/hero-icons`.
+4. From a host application, `composer require ichava/icon-sets-tabler`.
 
 The provider is auto-discovered. No `config/app.php` edit.
 
