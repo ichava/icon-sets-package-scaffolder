@@ -19,6 +19,27 @@ Publishing is optional; the defaults are merged either way.
 Only what is specific to this pack -- the set name and prefix it registers under, and its own
 addressing defaults. Read the published file for the current list rather than a copy of it here.
 
+## Kinds in `config.json`
+
+`resources/assets/svg/config.json` declares what the pack's SVGs are, `icon` or `illustration`. Core decides
+each item's kind from the first row that gives one, and an item path is the file's path under `files/` without
+`.svg` (`illustrations/office`):
+
+| Row | Key | Notes |
+|---|---|---|
+| 1 | the host's `kinds.overrides` | the app developer's, in core's config; wins over the pack |
+| 2 | `metadata.data.items.<item path>.kind` | one item; the value is an object so it can grow |
+| 3 | `metadata.data.kinds.rules[]` | `{ "match": "<glob>", "kind": "..." }`, ordered, **first match wins**; put specific rules before broad ones |
+| 4 | `metadata.data.categories.<slug>.kind` | every item in that first-level folder |
+| 5 | `package.kind` | this pack's default, `{{kind}}` |
+| 6 | | `icon` |
+
+Globs match the whole item path and are case-sensitive: `*` is any run of characters except `/`, `?` is one
+character, and `**` is whole segments (`spot/**`). `items` and `kinds.rules` start empty. A pack is "mixed" when
+its items resolve to both kinds; nothing declares that, and there is no `"kind": "mixed"`. A value that names no
+kind is ignored by core and reported by `ichava::ichava-core.info doctor`; the pack's own `ResourceShapeTest`
+fails on it instead. See core's [kinds guide](https://github.com/ichava/core/blob/main/docs/kinds.md).
+
 ## What is not here
 
 Cache, queue, database, logging, security and the `ICHAVA_*` environment surface are **core's**, and

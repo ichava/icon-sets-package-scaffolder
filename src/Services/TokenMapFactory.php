@@ -48,6 +48,11 @@ final readonly class TokenMapFactory
             '{{email}}'       => $definition->email,
             '{{iconSetType}}' => $definition->type->value,
             '{{kind}}'        => $definition->kind->value,
+            // `[]` for no rules: `kinds.rules` is an ordered array, so the
+            // empty case must encode as a list, not as an object.
+            '{{kindRulesJson}}' => $definition->kindRules === []
+                ? '[]'
+                : (string) json_encode($definition->kindRulesConfig(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
 
             // The taxonomy axis, distinct from iconSetType above: that one is
             // filesystem layout, these name the enum class, the docs page and

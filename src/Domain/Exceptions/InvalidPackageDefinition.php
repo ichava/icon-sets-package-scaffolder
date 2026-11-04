@@ -53,6 +53,16 @@ final class InvalidPackageDefinition extends InvalidArgumentException
         return new self(sprintf('Unknown icon kind "%s"; expected "icon" or "illustration".', $kind));
     }
 
+    public static function malformedKindRule(string $spec): self
+    {
+        return new self(sprintf('Kind rule "%s" is not <glob>=<kind>, for example "scenes/**=illustration".', $spec));
+    }
+
+    public static function invalidKindGlob(string $pattern): self
+    {
+        return new self(sprintf('Kind rule glob "%s" is not valid: no empty pattern, leading "/", "..", empty segment, "[ ] { } \\", or "**" inside a segment.', $pattern));
+    }
+
     public static function multiSetWithoutVariants(): self
     {
         return new self('A multi-variant package needs at least one variant.');

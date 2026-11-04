@@ -114,6 +114,7 @@ final readonly class PackageDefinitionPrompter
             variants: $variants,
             axis: $axis ?? '',
             kind: $kind ?? '',
+            kindRules: $this->kindRules($supplied),
         );
     }
 
@@ -127,6 +128,23 @@ final readonly class PackageDefinitionPrompter
     private static function string(mixed $value): string
     {
         return is_scalar($value) || $value instanceof Stringable ? (string) $value : '';
+    }
+
+    /**
+     * The repeatable `--kind-rule=<glob>=<kind>` values, in the order given.
+     * Never prompted for: a rule needs a glob the author has to type anyway.
+     *
+     * @param array<string, mixed> $supplied
+     *
+     * @return list<string>
+     */
+    private function kindRules(array $supplied): array
+    {
+        $rules = $supplied['kind_rules'] ?? [];
+
+        return is_array($rules)
+            ? array_values(array_filter(array_map(self::string(...), $rules), static fn (string $rule): bool => trim($rule) !== ''))
+            : [];
     }
 
     /**

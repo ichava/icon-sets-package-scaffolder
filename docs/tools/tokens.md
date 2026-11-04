@@ -28,6 +28,7 @@ For `name: Hero`, `vendor: Acme Labs`, `email: dev@example.com`:
 | `{{email}}` | `dev@example.com` | |
 | `{{iconSetType}}` | `single` or `multi` | |
 | `{{kind}}` | `icon` or `illustration` | `package.kind` in `config.json`. |
+| `{{kindRulesJson}}` | `[]`, or the `--kind-rule` entries as pretty-printed JSON | `metadata.data.kinds.rules` in `config.json`. Always a list, never `{}`: rule order decides the winner. |
 | `{{variantsJson}}` | `{}` or a JSON object | Pretty-printed, already ordered. |
 | `{{year}}` | `2026` | |
 | `{{date}}` | `2026-09-21` | |
