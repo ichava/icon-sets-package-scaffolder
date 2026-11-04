@@ -31,7 +31,18 @@ it('publishes no personal author name or email, here or in a scaffolded pack', f
 
     $offenders = [];
 
+    // The one stub that must spell the pattern: the generated pack's own
+    // NoPersonalContactTest is the regex that fails on a personal name, so it
+    // cannot avoid containing it. Exempted by exact path, and it has to exist,
+    // so a renamed stub cannot leave the exemption covering nothing.
+    $guardStub = $root . '/stubs/tests/Unit/NoPersonalContactTest.php.stub';
+    $this->assertFileExists($guardStub);
+
     foreach ($files as $path) {
+        if ($path === $guardStub) {
+            continue;
+        }
+
         if (preg_match('/imani@|manyara/i', (string) file_get_contents($path)) === 1) {
             $offenders[] = substr($path, strlen($root) + 1);
         }

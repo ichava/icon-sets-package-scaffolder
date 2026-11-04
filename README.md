@@ -60,7 +60,7 @@ php artisan ichava::icon-sets-package-scaffolder.make tabler \
 ```
 
 Type the bare slug. `tabler` yields `ichava/icon-sets-tabler` and
-`Ichava\IconSetsTabler`; the `icon-sets-` prefix is added for you, and typing
+`Simtabi\Laranail\Ichava\IconSetsTabler`; the `icon-sets-` prefix is added for you, and typing
 the full `icon-sets-tabler` gives the same names. Pass `--path` yourself and
 name the directory `icon-sets-<slug>`, as the existing packs are.
 

@@ -15,14 +15,16 @@ for a multi-variant pack -- the variants, then a destination.
 
 `tabler`, not `icon-sets-tabler`. The `icon-sets-` prefix is added for you, and
 it is added once: typing the full slug gives the same names. The mapping below
-was produced by running the generator with vendor `Ichava`:
+was produced by running the generator with vendor `Ichava`, whose packs live under
+`Simtabi\Laranail\Ichava\` like every real pack (any other vendor keeps
+`<Vendor>\IconSets<Slug>`):
 
 | You type | Composer name | Namespace | Config file |
 |---|---|---|---|
-| `tabler` or `Tabler` | `ichava/icon-sets-tabler` | `Ichava\IconSetsTabler` | `config/icon-sets-tabler.php` |
-| `flag` | `ichava/icon-sets-flag` | `Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
-| `icon-sets-flag` or `IconSetsFlag` | `ichava/icon-sets-flag` | `Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
-| `TablerIcons` | `ichava/icon-sets-tabler-icons` | `Ichava\IconSetsTablerIcons` | `config/icon-sets-tabler-icons.php` |
+| `tabler` or `Tabler` | `ichava/icon-sets-tabler` | `Simtabi\Laranail\Ichava\IconSetsTabler` | `config/icon-sets-tabler.php` |
+| `flag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
+| `icon-sets-flag` or `IconSetsFlag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
+| `TablerIcons` | `ichava/icon-sets-tabler-icons` | `Simtabi\Laranail\Ichava\IconSetsTablerIcons` | `config/icon-sets-tabler-icons.php` |
 
 The last row is not a typo. A trailing `Icons` in what you type is kept, so
 `TablerIcons` is a different pack from `tabler`. Type the bare slug.
@@ -53,14 +55,15 @@ behind it blocks rather than fails.
 
 ## What lands
 
-44 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
+52 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
 
 ```
 icon-sets-tabler/
 ├── composer.json                    name, PSR-4 map, provider discovery
 ├── README.md  CHANGELOG.md  LICENSE.md
 ├── .github/workflows/               tests, code-quality, release, sync-upstream
-├── .gitignore  .gitattributes  phpunit.xml.dist
+├── .github/                         dependabot.yml, issue templates, PR template
+├── .gitignore  .gitattributes  .editorconfig  phpunit.xml.dist
 ├── config/icon-sets-tabler.php      the config file, named for the pack
 ├── docs/                            variants, attribution, customization
 ├── resources/assets/svg/
@@ -70,8 +73,13 @@ icon-sets-tabler/
 ├── src/Constants/IconsConstants.php
 ├── src/Enums/Variant.php
 ├── src/View/Components/IconComponent.php
-└── tests/
+└── tests/                           metadata, docs, attribution and the shared guards
 ```
+
+There is no `SECURITY.md`: the real packs rely on the organisation's `.github`
+cascade, so the README and `CONTRIBUTING.md` link the repository's own security
+policy page. Disclosure goes to `security@simtabi.com`; `ichava@` is the author
+and contact address only.
 
 ## Then
 

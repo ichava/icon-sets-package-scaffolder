@@ -45,4 +45,4 @@ pipeline in `ichava/core`, never by repairing the asset here.
 
 ## Reporting a vulnerability
 
-Not here, and not in a public issue. See [SECURITY.md](SECURITY.md).
+Not here, and not in a public issue. See the [security policy](https://github.com/{{packageName}}/security/policy).

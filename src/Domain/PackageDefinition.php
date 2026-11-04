@@ -26,6 +26,14 @@ final readonly class PackageDefinition
     private const string SLUG_PREFIX = 'icon-sets-';
 
     /**
+     * PSR-4 roots that differ from the studly vendor, keyed by kebab vendor.
+     * Every real ichava pack is `Simtabi\Laranail\Ichava\IconSets<Slug>`.
+     */
+    private const array NAMESPACE_ROOTS = [
+        'ichava' => 'Simtabi\\Laranail\\Ichava',
+    ];
+
+    /**
      * @param list<IconVariant> $variants
      * @param list<KindRule> $kindRules
      */
@@ -157,12 +165,16 @@ final readonly class PackageDefinition
      * `Acme\IconSetsHero` -- the PSR-4 root of the generated package.
      *
      * Derived from bladeNamespace() so the class root and the composer name
-     * cannot drift apart. The real packs are `…\Ichava\IconSetsFlag`, studly
-     * of the same slug.
+     * cannot drift apart. The real packs are
+     * `Simtabi\Laranail\Ichava\IconSetsFlag`, studly of the same slug, so the
+     * `ichava` vendor takes the estate root; every other vendor keeps
+     * `<Vendor>\<Pack>`, as before.
      */
     public function namespace(): string
     {
-        return $this->vendorStudly() . '\\' . Str::studly($this->bladeNamespace());
+        $root = self::NAMESPACE_ROOTS[$this->vendorKebab()] ?? $this->vendorStudly();
+
+        return $root . '\\' . Str::studly($this->bladeNamespace());
     }
 
     /** `Hero Icons` -- for descriptions and headings. */
