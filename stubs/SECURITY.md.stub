@@ -1,23 +1,27 @@
 # Security policy
 
+Do not report a suspected vulnerability in a public issue, discussion or pull request.
+
 ## Reporting a vulnerability
 
-Do not open a public issue for a suspected vulnerability.
-
-**Email [{{email}}](mailto:{{email}}).**
-
-GitHub private vulnerability reporting is the better channel, because it
-attaches the report to the repository with a draft advisory and a CVE request
-path already in place. It is a public-repository feature and it is **off by
-default**, so switch it on before listing it here:
+**Use GitHub private vulnerability reporting.** On this repository's
+[Security tab](https://github.com/{{packageName}}/security/policy), choose
+*Report a vulnerability*. The report arrives attached to the repository, with a
+draft advisory and a CVE request path in place. It is off by default, so switch
+it on once the repository is public, and keep naming it here only while the
+button is there:
 
 ```bash
 gh api -X PUT repos/{{packageName}}/private-vulnerability-reporting
 ```
 
-Once the repository's `/security/policy` page shows a *Report a vulnerability*
-button, name that channel above email. Until it does, the channel does not
-exist, and advertising it sends a reporter to a button that is not there.
+**Or email [security@simtabi.com](mailto:security@simtabi.com).** That is the only
+disclosure address, and it works whether or not the button is available. Other
+Simtabi addresses, including `ichava@simtabi.com`, handle community mail and
+may delay a report.
+
+Response times, coordinated disclosure, safe harbor and credit follow the
+[organisation security policy](https://github.com/ichava/.github/blob/main/SECURITY.md).
 
 ## Scope
 

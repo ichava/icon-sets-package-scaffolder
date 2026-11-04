@@ -49,7 +49,7 @@ The full documentation lives in this repository, under `docs/`, and is indexed b
 
 ## Contributing & security
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through [SECURITY.md](SECURITY.md) — never in a public issue.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through the [security policy](https://github.com/{{packageName}}/security/policy) — never in a public issue.
 
 ## License
 
