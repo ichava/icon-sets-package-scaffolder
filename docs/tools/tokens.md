@@ -14,17 +14,17 @@ For `name: Hero`, `vendor: Acme Labs`, `email: dev@example.com`:
 | `{{vendorLower}}` | `acme labs` | |
 | `{{vendorKebab}}` | `acme-labs` | Composer vendor. |
 | `{{vendorSnake}}` | `acme_labs` | |
-| `{{studlyName}}` | `Hero` | As typed, studly. |
-| `{{camelName}}` | `hero` | |
-| `{{kebabName}}` | `hero` | |
-| `{{snakeName}}` | `hero` | |
-| `{{snakeNameUpper}}` | `HERO` | Env var prefixes. |
-| `{{humanName}}` | `Hero` | Headings and descriptions. |
-| `{{namespace}}` | `AcmeLabs\HeroIcons` | Note the appended `Icons`. |
-| `{{namespaceEscaped}}` | `AcmeLabs\\HeroIcons` | For JSON and double-quoted contexts. |
-| `{{packageName}}` | `acme-labs/hero-icons` | Composer name. |
-| `{{bladeNamespace}}` | `hero-icons` | Pack short name. |
-| `{{prefix}}` | `hero` | Blade component prefix. |
+| `{{studlyName}}` | `Tabler` | As typed, studly. |
+| `{{camelName}}` | `tabler` | |
+| `{{kebabName}}` | `tabler` | |
+| `{{snakeName}}` | `tabler` | |
+| `{{snakeNameUpper}}` | `TABLER` | Env var prefixes. |
+| `{{humanName}}` | `Tabler` | Headings and descriptions. |
+| `{{namespace}}` | `AcmeLabs\IconSetsTabler` | Note the `IconSets` prefix. |
+| `{{namespaceEscaped}}` | `AcmeLabs\\IconSetsTabler` | For JSON and double-quoted contexts. |
+| `{{packageName}}` | `acme-labs/icon-sets-tabler` | Composer name. |
+| `{{bladeNamespace}}` | `icon-sets-tabler` | Pack short name: the `icon-sets-` prefix plus the kebab name, never doubled. |
+| `{{prefix}}` | `tabler` | Icon prefix (`icon_prefix` in `config.json`); defaults to the kebab name. |
 | `{{email}}` | `dev@example.com` | |
 | `{{iconSetType}}` | `single` or `multi` | |
 | `{{kind}}` | `icon` or `illustration` | `package.kind` in `config.json`. |

@@ -53,14 +53,16 @@ php artisan ichava::icon-sets-package-scaffolder.make
 Answer the prompts, or supply everything and skip them:
 
 ```bash
-php artisan ichava::icon-sets-package-scaffolder.make Hero \
-  --vendor=Acme --email=dev@example.com \
-  --path=../acme-hero-icons --type=multi --variants=outline,solid \
+php artisan ichava::icon-sets-package-scaffolder.make tabler \
+  --vendor=Ichava --email=ichava@simtabi.com \
+  --path=../icon-sets-tabler --prefix=ti --type=multi --variants=outline,filled \
   --no-interaction
 ```
 
-Type the bare noun. `Hero` yields `acme/hero-icons` and `Acme\HeroIcons`; the
-`Icons` suffix is added for you.
+Type the bare slug. `tabler` yields `ichava/icon-sets-tabler` and
+`Ichava\IconSetsTabler`; the `icon-sets-` prefix is added for you, and typing
+the full `icon-sets-tabler` gives the same names. Pass `--path` yourself and
+name the directory `icon-sets-<slug>`, as the existing packs are.
 
 See [Getting started](docs/getting-started.md) for the full walkthrough, and the
 [documentation index](#documentation) for everything else.

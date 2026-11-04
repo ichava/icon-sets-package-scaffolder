@@ -57,7 +57,7 @@ Semantic versioning. For this package specifically:
 - **A change to what a scaffolded pack contains is a feature, not a fix**, even
   when it corrects something. A consumer's existing packs do not change, but the
   next pack they generate does.
-- **A change to a derived name is breaking.** The `Icons` suffix behaviour, the
+- **A change to a derived name is breaking.** The `icon-sets-` prefix behaviour, the
   `ichava::` prefix on a generated pack's update command, the config filename --
   each of these renames files or classes in the output.
 - No `version` field in `composer.json`. The tag is the version.

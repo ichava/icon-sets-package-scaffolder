@@ -29,10 +29,11 @@ package is `composer install`-ready; just drop SVG files into
 `resources/assets/svg/files/` (single-set) or
 `resources/assets/svg/files/<variant>/` (multi-set).
 
-> **Directory naming convention.** New packages should live in a directory
-> named `ichava-<kebabName>-icons`, matching the existing siblings
-> (`ichava-tabler-icons`, `ichava-flag-icons`).
-> The interactive prompt defaults to `base_path("ichava-{kebabName}-icons")`.
+> **Directory naming convention.** New packages live in a directory named
+> `icon-sets-<slug>`, matching the existing siblings (`icon-sets-tabler`,
+> `icon-sets-flag`, `icon-sets-emoji`, `icon-sets-metronic`,
+> `icon-sets-bundled`). The interactive prompt suggests
+> `<vendor>-<kebabName>-icons` instead, so pass `--path` or edit the suggestion.
 
 The full flag reference lives with the command, in
 [`ichava/icon-sets-package-scaffolder`](https://github.com/ichava/icon-sets-package-scaffolder/blob/main/docs/tools/make-command.md).
@@ -81,7 +82,7 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 
 | Token | Result | Use for |
 |---|---|---|
-| `{{studlyName}}` | `Hero` | Class names; the stubs append the literal `Icons` suffix where needed. |
+| `{{studlyName}}` | `Hero` | Class names; the namespace root is `IconSets` plus this, and the stubs append the literal `Icons` to some class short names (below). |
 | `{{camelName}}` | `hero` | Local variables, camelCase identifiers. |
 | `{{kebabName}}` | `hero` | Composer fragments, Blade component prefixes, route slugs. |
 | `{{snakeName}}` | `hero` | Database tables, snake-cased configuration keys. |
@@ -92,16 +93,15 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 
 | Token | Result | Use for |
 |---|---|---|
-| `{{namespace}}` | `YourCompany\HeroIcons` | Single-token PHP namespace prefix. |
-| `{{namespaceEscaped}}` | `YourCompany\\HeroIcons` | JSON-safe namespace (composer.json `psr-4` keys). |
-| `{{packageName}}` | `your-company/hero-icons` | Full composer package name. |
-| `{{bladeNamespace}}` | `hero-icons` | Blade component namespace (`<x-hero-icons-icon>`). |
+| `{{namespace}}` | `YourCompany\IconSetsHero` | Single-token PHP namespace prefix. |
+| `{{namespaceEscaped}}` | `YourCompany\\IconSetsHero` | JSON-safe namespace (composer.json `psr-4` keys). |
+| `{{packageName}}` | `your-company/icon-sets-hero` | Full composer package name. |
+| `{{bladeNamespace}}` | `icon-sets-hero` | Blade component namespace (`<x-icon-sets-hero-icon>`). Never doubled: `icon-sets-hero` stays `icon-sets-hero`. |
 
 > **Class short names are constants**. `IconsServiceProvider`,
 > `IconsConstants`, `IconComponent`, `Variant`. Every scaffolded
 > package uses the same names; disambiguation happens via the
-> namespace. This eliminates a class of bugs (e.g, double-`Icons`
-> suffix when a user typed `HeroIcons` instead of `Hero`) and lets
+> namespace. This lets
 > you grep `class IconsConstants` across the whole ecosystem.
 
 **Author / metadata** (pass-through):

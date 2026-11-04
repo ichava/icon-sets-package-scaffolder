@@ -16,18 +16,18 @@ php artisan ichava::icon-sets-package-scaffolder.make
 Or non-interactively:
 
 ```bash
-php artisan ichava::icon-sets-package-scaffolder.make Hero \
+php artisan ichava::icon-sets-package-scaffolder.make hero \
     --vendor=Acme \
     --email=team@acme.test \
     --prefix=hi \
     --type=multi \
     --variants=outline,solid \
-    --path=ichava-hero-icons
+    --path=icon-sets-hero
 ```
 
 You get a complete package: `composer.json`, service provider, constants class, variant enum, Blade component, update command, `config.json`, README, CHANGELOG, LICENSE, `.gitignore`, `.gitattributes`, `phpunit.xml.dist`, four GitHub Actions workflows, and a `docs/` directory pre-populated with vendor-specific pages.
 
-The name you type is the bare noun. `Hero` gives `acme/hero-icons` and `Acme\HeroIcons`; the `Icons` suffix is appended for you, so typing `HeroIcons` yields `acme/hero-icons-icons`.
+The name you type is the bare slug. `hero` gives `acme/icon-sets-hero` and `Acme\IconSetsHero`; the `icon-sets-` prefix is added for you, once, so typing `icon-sets-hero` gives the same names. See [the full mapping](../getting-started.md#type-the-bare-slug).
 
 See the [command reference](https://github.com/ichava/icon-sets-package-scaffolder/blob/main/docs/tools/make-command.md) for every flag, and the [token reference](https://github.com/ichava/icon-sets-package-scaffolder/blob/main/docs/tools/tokens.md) for every stub placeholder.
 
