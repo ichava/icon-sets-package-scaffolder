@@ -25,7 +25,10 @@ final readonly class PackageDefinition
     /** The estate-wide slug prefix every icon pack carries. */
     private const string SLUG_PREFIX = 'icon-sets-';
 
-    /** @param list<IconVariant> $variants */
+    /**
+     * @param list<IconVariant> $variants
+     * @param list<KindRule> $kindRules
+     */
     private function __construct(
         public string $studlyName,
         public string $kebabName,
@@ -36,6 +39,7 @@ final readonly class PackageDefinition
         public array $variants,
         public IconAxis $axis = IconAxis::Variant,
         public IconKind $kind = IconKind::Icon,
+        public array $kindRules = [],
     ) {}
 
     /**
@@ -48,6 +52,11 @@ final readonly class PackageDefinition
      *
      * `$kind` defaults to Icon for the same reason: every pack in the estate
      * declares `icon`, and a caller that predates kinds must keep getting it.
+     *
+     * `$kindRules` are `kinds.rules` entries, as `<glob>=<kind>` strings or
+     * {@see KindRule}s, in the order the first match should win. Empty by
+     * default, which renders the empty list the stub always carried.
+     * @param list<string|KindRule> $kindRules
      */
     public static function create(
         string $name,
@@ -58,6 +67,7 @@ final readonly class PackageDefinition
         array $variants = [],
         string|IconAxis $axis = IconAxis::Variant,
         string|IconKind $kind = IconKind::Icon,
+        array $kindRules = [],
     ): self {
         $name = trim($name);
         $vendor = trim($vendor);
@@ -94,6 +104,10 @@ final readonly class PackageDefinition
             variants: $type->hasVariantDirectories() ? self::buildVariants($variants) : [],
             axis: is_string($axis) ? IconAxis::fromInput($axis) : $axis,
             kind: is_string($kind) ? IconKind::fromInput($kind) : $kind,
+            kindRules: array_values(array_map(
+                static fn (string|KindRule $rule): KindRule => $rule instanceof KindRule ? $rule : KindRule::fromInput($rule),
+                $kindRules,
+            )),
         );
     }
 
@@ -168,6 +182,16 @@ final readonly class PackageDefinition
         }
 
         return $config;
+    }
+
+    /**
+     * The `kinds.rules` list core's `PackConfigData::kindRules()` reads, in order.
+     *
+     * @return list<array{match: string, kind: string}>
+     */
+    public function kindRulesConfig(): array
+    {
+        return array_map(static fn (KindRule $rule): array => $rule->toConfigArray(), $this->kindRules);
     }
 
     /**

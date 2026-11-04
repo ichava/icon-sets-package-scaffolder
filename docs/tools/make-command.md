@@ -13,6 +13,7 @@ The one command this package registers. Scaffolds a complete icon package.
 | `--prefix` | option | kebab name | Icon prefix: written to `config.json` as `icon_prefix`, and the pack's icons render as `<x-{prefix}-icon name="..." />` (`ti` for Tabler, `flag` for Flag). It does not name the package; that is `icon-sets-<slug>`. |
 | `--type` | option | `single` | `single` or `multi`. |
 | `--kind` | option | prompted, `icon` | `icon` or `illustration`. Written to `config.json` as `package.kind`, the pack-wide SVG kind ichava/core resolves for every category that declares none of its own. |
+| `--kind-rule` | option, repeatable | none | `<glob>=<kind>`, for example `--kind-rule="spot/tiny-*=icon" --kind-rule="spot/**=illustration"`. Each becomes an entry of `kinds.rules` in `config.json`, in the order given, and the first match wins. The glob follows core's syntax (`*`, `?`, whole-segment `**`); an invalid glob or an unknown kind exits `2`. Never prompted for. Without it `kinds.rules` is the empty list, and `items` is always `{}`. |
 | `--variants` | option | prompted for `multi` | Comma separated. The first is the default. |
 | `--force` | flag | off | Overwrite a non-empty destination. |
 

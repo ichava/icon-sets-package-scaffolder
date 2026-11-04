@@ -47,6 +47,7 @@ final class MakeIconPackageCommand extends Command
                            {--type= : Icon set type: single or multi}
                            {--axis= : Taxonomy axis: variant or category}
                            {--kind= : SVG kind: icon or illustration, defaults to icon}
+                           {--kind-rule=* : A kinds.rules entry, <glob>=<kind>, e.g. "scenes/**=illustration"; repeat for more, first match wins}
                            {--variants= : Comma-separated variants for a multi-set pack}
                            {--force : Overwrite a non-empty destination}';
 
@@ -71,14 +72,15 @@ final class MakeIconPackageCommand extends Command
 
         try {
             $definition = $prompter->prompt([
-                'name'     => $this->argument('name'),
-                'vendor'   => $this->option('vendor'),
-                'email'    => $this->option('email'),
-                'prefix'   => $this->option('prefix'),
-                'type'     => $this->option('type'),
-                'axis'     => $this->option('axis'),
-                'kind'     => $this->option('kind'),
-                'variants' => $this->option('variants'),
+                'name'       => $this->argument('name'),
+                'vendor'     => $this->option('vendor'),
+                'email'      => $this->option('email'),
+                'prefix'     => $this->option('prefix'),
+                'type'       => $this->option('type'),
+                'axis'       => $this->option('axis'),
+                'kind'       => $this->option('kind'),
+                'kind_rules' => $this->option('kind-rule'),
+                'variants'   => $this->option('variants'),
             ], $interactive);
 
             $suppliedPath = $this->option('path');

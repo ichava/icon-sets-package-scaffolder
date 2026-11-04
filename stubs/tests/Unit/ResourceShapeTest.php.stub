@@ -163,6 +163,38 @@ it('declares an SVG kind core recognises, for the pack and every category', func
     expect(array_diff($declared, $kinds))->toBe([]);
 });
 
+it('declares item kinds and kind rules core can read', function () {
+    // `items` is keyed by item path (relative to files/, no .svg) and each
+    // value is an object; `kinds.rules` is an ordered array of
+    // { match: <glob>, kind } where the first match wins. Core drops an entry
+    // it cannot read and doctor reports it, so a typo files the SVG under the
+    // next row instead of failing; this makes it fail.
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+    $data = $config['metadata']['data'];
+    $kinds = ['icon', 'illustration'];
+
+    expect($data['items'] ?? [])->toBeArray();
+    expect(array_is_list($data['kinds']['rules'] ?? []))->toBeTrue('kinds.rules must be an ordered array');
+
+    foreach ($data['items'] ?? [] as $path => $item) {
+        expect(is_array($item) && in_array($item['kind'] ?? null, $kinds, true))
+            ->toBeTrue("items.{$path}.kind must be \"icon\" or \"illustration\"");
+    }
+
+    foreach ($data['kinds']['rules'] ?? [] as $index => $rule) {
+        $match = is_array($rule) ? ($rule['match'] ?? null) : null;
+
+        expect(is_string($match) && $match !== '' && $match[0] !== '/' && strpbrk($match, '[]{}\\') === false)
+            ->toBeTrue("kinds.rules.{$index}.match is not a valid glob");
+        expect(in_array($rule['kind'] ?? null, $kinds, true))
+            ->toBeTrue("kinds.rules.{$index}.kind must be \"icon\" or \"illustration\"");
+    }
+});
+
 it('ships no translations for an update command or an about block', function () {
     // A pack registers no Artisan command, and core's about section reads the
     // registry, so strings for either are read by nothing.
