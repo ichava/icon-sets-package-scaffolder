@@ -115,12 +115,18 @@ it('ships the guard tests every real pack carries', function (): void {
     removeDirectory($root);
 });
 
-it('names security@ as the only disclosure address and ships no SECURITY.md of its own', function (): void {
+it('names security@ as the only disclosure address and never ichava@', function (): void {
     [$root, $pack] = scaffoldIchavaPack('openmoji', 'sib-sec');
 
-    // icon-sets-openmoji, -emoji, -tabler and -flag rely on the organisation's
-    // .github cascade, so a pack adds no policy file that could disagree with it.
-    expect(is_file($pack . '/SECURITY.md'))->toBeFalse();
+    // icon-sets-openmoji, -emoji and -tabler rely on the organisation cascade,
+    // but the stub stays (owner decision pending); it must agree with that policy.
+    expect(is_file($pack . '/SECURITY.md'))->toBeTrue();
+
+    $policy = (string) file_get_contents($pack . '/SECURITY.md');
+    expect($policy)->toContain('security@simtabi.com')
+        ->and($policy)->toContain('private vulnerability reporting')
+        ->and(strpos($policy, 'private vulnerability reporting'))->toBeLessThan(strpos($policy, 'security@simtabi.com'))
+        ->and($policy)->toContain('https://github.com/ichava/icon-sets-openmoji/security/policy');
 
     $walked = 0;
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pack, FilesystemIterator::SKIP_DOTS));
@@ -130,11 +136,15 @@ it('names security@ as the only disclosure address and ships no SECURITY.md of i
         }
         $walked++;
         foreach (file($file->getPathname()) ?: [] as $line) {
-            // `ichava@` is the author and contact role address. It is wrong only
-            // on a line that talks about vulnerabilities or security reports.
-            if (stripos($line, 'ichava@') !== false && preg_match('/vulnerab|security|disclos/i', $line) === 1) {
-                $this->fail("{$file->getPathname()} routes disclosure to ichava@: " . trim($line));
+            // `ichava@` is the author and contact role address. It is wrong as a
+            // disclosure address; SECURITY.md may name it only to say it is not one.
+            if (stripos($line, 'ichava@') === false || preg_match('/vulnerab|security|disclos/i', $line) !== 1) {
+                continue;
             }
+            if (basename($file->getPathname()) === 'SECURITY.md' && preg_match('/community|handle|delay/i', $line) === 1) {
+                continue;
+            }
+            $this->fail("{$file->getPathname()} routes disclosure to ichava@: " . trim($line));
         }
     }
 

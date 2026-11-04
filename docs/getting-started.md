@@ -55,7 +55,7 @@ behind it blocks rather than fails.
 
 ## What lands
 
-52 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
+53 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
 
 ```
 icon-sets-tabler/
@@ -76,10 +76,10 @@ icon-sets-tabler/
 └── tests/                           metadata, docs, attribution and the shared guards
 ```
 
-There is no `SECURITY.md`: the real packs rely on the organisation's `.github`
-cascade, so the README and `CONTRIBUTING.md` link the repository's own security
-policy page. Disclosure goes to `security@simtabi.com`; `ichava@` is the author
-and contact address only.
+`SECURITY.md` names `security@simtabi.com` as the only disclosure address and GitHub private
+vulnerability reporting as the preferred channel, as the organisation policy does. `ichava@` is the
+author and contact address only. The real packs ship no `SECURITY.md` and use the organisation
+cascade; the README and `CONTRIBUTING.md` link the repository's security policy page.
 
 ## Then
 
