@@ -64,8 +64,8 @@ filename grammar to learn, one convention everywhere.
 #### Replacement tokens
 
 Tokens are grouped by intent so the right form lands in the right grammar.
-Mixing them up (using `{{vendorLower}}` where a kebab form is needed, or
-`{{vendor}}` where a PHP namespace is needed) is the most common
+Mixing them up (using `{{vendor}}` where a kebab form or a PHP namespace
+is needed) is the most common
 scaffolding bug, that's why both correct and lossy variants are exposed.
 
 **Vendor variants** (`Your Company` input ⇒ each form below):
@@ -75,7 +75,6 @@ scaffolding bug, that's why both correct and lossy variants are exposed.
 | `{{vendor}}` | `Your Company` | Author/copyright display only, keeps user input verbatim. |
 | `{{vendorStudly}}` | `YourCompany` | PHP namespaces, `use` statements, `@package` tags. |
 | `{{vendorKebab}}` | `your-company` | Composer package name, GitHub URLs, route segments. |
-| `{{vendorLower}}` | `your company` (lowercased) | Legacy, prefer `{{vendorKebab}}` for paths. |
 | `{{vendorSnake}}` | `your_company` | Env-var prefixes, snake_case identifiers. |
 
 **Package-name variants** (`Hero` input ⇒):

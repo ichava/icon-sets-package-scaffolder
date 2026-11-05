@@ -11,7 +11,6 @@ For `name: Hero`, `vendor: Acme Labs`, `email: dev@example.com`:
 |---|---|---|
 | `{{vendor}}` | `Acme Labs` | Verbatim, as typed. |
 | `{{vendorStudly}}` | `AcmeLabs` | Namespace segment. |
-| `{{vendorLower}}` | `acme labs` | |
 | `{{vendorKebab}}` | `acme-labs` | Composer vendor. |
 | `{{vendorSnake}}` | `acme_labs` | |
 | `{{studlyName}}` | `Tabler` | As typed, studly. |
