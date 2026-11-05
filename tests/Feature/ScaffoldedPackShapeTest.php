@@ -125,6 +125,7 @@ function expectedShape(array $iconDirectories): array
         'tests/Unit/PhpstanLevelTest.php',
         'tests/Unit/ReleaseVersionTest.php',
         'tests/Unit/ResourceShapeTest.php',
+        'tests/Unit/SanitisedSvgTest.php',
         'tests/Unit/SiblingConstraintsTest.php',
         'tests/Unit/SyncWorkflowCallerTest.php',
         'tests/Unit/VariantTest.php',

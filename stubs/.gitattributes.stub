@@ -24,3 +24,7 @@
 /docs                   export-ignore
 /.dev                   export-ignore
 /phpstan.neon.dist      export-ignore
+
+# Licence files whose sha256 is recorded in config.json stay byte-for-byte
+# as vendored: no line-ending normalisation on any checkout.
+/resources/assets/svg/licenses/** -text
