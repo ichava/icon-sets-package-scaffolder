@@ -53,6 +53,12 @@
         "phpstan/phpstan": "^2.1",
         "laravel/pint": "^1.18"
     },
+    "conflict": {
+        "symfony/http-foundation": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/http-kernel": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/routing": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/yaml": "<7.4.23 || >=8.0,<8.1.11"
+    },
     "autoload": {
         "psr-4": {
             "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\": "src/"

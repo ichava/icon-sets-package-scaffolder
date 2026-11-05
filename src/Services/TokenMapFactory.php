@@ -27,7 +27,6 @@ final readonly class TokenMapFactory
         return [...$this->axisTokens->for($definition), ...[
             '{{vendor}}'       => $definition->vendor,
             '{{vendorStudly}}' => $definition->vendorStudly(),
-            '{{vendorLower}}'  => Str::lower($definition->vendor),
             '{{vendorKebab}}'  => $definition->vendorKebab(),
             '{{vendorSnake}}'  => Str::snake($definition->vendor),
 

@@ -94,6 +94,7 @@ it('produces the values core produced, so an extracted pack is unchanged', funct
         ->toHaveKey('{{vendorStudly}}', 'AcmeLabs')
         ->toHaveKey('{{vendorKebab}}', 'acme-labs')
         ->toHaveKey('{{vendorSnake}}', 'acme_labs')
+        ->not->toHaveKey('{{vendorLower}}')
         ->toHaveKey('{{namespace}}', 'AcmeLabs\\IconSetsHero')
         ->toHaveKey('{{namespaceEscaped}}', 'AcmeLabs\\\\IconSetsHero')
         ->toHaveKey('{{packageName}}', 'acme-labs/icon-sets-hero')
