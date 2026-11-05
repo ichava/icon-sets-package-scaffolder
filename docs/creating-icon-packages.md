@@ -224,38 +224,41 @@ your-icons/
 
 ### 3. Create Service Provider
 
-Extend `Simtabi\Laranail\Ichava\Support\ServiceProvider`. **not** `PackageServiceProvider` directly.
-The base class provides `loadBladeComponent()`, `registerIconDirectory()`, `registerBulkIconSets()`,
-and `svgAssetsPath()` out of the box.
+Extend `Simtabi\Laranail\Ichava\Support\IconPackServiceProvider` and name two classes: the
+constants class that reads your `config.json`, and your Blade component. The base names the package
+from the constants class, sets the path from the provider file, registers `config/{slug}.php` if you
+ship one, registers `<x-{slug}-icon>`, and registers `resources/assets/svg` with the registry. A pack
+written this way requires `ichava/core` and nothing else, because it names no `laranail/*` type.
 
 ```php
 <?php
 
 namespace Your\Icons\Providers;
 
-use Simtabi\Laranail\Packager\Package\Package;
-use Simtabi\Laranail\Ichava\Support\ServiceProvider;
-use Your\Icons\View\Components\YourIconComponent;
+use Your\Icons\Constants\IconsConstants;
+use Your\Icons\View\Components\IconComponent;
+use Simtabi\Laranail\Ichava\Support\IconPackServiceProvider;
 
-class YourIconsServiceProvider extends ServiceProvider
+class IconsServiceProvider extends IconPackServiceProvider
 {
-    public function configurePackage(Package $package): void
+    protected function constantsClass(): string
     {
-        $package
-            ->setName('your/icons')
-            ->setPathFrom(source: $this, levelsUp: 2);
+        return IconsConstants::class;
     }
 
-    public function bootingPackage(): void
+    protected function componentClass(): string
     {
-        // Registers: <x-your-icons-icon name="..." />
-        $this->loadBladeComponent(YourIconComponent::class, 'your-icons');
-
-        // Register the SVG directory (must contain config.json)
-        $this->registerIconDirectory($this->svgAssetsPath());
+        return IconComponent::class;
     }
 }
 ```
+
+Set `"type": "ichava-icon-set"` in the pack's `composer.json`; core's pack discovery lists installed
+packs by it.
+
+A provider that needs to do more can extend `Simtabi\Laranail\Ichava\Support\ServiceProvider`
+instead and write its own `configurePackage()` and `bootingPackage()`. That signature takes
+`laranail/package-tools`' `Package`, so such a pack imports, and has to require, that package too.
 
 **For a pack with several set directories**, use `registerBulkIconSets()` instead:
 
@@ -303,8 +306,9 @@ The Ichava ecosystem uses a parent–child provider architecture with a strict b
 
 | Method | Required | Purpose |
 |---|---|---|
-| `configurePackage()` | ✅ Yes | Set package name, path, config file, commands |
-| `bootingPackage()` | ✅ Yes | Register Blade component + icon directory |
+| `constantsClass()`, `componentClass()` | ✅ Yes, on `IconPackServiceProvider` | Name the constants class and the Blade component; the base does the rest |
+| `configurePackage()` | ✅ Yes, on `ServiceProvider` only | Set package name, path, config file, commands |
+| `bootingPackage()` | ✅ Yes, on `ServiceProvider` only | Register Blade component + icon directory |
 | `registeringPackage()` | ❌ Usually not | Infrastructure is handled by the parent |
 | `packageRegistered()` | ❌ Usually not | Only for conditional extra service bindings |
 
