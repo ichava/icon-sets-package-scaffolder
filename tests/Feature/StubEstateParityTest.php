@@ -76,10 +76,108 @@ function estateCheckoutPath(): ?string
     return file_exists(estateCandidatePath() . '/.git') ? estateCandidatePath() : null;
 }
 
-/** Where the sibling is expected, named so a skip can say what it looked for. */
+/**
+ * The estate pack this guard measures against: the one closest to the
+ * majority shape of every estate pack checked out beside this one (S-02).
+ *
+ * It used to be flag, always, and flag is one of the most divergent packs, so
+ * the stub was held to one pack's quirks and every drift the other packs
+ * shared was invisible. A pack's shape is the set of tracked paths under
+ * `tests/`, `.github/workflows/` and `docs/` at `origin/main`, with its axis
+ * page and axis test named generically; the majority shape is every path more
+ * than half the packs have. With no sibling checked out, flag's path is
+ * returned so the skip names it.
+ */
 function estateCandidatePath(): string
 {
-    return dirname(__DIR__, 3) . '/icon-sets-flag';
+    static $chosen = null;
+
+    if ($chosen !== null) {
+        return $chosen;
+    }
+
+    $majority = estateMajorityShape();
+    $best = null;
+    $distance = PHP_INT_MAX;
+
+    foreach (estatePacks() as $path) {
+        $shape = estateShape($path);
+        $d = count(array_diff($shape, $majority)) + count(array_diff($majority, $shape));
+
+        if ($d < $distance) {
+            [$best, $distance] = [$path, $d];
+        }
+    }
+
+    return $chosen = $best ?? dirname(__DIR__, 3) . '/icon-sets-flag';
+}
+
+/**
+ * Every path more than half the estate packs carry.
+ *
+ * @return list<string>
+ */
+function estateMajorityShape(): array
+{
+    $packs = estatePacks();
+    $counts = [];
+
+    foreach ($packs as $path) {
+        foreach (estateShape($path) as $file) {
+            $counts[$file] = ($counts[$file] ?? 0) + 1;
+        }
+    }
+
+    $majority = array_keys(array_filter($counts, static fn (int $n): bool => $n * 2 > count($packs)));
+    sort($majority);
+
+    return $majority;
+}
+
+/**
+ * Every estate pack checked out beside this repository, by path.
+ *
+ * @return list<string>
+ */
+function estatePacks(): array
+{
+    $packs = array_values(array_filter(
+        glob(dirname(__DIR__, 3) . '/icon-sets-*', GLOB_ONLYDIR) ?: [],
+        static fn (string $path): bool => ! in_array(basename($path), ['icon-sets-sync', 'icon-sets-package-scaffolder'], true)
+            && file_exists($path . '/.git'),
+    ));
+    sort($packs);
+
+    return $packs;
+}
+
+/**
+ * A pack's shape: its tracked test, workflow and docs paths at origin/main.
+ *
+ * @return list<string>
+ */
+function estateShape(string $path): array
+{
+    $listing = (string) shell_exec('git -C ' . escapeshellarg($path) . ' ls-tree -r --name-only origin/main -- tests .github/workflows docs 2>/dev/null');
+
+    return normaliseShape(array_filter(explode("\n", trim($listing))));
+}
+
+/**
+ * @param array<int, string> $paths
+ *
+ * @return list<string>
+ */
+function normaliseShape(array $paths): array
+{
+    $paths = array_map(static fn (string $p): string => (string) preg_replace(
+        ['#^docs/(variants|categories|sets|icon-sets)\.md$#', '#^tests/Unit/(Variant|Category|Set)Test\.php$#'],
+        ['docs/AXIS.md', 'tests/Unit/AXISTest.php'],
+        $p,
+    ), $paths);
+    sort($paths);
+
+    return array_values(array_unique($paths));
 }
 
 /**
@@ -224,6 +322,39 @@ function skipWithoutEstate(): void
 
     test()->markTestSkipped($reason);
 }
+
+/**
+ * Majority paths the stub deliberately does not generate, each with its
+ * reason and the measurement behind it. An entry whose path stops being a
+ * majority path is reported, so the list cannot outlive its reason.
+ */
+const STUB_SHAPE_EXEMPTIONS = [
+    // 17 of 21 packs carry it (2026-11-05); the blueprint asserts the same
+    // three cases inside its ResourceShapeTest instead (packs re-audit P-05).
+    'tests/Feature/RetiredCopiesTest.php' => 'its cases live in the stub\'s ResourceShapeTest',
+];
+
+it('scaffolds every test, workflow and docs path most estate packs carry', function () {
+    skipWithoutEstate();
+    scaffoldForParity($this->scaffoldRoot);
+
+    $floor = filter_var(getenv('ICHAVA_REQUIRE_ESTATE') ?: '', FILTER_VALIDATE_BOOLEAN) ? 19 : 1;
+    $generated = [];
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->scaffoldRoot, FilesystemIterator::SKIP_DOTS));
+
+    foreach ($files as $file) {
+        $relative = substr($file->getPathname(), strlen($this->scaffoldRoot) + 1);
+
+        if (preg_match('#^(tests|\.github/workflows|docs)/#', $relative) === 1) {
+            $generated[] = $relative;
+        }
+    }
+
+    // CI clones every public pack; locally whatever is checked out counts.
+    expect(count(estatePacks()))->toBeGreaterThanOrEqual($floor)
+        ->and(array_values(array_diff(estateMajorityShape(), normaliseShape($generated), array_keys(STUB_SHAPE_EXEMPTIONS))))->toBe([], 'The stub lacks paths most estate packs carry.')
+        ->and(array_values(array_diff(array_keys(STUB_SHAPE_EXEMPTIONS), estateMajorityShape())))->toBe([], 'An exemption no longer names a majority path; remove it.');
+});
 
 it('scaffolds the same runtime constraints a real pack declares', function () {
     skipWithoutEstate();
