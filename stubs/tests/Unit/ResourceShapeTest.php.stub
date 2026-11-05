@@ -63,7 +63,7 @@ it(description: 'matches every labelled group to its enum exactly', closure: fun
     // A pack that starts variant-style and later adds `categories` or `sets`
     // -- which three of the five estate packs did -- would otherwise keep a
     // test that checks `variants` and says nothing about the new group. That
-    // is not hypothetical: icon-sets-emoji shipped `sets`/`set_descriptions`
+    // is not hypothetical: icon-sets-twemoji shipped `sets`/`set_descriptions`
     // guarded by nothing at all, so its `Set` enum could drift from its
     // translations silently.
     //
@@ -79,7 +79,7 @@ it(description: 'matches every labelled group to its enum exactly', closure: fun
         }
 
         // `categories` -> `Category`, not `Categorie`. A bare rtrim('s') is
-        // wrong for every -ies plural, and the estate has one: icon-sets-emoji
+        // wrong for every -ies plural, and the estate has one: icon-sets-twemoji
         // ships a `Category` enum.
         $singular = str_ends_with($group, 'ies')
             ? substr($group, 0, -3) . 'y'

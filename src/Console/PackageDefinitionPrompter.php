@@ -76,7 +76,7 @@ final readonly class PackageDefinitionPrompter
         ), IconSetType::Single->value);
 
         // Asked separately from the type above, because the two are orthogonal:
-        // `icon-sets-emoji` is a category pack whose SVGs sit in per-set
+        // `icon-sets-twemoji` is a category pack whose SVGs sit in per-set
         // directories. One prompt for both would force a false choice.
         $axis = $this->filled($supplied, 'axis') ?? $this->ask($interactive, fn (): string => (string) select(
             label: Messages::get('prompt.axis.label'),

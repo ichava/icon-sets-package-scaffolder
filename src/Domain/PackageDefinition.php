@@ -145,8 +145,8 @@ final readonly class PackageDefinition
      * that exists. Measured against the real packs: `ichava/icon-sets-flag`,
      * `config/icon-sets-flag.php`, `<x-icon-sets-flag-icon>`.
      *
-     * Idempotent, because `emoji-sets` became `icon-sets-emoji` rather than
-     * `icon-sets-emoji-sets`: someone typing the full slug must not get
+     * Idempotent, because a name may already carry the prefix: someone
+     * typing the full slug `icon-sets-flag` must not get
      * `icon-sets-icon-sets-flag`.
      *
      * This is the one place the name is derived. Stubs reference it through

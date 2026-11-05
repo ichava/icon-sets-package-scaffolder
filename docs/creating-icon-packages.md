@@ -31,8 +31,7 @@ package is `composer install`-ready; just drop SVG files into
 
 > **Directory naming convention.** New packages live in a directory named
 > `icon-sets-<slug>`, matching the existing siblings (`icon-sets-tabler`,
-> `icon-sets-flag`, `icon-sets-emoji`, `icon-sets-metronic`,
-> `icon-sets-bundled`). The interactive prompt suggests
+> `icon-sets-flag`, `icon-sets-twemoji`, `icon-sets-openmoji`). The interactive prompt suggests
 > `<vendor>-<kebabName>-icons` instead, so pass `--path` or edit the suggestion.
 
 The full flag reference lives with the command, in
@@ -167,12 +166,12 @@ beyond it, and it is a one-off rather than a missing flag. Measured against
 
 | Pack | Shape | Why it is not generated |
 |---|---|---|
-| `icon-sets-emoji` | **Two** enums, `Category` *and* `Set`, with four labelled groups (`categories`, `category_descriptions`, `sets`, `set_descriptions`) | `--axis` picks one axis. A second is not a different value, it is a second enum, a second docs page and a second pair of lang groups. |
+| `icon-sets-twemoji` | **Two** enums, `Category` *and* `Set`, with four labelled groups (`categories`, `category_descriptions`, `sets`, `set_descriptions`) | `--axis` picks one axis. A second is not a different value, it is a second enum, a second docs page and a second pair of lang groups. |
 
 Scaffold the closest axis and add the second enum by hand. Note the shipped `ResourceShapeTest` already handles both: it
 **discovers** its labelled groups rather than hardcoding `variants`, so an
 added `sets`/`set_descriptions` pair is checked against a `Set` enum the
-moment you add one -- which is how `icon-sets-emoji` is guarded today.
+moment you add one -- which is how `icon-sets-twemoji` is guarded today.
 
 Do not widen the generator to cover a shape that exists once. The rule this
 estate follows is to extract what a defect indicted, not what is merely

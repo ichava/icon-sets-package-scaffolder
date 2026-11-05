@@ -36,8 +36,8 @@ it('derives the names the estate uses', function (): void {
 });
 
 it('does not double the prefix when the name already carries it', function (): void {
-    // `emoji-sets` became `icon-sets-emoji`, not `icon-sets-emoji-sets`. Someone
-    // typing the full slug must not get `icon-sets-icon-sets-flag`.
+    // A name may already carry the prefix. Someone typing the full slug must
+    // not get `icon-sets-icon-sets-flag`.
     expect(estateDefinition(['name' => 'icon-sets-flag'])->bladeNamespace())
         ->toBe('icon-sets-flag')
         ->and(estateDefinition(['name' => 'IconSetsFlag'])->bladeNamespace())
