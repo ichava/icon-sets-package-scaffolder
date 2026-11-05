@@ -223,7 +223,7 @@ your-icons/
 
 ### 3. Create Service Provider
 
-Extend `Simtabi\Laranail\Ichava\Support\IconPackServiceProvider` and name two classes: the
+Extend `Simtabi\Laranail\Ichava\Providers\IconPackServiceProvider` and name two classes: the
 constants class that reads your `config.json`, and your Blade component. The base names the package
 from the constants class, sets the path from the provider file, registers `config/{slug}.php` if you
 ship one, registers `<x-{slug}-icon>`, and registers `resources/assets/svg` with the registry. A pack
@@ -236,7 +236,7 @@ namespace Your\Icons\Providers;
 
 use Your\Icons\Constants\IconsConstants;
 use Your\Icons\View\Components\IconComponent;
-use Simtabi\Laranail\Ichava\Support\IconPackServiceProvider;
+use Simtabi\Laranail\Ichava\Providers\IconPackServiceProvider;
 
 class IconsServiceProvider extends IconPackServiceProvider
 {

@@ -278,7 +278,7 @@ it('scaffolds a provider on the same core base a real pack extends, naming no la
     // rename in core is caught instead of being encoded twice.
     preg_match('/^class IconsServiceProvider extends (\\w+)$/m', $estate, $extends);
     expect($extends)->toHaveCount(2, 'flag-icons no longer declares its provider base on one line.');
-    preg_match('/^use (Simtabi\\\\Laranail\\\\Ichava\\\\Support\\\\' . $extends[1] . ');$/m', $estate, $import);
+    preg_match('/^use (Simtabi\\\\Laranail\\\\Ichava\\\\Providers\\\\' . $extends[1] . ');$/m', $estate, $import);
     expect($import)->toHaveCount(2, "flag-icons extends {$extends[1]} but does not import it from core.");
 
     expect($generated)->toContain("use {$import[1]};")
