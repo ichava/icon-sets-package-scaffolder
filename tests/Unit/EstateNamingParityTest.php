@@ -14,8 +14,10 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
  *
  * Measured on the real packs rather than assumed:
  *   composer  ichava/icon-sets-flag
- *   config    config/icon-sets-flag.php
  *   component <x-icon-sets-flag-icon>
+ *
+ * The packs used to ship `config/icon-sets-flag.php` too. None does any more:
+ * it held copies of the name and prefix that nothing read.
  */
 function estateDefinition(array $overrides = []): PackageDefinition
 {
@@ -69,17 +71,18 @@ it('leaves no stub reconstructing the namespace by hand', function (): void {
     expect($offenders)->toBe([]);
 });
 
-it('ships the config file under the name its provider declares', function (): void {
+it('ships no config file, and a provider that declares none', function (): void {
     // `V39`: package-tools resolves a config file BY the name passed to
-    // hasConfigFile(). The stub tree shipped `config/config.php` while the
+    // hasConfigFile(). The stub tree once shipped `config/config.php` while the
     // generated provider declared `hasConfigFile('icon-sets-<name>')`, so a
-    // scaffolded pack's entire config was inert -- the same defect, and the
-    // same silence, that cost this estate months in `ichava/core`.
-    //
-    // Asserted on the stub filename because that is where the mismatch lives;
-    // `destinationFor()` substitutes path tokens, so the rendered name follows.
-    $stubs = dirname(__DIR__, 2) . '/stubs/config';
+    // scaffolded pack's entire config was inert. The estate packs then dropped
+    // the file altogether -- it held copies of the set name and prefix that
+    // nothing read, since core takes both from config.json -- and the stub tree
+    // follows them. Both halves are asserted, so neither can come back alone
+    // and recreate the mismatch.
+    $stubs = dirname(__DIR__, 2) . '/stubs';
 
-    expect(glob($stubs . '/config.php.stub'))->toBe([], 'stubs/config/config.php.stub is a name no provider declares')
-        ->and(glob($stubs . '/{{bladeNamespace}}.php.stub'))->not->toBeEmpty();
+    expect(glob($stubs . '/config/*.stub') ?: [])->toBe([], 'the stub tree ships a config file no estate pack has')
+        ->and((string) file_get_contents($stubs . '/src/Providers/IconsServiceProvider.php.stub'))
+        ->not->toContain('hasConfigFile');
 });

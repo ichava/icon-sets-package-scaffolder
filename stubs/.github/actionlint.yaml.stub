@@ -11,3 +11,10 @@ paths:
       # knows v3's inputs and the lint passes without them.
       - 'missing input "app-id" which is required by action "actions/create-github-app-token@v3"'
       - 'input "client-id" is not defined in action "actions/create-github-app-token@v3"'
+  .github/workflows/sync-upstream.yml:
+    ignore:
+      # Same false positive as release-please.yml above: actionlint's bundled metadata predates
+      # actions/create-github-app-token v3's `client-id` input. Added 2026-11-02 with the Refresh Bot
+      # token for the sync PR. Delete both entries when an actionlint release knows v3's inputs.
+      - 'missing input "app-id" which is required by action "actions/create-github-app-token@v3"'
+      - 'input "client-id" is not defined in action "actions/create-github-app-token@v3"'

@@ -243,8 +243,7 @@ class YourIconsServiceProvider extends ServiceProvider
     {
         $package
             ->setName('your/icons')
-            ->setPathFrom(source: $this, levelsUp: 2)
-            ->hasConfigFile('your-icons');
+            ->setPathFrom(source: $this, levelsUp: 2);
     }
 
     public function bootingPackage(): void

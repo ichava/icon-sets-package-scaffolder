@@ -9,84 +9,21 @@ use Simtabi\Laranail\Ichava\Contracts\IconSetVariantInterface;
 use {{namespace}}\Constants\IconsConstants;
 
 /**
- * {{studlyName}} Icons {{axisStudlyPlural}}
- *
- * Provides type-safe {{axis}} selection for {{studlyName}} icons.
- * Uses the shared trait for consistent behavior across all icon packages.
- *
- * Usage:
- *   {{axisStudly}}::DEFAULT->value      // Get {{axis}} value
- *   {{axisStudly}}::DEFAULT->getPath()  // Get full path to {{axis}} icons
- *   {{axisStudly}}::fromString('default') // Create from string
- *
- * Add additional cases as needed for your icon set {{axisPlural}}:
- *   case OUTLINE = 'outline';
- *   case FILLED = 'filled';
- *   case SOLID = 'solid';
+ * {{axisEnumSummary}}
  */
 enum {{axisStudly}}: string implements IconSetVariantInterface
 {
     use HasIconSetVariants;
 
-    /**
-     * Default {{axis}} - the primary icon style
-     */
-    case DEFAULT = 'default';
+{{axisCases}}
 
-    // Add additional {{axisPlural}} as needed:
-    // case OUTLINE = 'outline';
-    // case FILLED = 'filled';
-    // case SOLID = 'solid';
-    // case REGULAR = 'regular';
-    // case BOLD = 'bold';
+{{axisPathMethod}}
 
-    /**
-     * Get the full path to this {{axis}}'s icons
-     */
-    public function getPath(): string
-    {
-        return IconsConstants::getSvgPath($this->value);
-    }
-
-    /**
-     * Get a human-readable label for the {{axis}}
-     */
-    public function label(): string
-    {
-        return match ($this) {
-            self::DEFAULT => 'Default',
-            // Add labels for additional {{axisPlural}}:
-            // self::OUTLINE => 'Outline',
-            // self::FILLED => 'Filled',
-            // self::SOLID => 'Solid',
-        };
-    }
-
-    /**
-     * Get a description of the {{axis}}
-     */
-    public function description(): string
-    {
-        return match ($this) {
-            self::DEFAULT => 'Default icon style',
-            // Add descriptions for additional {{axisPlural}}:
-            // self::OUTLINE => 'Stroke-based outline icons',
-            // self::FILLED => 'Solid filled icons',
-            // self::SOLID => 'Solid filled icons',
-        };
-    }
-
-    /**
-     * Get the default {{axis}} value
-     */
     private static function getDefaultValue(): string
     {
-        return IconsConstants::getDefaultVariant() ?? 'default';
+        return IconsConstants::getDefaultVariant() ?? self::{{axisDefaultCase}}->value;
     }
 
-    /**
-     * Get the class prefix for this icon set
-     */
     private static function getClassPrefix(): string
     {
         return IconsConstants::getPrefix();

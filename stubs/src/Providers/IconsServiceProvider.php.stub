@@ -13,14 +13,9 @@ use {{namespace}}\Constants\IconsConstants;
 use {{namespace}}\View\Components\IconComponent;
 
 /**
- * {{studlyName}} Icons Service Provider
- *
- * Registers the {{studlyName}} icon set with the Ichava ecosystem.
- * Icons are automatically discovered and made available via:
- * - Blade component: <x-{{bladeNamespace}}-icon name="icon-name" />
- * - Helper function: ichava('{{packageName}}::icon-name')
+ * Registers the {{studlyName}} Icons set with the Ichava registry on boot.
  */
-final class IconsServiceProvider extends ServiceProvider
+class IconsServiceProvider extends ServiceProvider
 {
     /**
      * @throws InvalidPath
@@ -30,21 +25,14 @@ final class IconsServiceProvider extends ServiceProvider
     {
         $package
             ->setName(IconsConstants::getVendorPackage())
-            ->setPathFrom(source: $this, levelsUp: 2)
-            ->hasConfigFile('{{bladeNamespace}}');
+            ->setPathFrom(source: $this, levelsUp: 2);
     }
 
-    /**
-     * Boot the package - register Blade component and icons
-     */
     public function bootingPackage(): void
     {
-        // Register package-specific Blade component: <x-{{bladeNamespace}}-icon name="..." />
         $this->loadBladeComponent(componentClass: IconComponent::class, packageName: '{{bladeNamespace}}');
 
-        // Register icons with the Ichava registry
-        $registry = $this->app->make(IconRegistry::class);
-        $registry->fromDirectory(
+        $this->app->make(IconRegistry::class)->fromDirectory(
             $this->package->basePath('resources/assets/svg'),
             self::class,
         );

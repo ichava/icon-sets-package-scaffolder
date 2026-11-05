@@ -93,7 +93,6 @@ it('ships the guard tests every real pack carries', function (): void {
         'tests/Unit/SiblingConstraintsTest.php',
         'tests/Unit/AttributionTest.php',
         'tests/Unit/DocsShapeTest.php',
-        'tests/Unit/PackageMetadataTest.php',
         'tests/Unit/ResourceShapeTest.php',
     ] as $guard) {
         expect(is_file($pack . '/' . $guard))->toBeTrue("{$guard} was not scaffolded");

@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -35,7 +38,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl
-          coverage: pcov
+          coverage: none
 
       - name: Setup problem matchers
         run: |
@@ -60,4 +63,4 @@ jobs:
           git checkout -- composer.json
 
       - name: Execute tests
-        run: vendor/bin/pest --coverage
+        run: vendor/bin/pest

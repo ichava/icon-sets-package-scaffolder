@@ -1,0 +1,238 @@
+<?php
+
+declare(strict_types=1);
+
+use Simtabi\Laranail\Ichava\Services\IconRegistry;
+
+/**
+ * Pins the SVG kind this pack declares in `config.json`, `icon` or `illustration`.
+ *
+ * Core resolves a category's kind as its own `kind`, then `package.kind`, then
+ * `icon`, and ignores a value that names no kind. So a typo here does not fail
+ * anywhere at runtime: it files the SVGs as icons and nothing reports it. These
+ * cases are what make it fail.
+ *
+ * The category is the first folder under `files/`, which is the folder core
+ * files an icon under, so the folders on disk are resolved as well as the
+ * categories `config.json` declares.
+ */
+function {{snakeName}}_kind_config(): array
+{
+    return json_decode(
+        (string) file_get_contents(dirname(__DIR__, 2) . '/resources/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+}
+
+/** @return list<string> */
+function {{snakeName}}_kinds(): array
+{
+    return ['icon', 'illustration'];
+}
+
+/** @return array<string, string> category slug => the kind it resolves to */
+function {{snakeName}}_resolved_kinds(): array
+{
+    $config = {{snakeName}}_kind_config();
+    $packageKind = $config['package']['kind'] ?? 'icon';
+    $categories = $config['metadata']['data']['categories'] ?? [];
+
+    $slugs = array_keys($categories);
+
+    foreach (glob(dirname(__DIR__, 2) . '/resources/assets/svg/files/*', GLOB_ONLYDIR) ?: [] as $directory) {
+        $slugs[] = basename($directory);
+    }
+
+    // A flat pack keeps its icons at the root of files/, which core files under no
+    // category (the empty slug), so the pack's own kind is what they resolve to.
+    if ((glob(dirname(__DIR__, 2) . '/resources/assets/svg/files/*.svg') ?: []) !== []) {
+        $slugs[] = '';
+    }
+
+    $kinds = [];
+
+    foreach (array_unique($slugs) as $slug) {
+        $kinds[$slug] = $categories[$slug]['kind'] ?? $packageKind;
+    }
+
+    ksort($kinds);
+
+    return $kinds;
+}
+
+it(description: 'declares a pack-wide kind core recognises', closure: function () {
+    $package = {{snakeName}}_kind_config()['package'];
+
+    expect(array_key_exists('kind', $package))->toBeTrue('config.json package.kind is missing');
+    expect(in_array($package['kind'], {{snakeName}}_kinds(), true))
+        ->toBeTrue("config.json package.kind is '{$package['kind']}', which names no kind");
+});
+
+it(description: 'declares only kinds core recognises on its categories', closure: function () {
+    $declared = [];
+
+    foreach ({{snakeName}}_kind_config()['metadata']['data']['categories'] ?? [] as $slug => $category) {
+        if (array_key_exists('kind', $category)) {
+            $declared[$slug] = $category['kind'];
+        }
+    }
+
+    // Empty is fine: a category that names no kind inherits the pack's.
+    expect(array_diff($declared, {{snakeName}}_kinds()))->toBe([]);
+});
+
+it(description: 'resolves a kind for every category', closure: function () {
+    $kinds = {{snakeName}}_resolved_kinds();
+
+    // A glob or a key that matches nothing would make the loop below vacuous.
+    expect($kinds)->not->toBeEmpty('no categories were inspected');
+
+    foreach ($kinds as $slug => $kind) {
+        expect(in_array($kind, {{snakeName}}_kinds(), true))
+            ->toBeTrue("category {$slug} resolves to '{$kind}', which names no kind");
+    }
+});
+
+it(description: 'files exactly the expected categories as illustrations', closure: function () {
+    $illustrations = array_keys(array_filter(
+        {{snakeName}}_resolved_kinds(),
+        static fn (string $kind): bool => $kind === 'illustration',
+    ));
+
+    expect($illustrations)->toBe({{kindIllustrationSlugs}});
+});
+
+it(description: 'resolves the same kinds through core', closure: function () {
+    if (! method_exists(IconRegistry::class, 'kindFor')) {
+        $this->markTestSkipped(
+            'the ichava/core resolved here predates SVG kinds (IconRegistry::kindFor, ichava/core#148); '
+            . 'the config.json cases above still run',
+        );
+    }
+
+    $registry = $this->app->make(IconRegistry::class);
+
+    foreach ({{snakeName}}_resolved_kinds() as $slug => $kind) {
+        expect($registry->kindFor('{{packageName}}', $slug)->value)->toBe($kind);
+    }
+});
+
+/**
+ * Up to $perCategory item paths from each first-level folder under files/, plus
+ * the files at its root: the paths core resolves a kind for (the path under
+ * `files/`, forward slashes, no `.svg`).
+ *
+ * @return list<string>
+ */
+function {{snakeName}}_item_paths(int $perCategory = 5): array
+{
+    $root = dirname(__DIR__, 2) . '/resources/assets/svg/files';
+    $paths = [];
+
+    foreach (glob($root . '/*', GLOB_ONLYDIR) ?: [] as $directory) {
+        $taken = 0;
+
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)) as $file) {
+            if ($file->getExtension() !== 'svg' || {{snakeName}}_is_theme_twin($file->getBasename('.svg'))) {
+                continue;
+            }
+
+            $paths[] = substr(str_replace('\\', '/', $file->getPathname()), strlen($root) + 1, -strlen('.svg'));
+
+            if (++$taken >= $perCategory) {
+                break;
+            }
+        }
+    }
+
+    foreach (glob($root . '/*.svg') ?: [] as $file) {
+        $paths[] = basename($file, '.svg');
+    }
+
+    sort($paths);
+
+    return $paths;
+}
+
+/** A theme twin is not an item: it inherits its light file's kind. */
+function {{snakeName}}_is_theme_twin(string $basename): bool
+{
+    return false;
+}
+
+/** @return array{string, string} the kind and the D6 row source an item resolves to */
+function {{snakeName}}_expected(string $item): array
+{
+    // No item, rule or category kind: `package.kind` decides, so the source is `pack`.
+    // A pack that adds `items`, `kinds.rules` or a category kind names here the kind
+    // and row each item resolves from instead.
+    return ['{{kind}}', 'pack'];
+}
+
+it(description: 'declares item kinds and kind rules core can read', closure: function () {
+    $data = {{snakeName}}_kind_config()['metadata']['data'];
+    $files = dirname(__DIR__, 2) . '/resources/assets/svg/files';
+
+    // Absent is fine (a v0.1 manifest has neither). When present, `items` is a
+    // map keyed by item path and `kinds.rules` an ordered array: core drops an
+    // entry it cannot read and doctor reports it, so a typo would quietly fall
+    // through to the next row.
+    expect($data['items'] ?? [])->toBeArray();
+    expect(array_is_list($data['kinds']['rules'] ?? []))->toBeTrue('kinds.rules must be an ordered array');
+
+    foreach ($data['items'] ?? [] as $path => $item) {
+        expect(is_array($item) && in_array($item['kind'] ?? null, {{snakeName}}_kinds(), true))
+            ->toBeTrue("items.{$path}.kind names no kind");
+        expect(is_file("{$files}/{$path}.svg"))->toBeTrue("items.{$path} names no file");
+    }
+
+    foreach ($data['kinds']['rules'] ?? [] as $index => $rule) {
+        $match = is_array($rule) ? ($rule['match'] ?? null) : null;
+
+        expect(is_string($match) && $match !== '' && $match[0] !== '/' && strpbrk($match, '[]{}\\') === false)
+            ->toBeTrue("kinds.rules.{$index}.match is not a valid glob");
+        expect(in_array($rule['kind'] ?? null, {{snakeName}}_kinds(), true))
+            ->toBeTrue("kinds.rules.{$index}.kind names no kind");
+    }
+});
+
+it(description: 'declares no kind mixed, since a mixed pack is derived from its items', closure: function () {
+    $config = {{snakeName}}_kind_config();
+    $declared = [$config['package']['kind'] ?? null];
+
+    foreach ($config['metadata']['data']['categories'] ?? [] as $category) {
+        $declared[] = is_array($category) ? ($category['kind'] ?? null) : null;
+    }
+
+    expect(in_array('mixed', $declared, true))->toBeFalse('there is no "mixed" kind');
+});
+
+it(description: 'resolves each item to the kind and row the pack intends through core', closure: function () {
+    if (! class_exists(Simtabi\Laranail\Ichava\Support\KindResolver::class)) {
+        $this->markTestSkipped(
+            'the ichava/core resolved here predates item kinds and rules (Support\KindResolver, ichava/core#162); '
+            . 'the config.json cases above still run',
+        );
+    }
+
+    $resolver = $this->app->make(Simtabi\Laranail\Ichava\Support\KindResolver::class);
+    $items = {{snakeName}}_item_paths();
+
+    // A glob matching nothing would make the loop below vacuous.
+    expect(count($items))->toBeGreaterThanOrEqual(2, 'too few items were inspected');
+
+    $kinds = [];
+
+    foreach ($items as $item) {
+        $resolution = $resolver->resolve('{{packageName}}', $item);
+        [$kind, $source] = {{snakeName}}_expected($item);
+
+        expect([$resolution->kind->value, $resolution->source->value])
+            ->toBe([$kind, $source], "{$item} resolved to {$resolution->kind->value} from {$resolution->source->value}");
+
+        $kinds[$resolution->kind->value] = true;
+    }
+
+    expect(array_keys($kinds))->toBe(['{{kind}}'], 'this pack is not mixed');
+});

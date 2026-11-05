@@ -37,10 +37,10 @@ it(description: 'says the package claims no authorship of the icons', closure: f
     $this->assertStringContainsString('covers ONLY the package code', $text);
 });
 
-it(description: 'keeps LICENSE to the package code, held by {{vendor}}', closure: function () {
+it(description: 'keeps LICENSE to the package code, held by {{authorName}}', closure: function () {
     $license = (string) file_get_contents(attribution_root() . '/LICENSE');
     expect(preg_match_all('/^Copyright /m', $license))->toBe(1);
-    $this->assertStringContainsString('{{vendor}}', $license);
+    $this->assertStringContainsString('{{authorName}}', $license);
     $this->assertStringEndsWith("DEALINGS IN THE\nSOFTWARE.\n", $license, 'LICENSE must end where the MIT text ends; anything appended belongs in ATTRIBUTION.md');
 });
 

@@ -34,6 +34,16 @@ final readonly class PackageDefinition
     ];
 
     /**
+     * The legal author and copyright holder, keyed by kebab vendor. Every real
+     * ichava pack names Simtabi LLC in `composer.json`, `LICENSE`, the README and
+     * `ATTRIBUTION.md`; `Ichava` is the brand, not the holder. Any other vendor
+     * is its own author, as before.
+     */
+    private const array AUTHORS = [
+        'ichava' => ['name' => 'Simtabi LLC', 'homepage' => 'https://simtabi.com'],
+    ];
+
+    /**
      * @param list<IconVariant> $variants
      * @param list<KindRule> $kindRules
      */
@@ -177,6 +187,55 @@ final readonly class PackageDefinition
         return $root . '\\' . Str::studly($this->bladeNamespace());
     }
 
+    /** `Simtabi LLC` for the ichava vendor, the vendor itself otherwise. */
+    public function authorName(): string
+    {
+        return self::AUTHORS[$this->vendorKebab()]['name'] ?? $this->vendor;
+    }
+
+    /** The author's homepage: `https://simtabi.com` for ichava, the vendor's GitHub otherwise. */
+    public function authorHomepage(): string
+    {
+        return self::AUTHORS[$this->vendorKebab()]['homepage'] ?? 'https://github.com/' . $this->vendorKebab();
+    }
+
+    /**
+     * The cases the generated axis enum declares, in order, the first being the default.
+     *
+     * A single-set pack keeps its icons flat under `files/`, so it gets the one
+     * `DEFAULT` case, as icon-sets-lucide does. A multi-set pack gets one case per
+     * variant it was scaffolded with, as icon-sets-tabler (`OUTLINE`, `FILLED`)
+     * and icon-sets-carbon (`SIZE_32`, `SIZE_16`) do. The enum used to ship a
+     * `DEFAULT` case and commented-out placeholders whatever `--variants` said,
+     * so every multi-set pack was hand-edited after scaffolding.
+     *
+     * @return list<array{case: string, value: string, label: string, description: string}>
+     */
+    public function axisCases(): array
+    {
+        if ($this->variants === []) {
+            return [[
+                'case'        => 'DEFAULT',
+                'value'       => 'default',
+                'label'       => 'Default',
+                'description' => 'The default ' . $this->studlyName . ' icon style',
+            ]];
+        }
+
+        return array_map(fn (IconVariant $variant): array => [
+            'case'        => $this->caseName($variant->slug),
+            'value'       => $variant->slug,
+            'label'       => $variant->label,
+            'description' => $variant->description,
+        ], $this->variants);
+    }
+
+    /** Whether the pack's icons sit flat under `files/` rather than one folder per case. */
+    public function isFlat(): bool
+    {
+        return $this->variants === [];
+    }
+
     /** `Hero Icons` -- for descriptions and headings. */
     public function humanName(): string
     {
@@ -237,5 +296,16 @@ final readonly class PackageDefinition
         }
 
         return $variants;
+    }
+
+    /**
+     * `size-32` -> `SIZE_32`. A slug that starts with a digit (`2x`) is not a
+     * PHP identifier, so it takes the axis as a prefix (`VARIANT_2X`).
+     */
+    private function caseName(string $slug): string
+    {
+        $case = strtoupper(str_replace('-', '_', $slug));
+
+        return ctype_digit($case[0]) ? strtoupper($this->axis->value) . '_' . $case : $case;
     }
 }

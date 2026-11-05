@@ -14,8 +14,10 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "{{vendor}}",
-            "email": "{{email}}"
+            "name": "{{authorName}}",
+            "email": "{{email}}",
+            "homepage": "{{authorHomepage}}",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -51,7 +53,8 @@
         "orchestra/testbench": "^11.0",
         "pestphp/pest": "^4.6 || ^5.0",
         "phpstan/phpstan": "^2.1",
-        "laravel/pint": "^1.18"
+        "laravel/pint": "^1.18",
+        "symfony/yaml": "^7.0 || ^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -92,6 +95,7 @@
     "support": {
         "source": "https://github.com/{{packageName}}",
         "issues": "https://github.com/{{packageName}}/issues",
-        "security": "https://github.com/{{packageName}}/security/policy"
+        "security": "https://github.com/{{packageName}}/security/policy",
+        "docs": "https://github.com/{{packageName}}/tree/main/docs"
     }
 }

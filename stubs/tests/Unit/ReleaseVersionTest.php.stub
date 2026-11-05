@@ -19,8 +19,8 @@ declare(strict_types=1);
 | the manifest catches up when the release pull request merges, so between the
 | two the series may run one minor ahead of the manifest, never further.
 |
-| Pest functions only: a PHPUnit class in the same file would stop being
-| collected (see PackageMetadataTest.php).
+| Pest functions only: a top-level it() in a file holding a PHPUnit class
+| makes Pest skip the class, silently.
 |
 */
 

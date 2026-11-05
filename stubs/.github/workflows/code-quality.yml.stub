@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -118,8 +121,8 @@ jobs:
     timeout-minutes: 5
 
     # Nothing else reads these files until a tag is pushed. `release.yml` triggers
-    # on `push: tags`, so without this a broken workflow is first observed as a
-    # release that refuses to start -- after the decision to release has been made.
+    # on `push: tags`, so until now a broken workflow was first observed as a
+    # release that refused to start -- after the decision to release had been made.
     #
     # A YAML parse is not a substitute. `yaml.safe_load` accepts a duplicate key
     # and silently keeps the last one, which is how a double-applied patch shipped

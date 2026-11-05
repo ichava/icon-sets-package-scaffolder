@@ -19,10 +19,12 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
  */
 final readonly class TokenMapFactory
 {
+    public function __construct(private AxisTokenFactory $axisTokens = new AxisTokenFactory) {}
+
     /** @return array<string, string> */
     public function for(PackageDefinition $definition): array
     {
-        return [
+        return [...$this->axisTokens->for($definition), ...[
             '{{vendor}}'       => $definition->vendor,
             '{{vendorStudly}}' => $definition->vendorStudly(),
             '{{vendorLower}}'  => Str::lower($definition->vendor),
@@ -44,10 +46,14 @@ final readonly class TokenMapFactory
             '{{packageName}}'      => $definition->packageName(),
             '{{bladeNamespace}}'   => $definition->bladeNamespace(),
 
-            '{{prefix}}'      => $definition->prefix,
-            '{{email}}'       => $definition->email,
-            '{{iconSetType}}' => $definition->type->value,
-            '{{kind}}'        => $definition->kind->value,
+            '{{prefix}}' => $definition->prefix,
+            '{{email}}'  => $definition->email,
+            // The legal author and copyright holder: Simtabi LLC for ichava,
+            // whose packs all name it, and the vendor itself otherwise.
+            '{{authorName}}'     => $definition->authorName(),
+            '{{authorHomepage}}' => $definition->authorHomepage(),
+            '{{iconSetType}}'    => $definition->type->value,
+            '{{kind}}'           => $definition->kind->value,
             // `[]` for no rules: `kinds.rules` is an ordered array, so the
             // empty case must encode as a list, not as an object.
             '{{kindRulesJson}}' => $definition->kindRules === []
@@ -67,7 +73,7 @@ final readonly class TokenMapFactory
 
             '{{year}}' => date('Y'),
             '{{date}}' => date('Y-m-d'),
-        ];
+        ]];
     }
 
     /**

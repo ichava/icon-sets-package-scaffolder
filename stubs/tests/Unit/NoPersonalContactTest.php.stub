@@ -45,14 +45,14 @@ function personal_contact_files(): array
 it(description: 'names Simtabi LLC and the role address as the only author', closure: function () {
     $composer = json_decode((string) file_get_contents(personal_contact_root() . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
     expect($composer['authors'])->toHaveCount(1);
-    expect($composer['authors'][0]['name'])->toBe('Simtabi LLC');
-    expect($composer['authors'][0]['email'])->toBe('ichava@simtabi.com');
+    expect($composer['authors'][0]['name'])->toBe('{{authorName}}');
+    expect($composer['authors'][0]['email'])->toBe('{{email}}');
 });
 
 it(description: 'ships no personal name or email address', closure: function () {
     $files = personal_contact_files();
-    // 16 files measured 2026-10-30; a walk matching nothing must not pass.
-    expect(count($files))->toBeGreaterThanOrEqual(16);
+    // 15 files measured 2026-10-30; a walk matching nothing must not pass.
+    expect(count($files))->toBeGreaterThanOrEqual(15);
     foreach ($files as $file) {
         $this->assertDoesNotMatchRegularExpression('/imani@|manyara/i', (string) file_get_contents($file), "{$file} names a person; use Simtabi LLC <ichava@simtabi.com>");
     }

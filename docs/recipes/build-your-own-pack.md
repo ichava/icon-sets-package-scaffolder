@@ -74,9 +74,10 @@ https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md
 ## 5. Release and publish
 
 The pack starts on the family's 0.1 line: its `CHANGELOG.md` opens at `[0.1.0]` and
-`release-please-config.json` sets `initial-version` to `0.1.0`. Push `main`, then run *Release
-Please* from the Actions tab. It opens a release pull request; merging it tags `v0.1.0` and
-`release.yml` publishes the changelog section. The workflow needs the organisation's Refresh Bot
+`.release-please-manifest.json` already reads `0.1.0`, as in every estate pack. Tag `v0.1.0` by hand
+on the commit that changelog describes; the tag starts `release.yml`, which publishes the changelog
+section. From then on run *Release Please* from the Actions tab: it opens a release pull request for
+the next version, and merging it tags that version. The workflow needs the organisation's Refresh Bot
 credentials (`REFRESH_APP_CLIENT_ID`, `REFRESH_APP_PRIVATE_KEY`), copied to the repository if it is
 private.
 
