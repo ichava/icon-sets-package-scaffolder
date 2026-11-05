@@ -118,6 +118,7 @@ function expectedShape(array $iconDirectories): array
         'tests/Pest.php',
         'tests/TestCase.php',
         'tests/Unit/AttributionTest.php',
+        'tests/Unit/CoreOnlyDependencyTest.php',
         'tests/Unit/DocsShapeTest.php',
         'tests/Unit/NoPersonalContactTest.php',
         'tests/Unit/NoStrayTextNodesTest.php',
@@ -190,6 +191,38 @@ it('ships no config file and registers none', function (): void {
 
     expect(is_dir($pack . '/config'))->toBeFalse()
         ->and((string) file_get_contents($pack . '/src/Providers/IconsServiceProvider.php'))->not->toContain('hasConfigFile');
+
+    removeDirectory($root);
+});
+
+it('depends on ichava/core alone, and says what it is', function (): void {
+    [$root, $pack] = scaffoldShape('shape-core-only', 'multi', ['outline', 'filled']);
+
+    // Core alone uses the laranail/* packages. A pack requires php and
+    // ichava/core, extends core's IconPackServiceProvider, and imports nothing
+    // from another Simtabi\Laranail namespace; the pack's own
+    // CoreOnlyDependencyTest keeps it that way after it is generated.
+    $composer = json_decode((string) file_get_contents($pack . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+    $require = array_keys($composer['require']);
+    sort($require);
+
+    expect($require)->toBe(['ichava/core', 'php'])
+        ->and($composer['type'])->toBe('ichava-icon-set');
+
+    $provider = (string) file_get_contents($pack . '/src/Providers/IconsServiceProvider.php');
+    expect($provider)->toContain('use Simtabi\\Laranail\\Ichava\\Support\\IconPackServiceProvider;')
+        ->and($provider)->toContain('class IconsServiceProvider extends IconPackServiceProvider')
+        ->and($provider)->not->toContain('Laranail\\Package\\')
+        ->and($provider)->not->toContain('configurePackage');
+
+    // The repositories stay: Composer reads them from the root package only, so
+    // the pack's own CI installs core's dependencies through them.
+    expect(implode(' ', array_column($composer['repositories'], 'url')))->toContain('ichava/core')
+        ->and(implode(' ', array_column($composer['repositories'], 'url')))->toContain('laranail/package-tools');
+
+    $readme = (string) file_get_contents($pack . '/README.md');
+    expect($readme)->toContain('requires [`ichava/core`](https://github.com/ichava/core) and nothing else')
+        ->and($readme)->not->toContain('https://github.com/laranail/');
 
     removeDirectory($root);
 });
