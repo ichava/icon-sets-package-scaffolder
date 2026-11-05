@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **The generator declares the rest of the kind keys, and takes `--kind-rule=<glob>=<kind>` (repeatable).** `config.json` now carries `metadata.data.items` (`{}`) and `metadata.data.kinds.rules` (`[]`) beside `package.kind`, the shape ichava/core reads for D6 rows 2 and 3 (ichava/core#162). Each `--kind-rule` becomes a `rules` entry in the order given, so the first match wins; `Domain\KindRule` parses `<glob>=<kind>`, forgives kind case and space, and refuses what core would drop (an empty or `/`-leading glob, a `..` or empty segment, `[ ] { } \`, a `**` inside a segment) as `InvalidPackageDefinition`, exit `2`. `PackageDefinition::create()` takes an optional `kindRules` argument, so existing callers are unchanged, and a pack scaffolded without the option differs from before only by the two empty keys. The generated `ResourceShapeTest` checks `items` and `kinds.rules`, and the generated `docs/configuration.md` has a *Kinds in `config.json`* section. `ScaffoldedKindTest` asserts the empty case (`{}` and `[]` as the right JSON types), the order of repeated rules, the exit code, and each refusal.
 
+### Removed
+
+- **The `{{vendorLower}}` stub token.** The docs called it legacy (*prefer `{{vendorKebab}}`*), and no stub used it (measured across the stub tree, the estate packs and core's docs). The estate is forward-only (owner, 2026-11-05), so it goes instead of staying beside its replacement. A copied stub that still names it is left unsubstituted; use `{{vendorKebab}}` for paths and composer names, or `{{vendor}}` for display. `StubTreeTest` fails if the token returns.
+
+### Security
+
+- **Conflict floors for four Symfony components** (`composer audit`, 2026-11-05). `symfony/http-foundation`, `http-kernel`, `routing` and `yaml` below 7.4.23, or from 8.0 below 8.1.11, carry seven advisories (among them CVE-2026-118514 and CVE-2026-118516). `composer.json` declares them as `conflict`, the same floors as ichava/core.
+
 ### Fixed
 
 - **A fresh scaffold has the file set and shape of `icon-sets-tabler`, so a new pack needs no hand-fixing.** Fifteen packs scaffolded on 2026-11-04 were each corrected by hand; diffing a fresh scaffold against tabler, cross-checked with `icon-sets-lucide`, `-mdi` and `-carbon`, found these, all fixed in the stubs:
