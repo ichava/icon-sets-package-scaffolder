@@ -24,11 +24,14 @@ that do not exist yet, and logging there raises `Log [ichava] not defined`.
 Core discovers installed packs at runtime. It keeps no list of them, so a pack is added by
 installing it and removed by removing it.
 
-## It requires `laranail/package-tools` directly
+## It requires `ichava/core` only
 
-The provider writes `Package` into its own `configurePackage()` signature, so it depends on that
-class whatever the dependency graph delivers transitively through core. **Require what you import**;
-a transitive dependency is not a contract.
+`composer.json` requires `php` and `ichava/core`, and nothing under `src/` names a class from any
+other `Simtabi\Laranail` namespace. The provider extends core's `IconPackServiceProvider` and declares
+its constants class and its component class; core writes the `laranail/package-tools` signature, so
+the `laranail/*` packages reach this pack only through core. The composer `type` is
+`ichava-icon-set`, which is how core's pack discovery finds it. `tests/Unit/CoreOnlyDependencyTest.php`
+fails if any of that changes.
 
 ## Upstream
 

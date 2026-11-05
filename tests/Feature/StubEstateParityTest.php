@@ -232,13 +232,12 @@ it('scaffolds the same runtime constraints a real pack declares', function () {
     $generated = json_decode((string) file_get_contents($this->scaffoldRoot . '/composer.json'), true);
     $estate = estatePackManifest();
 
-    foreach (['php', 'illuminate/support', 'ichava/core', 'laranail/package-tools'] as $dependency) {
-        // toHaveKey($key, $value) asserts presence AND equality in one step, so
-        // a stub that omits the dependency and one that pins it differently
-        // both fail here, which is what drift looks like in either direction.
-        expect($estate['require'])->toHaveKey($dependency);
-        expect($generated['require'] ?? [])->toHaveKey($dependency, $estate['require'][$dependency]);
-    }
+    // A pack requires php and ichava/core and nothing else; core alone uses the
+    // laranail/* packages. Compared as the whole map, so a stub that keeps a
+    // dependency the estate dropped fails as surely as one that pins differently.
+    expect(array_keys($estate['require']))->toEqualCanonicalizing(['php', 'ichava/core']);
+    expect($generated['require'] ?? [])->toEqual($estate['require']);
+    expect($generated['type'] ?? null)->toBe($estate['type'] ?? null);
 });
 
 it('scaffolds the same dev toolchain a real pack declares', function () {
@@ -268,22 +267,28 @@ it('scaffolds the VCS repositories a pack needs, because nothing here is on Pack
     expect(implode(' ', $urls))->toContain('ichava/core');
 });
 
-it('scaffolds a provider importing the namespace package-tools actually publishes', function () {
+it('scaffolds a provider on the same core base a real pack extends, naming no laranail type', function () {
     skipWithoutEstate();
     scaffoldForParity($this->scaffoldRoot);
 
     $generated = (string) file_get_contents($this->scaffoldRoot . '/src/Providers/IconsServiceProvider.php');
     $estate = (string) estateFile('src/Providers/IconsServiceProvider.php');
 
-    // Read the namespace out of the real pack rather than naming it here, so an
-    // upstream rename is caught instead of being encoded twice.
-    preg_match('/^use (Simtabi\\\\Laranail\\\\[A-Za-z\\\\]+)\\\\Package;$/m', $estate, $matches);
-    expect($matches)->toHaveCount(2, 'flag-icons no longer imports a package-tools Package class.');
+    // Read the base out of the real pack rather than naming it here, so a
+    // rename in core is caught instead of being encoded twice.
+    preg_match('/^class IconsServiceProvider extends (\\w+)$/m', $estate, $extends);
+    expect($extends)->toHaveCount(2, 'flag-icons no longer declares its provider base on one line.');
+    preg_match('/^use (Simtabi\\\\Laranail\\\\Ichava\\\\Support\\\\' . $extends[1] . ');$/m', $estate, $import);
+    expect($import)->toHaveCount(2, "flag-icons extends {$extends[1]} but does not import it from core.");
 
-    // Scaffolded provider must import the same package-tools namespace
-    // flag-icons does, and must not carry the pre-migration spelling.
-    expect($generated)->toContain("use {$matches[1]}\\Package;");
-    expect($generated)->not->toContain('Laranail\\PackageTools\\');
+    expect($generated)->toContain("use {$import[1]};")
+        ->and($generated)->toContain("class IconsServiceProvider extends {$extends[1]}");
+
+    // Neither the generated provider nor the pack it measures against imports
+    // package-tools, and the pre-migration spelling stays gone.
+    expect($generated)->not->toContain('Laranail\\Package\\Tools')
+        ->and($estate)->not->toContain('Laranail\\Package\\Tools')
+        ->and($generated)->not->toContain('Laranail\\PackageTools\\');
 });
 
 it('scaffolds no Artisan command, and would namespace one if it ever did', function () {

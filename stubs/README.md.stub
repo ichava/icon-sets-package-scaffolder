@@ -14,18 +14,7 @@ Requires [`ichava/core`](https://github.com/ichava/core); targets PHP `^8.4.1 ||
 
 ## Install
 
-`ichava/core` and this pack come from Packagist. The `laranail/*` packages core depends on are not on Packagist yet, so the **application's** `composer.json` names them:
-
-```json
-{
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/laranail/package-tools" },
-        { "type": "vcs", "url": "https://github.com/laranail/console" },
-        { "type": "vcs", "url": "https://github.com/laranail/enumerator" },
-        { "type": "vcs", "url": "https://github.com/laranail/db-tools" }
-    ]
-}
-```
+This pack requires [`ichava/core`](https://github.com/ichava/core) and nothing else. Nothing in the Ichava family is on Packagist yet, so the **application's** `composer.json` first names the repositories: core's [installation guide](https://github.com/ichava/core/blob/main/docs/installation.md#1-point-composer-at-the-repositories) holds the one block that lists them, core's dependencies included, and this pack's line in it is `https://github.com/{{packageName}}`.
 
 Then require the pack:
 

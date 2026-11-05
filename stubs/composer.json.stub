@@ -1,7 +1,7 @@
 {
     "name": "{{packageName}}",
     "description": "{{humanName}} for Laravel via Ichava",
-    "type": "library",
+    "type": "ichava-icon-set",
     "keywords": [
         "laravel",
         "blade",
@@ -22,9 +22,7 @@
     ],
     "require": {
         "php": "^8.4.1 || ^8.5",
-        "illuminate/support": "^13.0",
-        "ichava/core": "^0.1",
-        "laranail/package-tools": "^0.1.0"
+        "ichava/core": "^0.1"
     },
     "repositories": [
         {
