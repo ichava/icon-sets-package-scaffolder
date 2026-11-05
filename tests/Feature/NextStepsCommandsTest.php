@@ -21,7 +21,7 @@ it('names only commands and files the scaffolded pack has', function (): void {
 
     try {
         $definition = PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com');
-        $result = app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
+        $result = app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root), force: true);
 
         $buffer = new BufferedOutput;
         (new NextStepsReporter)->report(new OutputStyle(new ArrayInput([]), $buffer), $result);

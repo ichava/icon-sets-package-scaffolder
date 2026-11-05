@@ -32,7 +32,7 @@ it('scaffolds packs that pass the shared Pint config', function (): void {
     foreach ($definitions as $label => $overrides) {
         $definition = PackageDefinition::create(...array_merge(['email' => 'dev@example.com'], $overrides));
 
-        app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root . '/' . $label));
+        app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root . '/' . $label));
     }
 
     // Assert the size of what Pint is about to inspect, so a render that wrote no

@@ -27,7 +27,7 @@ it('scaffolds an ATTRIBUTION.md that claims no authorship of the icons and ships
         vendor: 'Acme',
         email: 'dev@example.com',
     );
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root), force: true);
 
     $attribution = (string) file_get_contents($root . '/ATTRIBUTION.md');
     expect($attribution)->toContain('claims no authorship');

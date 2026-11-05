@@ -30,7 +30,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackag
 it(description: 'links only to files a scaffolded package actually contains', closure: function (): void {
     $root = sys_get_temp_dir() . '/ichava-linktargets-' . bin2hex(random_bytes(4));
 
-    app(ScaffoldIconPackage::class)(
+    app(ScaffoldIconPackage::class)->handle(
         PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com'),
         TargetPath::absolute($root),
         force: true,

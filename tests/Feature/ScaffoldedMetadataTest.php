@@ -39,7 +39,7 @@ it('scaffolds no homepage, rather than one pointing at the new package itself', 
         vendor: 'Acme',
         email: 'dev@example.com',
     );
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root), force: true);
 
     $config = json_decode(
         (string) file_get_contents($root . '/resources/assets/svg/config.json'),
@@ -97,7 +97,7 @@ it('scaffolds a metadata guard, so the value cannot drift once the pack leaves h
         vendor: 'Acme',
         email: 'dev@example.com',
     );
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root), force: true);
 
     // The guard lives in ResourceShapeTest, where every estate pack carries it;
     // it was a PackageMetadataTest of its own until the stubs caught up.

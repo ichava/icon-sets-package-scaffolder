@@ -49,7 +49,7 @@ it('declares icon by default', function () {
 
     expect($definition->kind)->toBe(IconKind::Icon);
 
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($this->kindRoot), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($this->kindRoot), force: true);
 
     expect(scaffoldedKindConfig($this->kindRoot)['package']['kind'])->toBe('icon');
 });
@@ -57,7 +57,7 @@ it('declares icon by default', function () {
 it('declares the kind it was given', function (string $input, string $expected) {
     $definition = PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com', kind: $input);
 
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($this->kindRoot), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($this->kindRoot), force: true);
 
     expect(scaffoldedKindConfig($this->kindRoot)['package']['kind'])->toBe($expected);
 })->with([
@@ -87,7 +87,7 @@ it('refuses a kind core would not recognise', function () {
 it('emits empty items and kind rules by default, as an object and a list', function () {
     $definition = PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com');
 
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($this->kindRoot), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($this->kindRoot), force: true);
 
     $raw = (string) file_get_contents($this->kindRoot . '/resources/assets/svg/config.json');
     $data = scaffoldedKindConfig($this->kindRoot)['metadata']['data'];
@@ -154,7 +154,7 @@ it('exits 2 for an invalid --kind-rule', function () {
 
 it('emits no update-command or about translations, and no prefix copy in config', function () {
     $definition = PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com');
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($this->kindRoot), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($this->kindRoot), force: true);
 
     $lang = require $this->kindRoot . '/resources/lang/en/icons.php';
 

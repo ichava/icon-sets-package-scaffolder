@@ -34,7 +34,7 @@ it('scaffolds docs in the shape every pack in the estate uses', function (): voi
         vendor: 'Acme',
         email: 'dev@example.com',
     );
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root), force: true);
 
     $readme = (string) file_get_contents($root . '/README.md');
     $docs = glob($root . '/docs/*.md') ?: [];

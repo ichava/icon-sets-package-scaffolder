@@ -16,7 +16,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
  *
  * A caller with no terminal -- a test, a CI job, a future browser UI -- does:
  *
- *     ($scaffold)($definition, TargetPath::absolute($path));
+ *     $scaffold->handle($definition, TargetPath::absolute($path));
  *
  * and gets a `ScaffoldResult` back. Before this seam existed, generation was
  * reachable only through a command's `handle()`, so the only way to exercise
@@ -34,14 +34,14 @@ final readonly class ScaffoldIconPackage
         private CreateIconDirectories $createDirectories,
     ) {}
 
-    public function __invoke(PackageDefinition $definition, TargetPath $path, bool $force = false): ScaffoldResult
+    public function handle(PackageDefinition $definition, TargetPath $path, bool $force = false): ScaffoldResult
     {
         $this->guardDestination($path, $force);
 
         $this->files->ensureDirectoryExists($path->value);
 
-        $files = ($this->renderStubs)($definition, $path);
-        $directories = ($this->createDirectories)($definition, $path);
+        $files = $this->renderStubs->handle($definition, $path);
+        $directories = $this->createDirectories->handle($definition, $path);
 
         return ScaffoldResult::of($definition, $path->value, $files, $directories);
     }
