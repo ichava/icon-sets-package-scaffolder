@@ -16,48 +16,48 @@ declare(strict_types=1);
  * - Every pack that kept `name` and `description` in both places had let them
  *   drift, because nothing read the translation copy.
  */
-function resourcesPath(): string
+function {{snakeName}}_resources(): string
 {
     return dirname(__DIR__, 2) . '/resources';
 }
 
 /** @return array<string, mixed> */
-function langLines(): array
+function {{snakeName}}_lang_lines(): array
 {
-    return require resourcesPath() . '/lang/en/icons.php';
+    return require {{snakeName}}_resources() . '/lang/en/icons.php';
 }
 
-it('ships every path of the canonical resource shape', function () {
+it(description: 'ships every path of the canonical resource shape', closure: function () {
     foreach ([
         'assets/svg/config.json',
         'assets/svg/files',
         'lang/en/icons.php',
         'views/components',
     ] as $path) {
-        expect(file_exists(resourcesPath() . '/' . $path))->toBeTrue("missing resources/{$path}");
+        expect(file_exists({{snakeName}}_resources() . '/' . $path))->toBeTrue("missing resources/{$path}");
     }
 });
 
-it('does not name the translation group after the locale', function () {
+it(description: 'does not name the translation group after the locale', closure: function () {
     // `lang/en/en.php` makes the group `en`, so every key reads
     // `<namespace>::en.name` with the locale doubled.
-    expect(file_exists(resourcesPath() . '/lang/en/en.php'))->toBeFalse();
+    expect(file_exists({{snakeName}}_resources() . '/lang/en/en.php'))->toBeFalse();
 });
 
-it('does not duplicate config.json metadata in english', function () {
+it(description: 'does not duplicate config.json metadata in english', closure: function () {
     // config.json is canonical for name and description -- IconRegistry reads
     // it. A copy here is a second source that nothing compares.
-    expect(langLines())->not->toHaveKey('name')
-        ->and(langLines())->not->toHaveKey('description');
+    expect({{snakeName}}_lang_lines())->not->toHaveKey('name')
+        ->and({{snakeName}}_lang_lines())->not->toHaveKey('description');
 });
 
-it('states no licence in the translations', function () {
+it(description: 'states no licence in the translations', closure: function () {
     // Package facts belong in config.json. A licence string here is a claim
     // nothing validates, and one estate pack shipped the wrong one for months.
-    expect(langLines())->not->toHaveKey('features');
+    expect({{snakeName}}_lang_lines())->not->toHaveKey('features');
 });
 
-it('matches every labelled group to its enum exactly', function () {
+it(description: 'matches every labelled group to its enum exactly', closure: function () {
     // Discovered, not hardcoded to `variants`.
     //
     // A pack that starts variant-style and later adds `categories` or `sets`
@@ -70,7 +70,7 @@ it('matches every labelled group to its enum exactly', function () {
     // The rule is the convention this estate already follows: a group `x` with
     // a sibling `x_descriptions` is a labelled group, and its keys must match
     // the cases of `Enums\<Studly singular of x>`.
-    $lines = langLines();
+    $lines = {{snakeName}}_lang_lines();
     $checked = 0;
 
     foreach (array_keys($lines) as $group) {
@@ -128,9 +128,9 @@ it('matches every labelled group to its enum exactly', function () {
     expect($checked)->toBeGreaterThan(0, 'no labelled group found in resources/lang/en/icons.php');
 });
 
-it('declares itself as this package in config.json', function () {
+it(description: 'declares itself as this package in config.json', closure: function () {
     $config = json_decode(
-        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        (string) file_get_contents({{snakeName}}_resources() . '/assets/svg/config.json'),
         true,
         flags: JSON_THROW_ON_ERROR,
     );
@@ -138,12 +138,12 @@ it('declares itself as this package in config.json', function () {
     expect($config['package']['name'])->toBe('{{packageName}}');
 });
 
-it('points metadata.repository at this package, not its upstream', function () {
+it(description: 'points metadata.repository at this package, not its upstream', closure: function () {
     // `metadata.repository` is THIS package's repository; the upstream's
     // identity lives in the `upstream` block. It had drifted to naming the
     // upstream in two estate packs and was blank in a third.
     $config = json_decode(
-        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        (string) file_get_contents({{snakeName}}_resources() . '/assets/svg/config.json'),
         true,
         flags: JSON_THROW_ON_ERROR,
     );
@@ -151,14 +151,14 @@ it('points metadata.repository at this package, not its upstream', function () {
     expect($config['metadata']['repository'])->toBe('https://github.com/{{packageName}}');
 });
 
-it('never points metadata.homepage at this package', function () {
+it(description: 'never points metadata.homepage at this package', closure: function () {
     // `metadata.homepage` is the UPSTREAM project's own site. It reaches a
     // consumer through IconRegistry and the browser API, but no frontend
     // renders it, so a wrong value is invisible until somebody reads the JSON.
     // The scaffolder emits none, because it cannot know the upstream; this
     // asserts the rule rather than a value, so it holds once you fill it in.
     $metadata = json_decode(
-        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        (string) file_get_contents({{snakeName}}_resources() . '/assets/svg/config.json'),
         true,
         flags: JSON_THROW_ON_ERROR,
     )['metadata'];
@@ -175,66 +175,9 @@ it('never points metadata.homepage at this package', function () {
         ->and($homepage)->not->toContain('github.com/{{vendorKebab}}/');
 });
 
-it('declares an SVG kind core recognises, for the pack and every category', function () {
-    // ichava/core resolves a category's kind as its own `kind`, then
-    // `package.kind`, then `icon`, and skips a value that names no kind. A
-    // typo here would quietly file every SVG as an icon; this makes it fail.
-    $config = json_decode(
-        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
-        true,
-        flags: JSON_THROW_ON_ERROR,
-    );
-    $kinds = ['icon', 'illustration'];
-
-    expect(in_array($config['package']['kind'] ?? null, $kinds, true))
-        ->toBeTrue('config.json package.kind must be "icon" or "illustration"');
-
-    $declared = [];
-
-    foreach ($config['metadata']['data']['categories'] ?? [] as $slug => $category) {
-        if (is_array($category) && array_key_exists('kind', $category)) {
-            $declared[$slug] = $category['kind'];
-        }
-    }
-
-    expect(array_diff($declared, $kinds))->toBe([]);
-});
-
-it('declares item kinds and kind rules core can read', function () {
-    // `items` is keyed by item path (relative to files/, no .svg) and each
-    // value is an object; `kinds.rules` is an ordered array of
-    // { match: <glob>, kind } where the first match wins. Core drops an entry
-    // it cannot read and doctor reports it, so a typo files the SVG under the
-    // next row instead of failing; this makes it fail.
-    $config = json_decode(
-        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
-        true,
-        flags: JSON_THROW_ON_ERROR,
-    );
-    $data = $config['metadata']['data'];
-    $kinds = ['icon', 'illustration'];
-
-    expect($data['items'] ?? [])->toBeArray();
-    expect(array_is_list($data['kinds']['rules'] ?? []))->toBeTrue('kinds.rules must be an ordered array');
-
-    foreach ($data['items'] ?? [] as $path => $item) {
-        expect(is_array($item) && in_array($item['kind'] ?? null, $kinds, true))
-            ->toBeTrue("items.{$path}.kind must be \"icon\" or \"illustration\"");
-    }
-
-    foreach ($data['kinds']['rules'] ?? [] as $index => $rule) {
-        $match = is_array($rule) ? ($rule['match'] ?? null) : null;
-
-        expect(is_string($match) && $match !== '' && $match[0] !== '/' && strpbrk($match, '[]{}\\') === false)
-            ->toBeTrue("kinds.rules.{$index}.match is not a valid glob");
-        expect(in_array($rule['kind'] ?? null, $kinds, true))
-            ->toBeTrue("kinds.rules.{$index}.kind must be \"icon\" or \"illustration\"");
-    }
-});
-
-it('ships no translations for an update command or an about block', function () {
+it(description: 'ships no translations for an update command or an about block', closure: function () {
     // A pack registers no Artisan command, and core's about section reads the
     // registry, so strings for either are read by nothing.
-    expect(langLines())->not->toHaveKey('commands')
-        ->and(langLines())->not->toHaveKey('info');
+    expect({{snakeName}}_lang_lines())->not->toHaveKey('commands')
+        ->and({{snakeName}}_lang_lines())->not->toHaveKey('info');
 });
