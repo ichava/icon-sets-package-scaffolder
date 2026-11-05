@@ -33,7 +33,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Check out the estate pack beside the checkout
+      - name: Check out the estate packs beside the checkout
         # tests/Feature/StubEstateParityTest.php measures the scaffolder stubs
         # against a real pack's manifest read off disk, rather than against
         # literals that would age silently beside the thing they guard. That
@@ -52,10 +52,17 @@ jobs:
         # diverged during the 2026-09-21 restructure and the rebrand closed
         # the gap. `estateCandidatePath()` in the test spells the
         # directory, so the two move together or the guard silently skips.
+        # Every public pack, so the guard measures the stub against the
+        # majority shape of the estate rather than one pack's (S-02). Treeless
+        # clones: the guard reads paths and a handful of files from origin/main.
         run: |
-          git clone --depth 1 --no-tags \
-            https://github.com/ichava/icon-sets-flag.git \
-            "$(dirname "$GITHUB_WORKSPACE")/icon-sets-flag"
+          for pack in bootstrap carbon emoji extras flag fluent font-awesome-free heroicons \
+                      iconoir ionicons lucide material-symbols mdi octicons openmoji phosphor \
+                      remix simple-icons tabler; do
+            git clone --depth 1 --no-tags --filter=blob:none --no-checkout \
+              "https://github.com/ichava/icon-sets-${pack}.git" \
+              "$(dirname "$GITHUB_WORKSPACE")/icon-sets-${pack}"
+          done
 
       - name: Setup PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0

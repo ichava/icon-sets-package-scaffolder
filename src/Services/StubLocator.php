@@ -25,7 +25,7 @@ final readonly class StubLocator
      * Every stub, absolute, sorted.
      *
      * `ignoreDotFiles(false)` is load-bearing: the tree ships `.gitignore.stub`,
-     * `.gitattributes.stub` and four workflows under `.github/`, all of which
+     * `.gitattributes.stub` and the workflows under `.github/`, all of which
      * Finder skips by default. A pack generated without them looks fine until
      * someone notices it has no CI.
      *

@@ -210,7 +210,7 @@ it('depends on ichava/core alone, and says what it is', function (): void {
         ->and($composer['type'])->toBe('ichava-icon-set');
 
     $provider = (string) file_get_contents($pack . '/src/Providers/IconsServiceProvider.php');
-    expect($provider)->toContain('use Simtabi\\Laranail\\Ichava\\Support\\IconPackServiceProvider;')
+    expect($provider)->toContain('use Simtabi\\Laranail\\Ichava\\Providers\\IconPackServiceProvider;')
         ->and($provider)->toContain('class IconsServiceProvider extends IconPackServiceProvider')
         ->and($provider)->not->toContain('Laranail\\Package\\')
         ->and($provider)->not->toContain('configurePackage');

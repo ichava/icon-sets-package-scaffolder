@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Renders the stub tree into a directory, with no terminal and no Laravel app.
  *
  * This exists so CI can lint what a scaffolded package actually receives. The
- * stub tree ships four workflow files, and until now nothing looked at them:
+ * stub tree ships the workflow files under stubs/.github/workflows, and until now nothing looked at them:
  * `actionlint` reads `.github/workflows/`, which is this package's own CI, not
  * the CI it generates. A mustache token sits inside a `${{ }}` expression and a
  * `.stub` extension keeps the file out of every YAML tool, so a broken

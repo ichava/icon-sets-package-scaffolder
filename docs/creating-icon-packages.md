@@ -223,10 +223,11 @@ your-icons/
 
 ### 3. Create Service Provider
 
-Extend `Simtabi\Laranail\Ichava\Support\IconPackServiceProvider` and name two classes: the
+Extend `Simtabi\Laranail\Ichava\Providers\IconPackServiceProvider` and name two classes: the
 constants class that reads your `config.json`, and your Blade component. The base names the package
 from the constants class, sets the path from the provider file, registers `config/{slug}.php` if you
-ship one, registers `<x-{slug}-icon>`, and registers `resources/assets/svg` with the registry. A pack
+ship one, registers `<x-ichava-{slug}::icon>` (and the short `<x-{slug}-icon>` while core's
+`components.short_prefix` is on), and registers `resources/assets/svg` with the registry. A pack
 written this way requires `ichava/core` and nothing else, because it names no `laranail/*` type.
 
 ```php
@@ -236,7 +237,7 @@ namespace Your\Icons\Providers;
 
 use Your\Icons\Constants\IconsConstants;
 use Your\Icons\View\Components\IconComponent;
-use Simtabi\Laranail\Ichava\Support\IconPackServiceProvider;
+use Simtabi\Laranail\Ichava\Providers\IconPackServiceProvider;
 
 class IconsServiceProvider extends IconPackServiceProvider
 {
@@ -255,8 +256,14 @@ class IconsServiceProvider extends IconPackServiceProvider
 Set `"type": "ichava-icon-set"` in the pack's `composer.json`; core's pack discovery lists installed
 packs by it.
 
-A provider that needs to do more can extend `Simtabi\Laranail\Ichava\Support\ServiceProvider`
-instead and write its own `configurePackage()` and `bootingPackage()`. That signature takes
+A pack that needs more than `config.json` says overrides one optional hook, `pack(PackSpec $pack)`:
+kind rules, theme twins and aliases in code, a second set, every set under a directory, extra Blade
+components, or a config file under another name. The default does nothing. Default attributes and
+class belong in `config.json` `config.defaults`, which core applies to every tag. See core's
+[Pack registration](https://github.com/ichava/core/blob/main/docs/tools/pack-registration.md).
+
+A provider that writes its own `configurePackage()` and `bootingPackage()` can extend
+`Simtabi\Laranail\Ichava\Providers\PackServiceProvider` instead. That signature takes
 `laranail/package-tools`' `Package`, so such a pack imports, and has to require, that package too.
 
 **For a pack with several set directories**, use `registerBulkIconSets()` instead:
