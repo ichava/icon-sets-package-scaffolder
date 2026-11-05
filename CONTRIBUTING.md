@@ -2,7 +2,7 @@
 
 Contribution guidelines are centralized for the whole Ichava org:
 
-- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Code of Conduct](https://github.com/ichava/.github/blob/main/CODE_OF_CONDUCT.md)
 
 ## Working on this package
 

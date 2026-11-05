@@ -58,6 +58,6 @@ $definition = PackageDefinition::create(
     variants: ['outline', 'filled'],
 );
 
-$result = $scaffold($definition, TargetPath::absolute($destination), force: true);
+$result = $scaffold->handle($definition, TargetPath::absolute($destination), force: true);
 
 printf("%d files, %d directories -> %s\n", $result->fileCount(), count($result->directories), $destination);

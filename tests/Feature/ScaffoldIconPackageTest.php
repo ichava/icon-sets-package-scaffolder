@@ -20,7 +20,7 @@ function scaffold(array $overrides, string $label): array
         'email'  => 'dev@example.com',
     ], $overrides));
 
-    $result = app(ScaffoldIconPackage::class)($definition, $path);
+    $result = app(ScaffoldIconPackage::class)->handle($definition, $path);
 
     return [$result, $root, $path->value];
 }
@@ -125,7 +125,7 @@ it('refuses a destination that already holds something', function (): void {
     $definition = PackageDefinition::create(name: 'Hero', vendor: 'Acme', email: 'dev@example.com');
 
     try {
-        app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root . '/pack'));
+        app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root . '/pack'));
         $thrown = false;
     } catch (RuntimeException) {
         $thrown = true;
@@ -145,7 +145,7 @@ it('overwrites when forced', function (): void {
     file_put_contents($root . '/pack/composer.json', '{"name":"someone/else"}');
 
     $definition = PackageDefinition::create(name: 'Hero', vendor: 'Acme', email: 'dev@example.com');
-    app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root . '/pack'), force: true);
+    app(ScaffoldIconPackage::class)->handle($definition, TargetPath::absolute($root . '/pack'), force: true);
 
     expect(json_decode((string) file_get_contents($root . '/pack/composer.json'), true)['name'])
         ->toBe('acme/icon-sets-hero');
@@ -163,7 +163,7 @@ it('is reachable without a terminal', function (): void {
     );
 
     $root = scratchDirectory('headless');
-    $result = $scaffold(
+    $result = $scaffold->handle(
         PackageDefinition::create(name: 'Hero', vendor: 'Acme', email: 'dev@example.com'),
         TargetPath::absolute($root . '/pack'),
     );

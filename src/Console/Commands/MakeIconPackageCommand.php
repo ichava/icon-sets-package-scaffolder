@@ -87,7 +87,7 @@ final class MakeIconPackageCommand extends Command
 
             $path = $destinations->resolve($definition, is_string($suppliedPath) ? $suppliedPath : null, $force, $interactive);
 
-            $result = $scaffold($definition, $path, $force);
+            $result = $scaffold->handle($definition, $path, $force);
         } catch (ScaffoldCancelled $e) {
             // Declining is an answer, not a failure.
             warning($e->getMessage());

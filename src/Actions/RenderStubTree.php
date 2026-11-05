@@ -27,7 +27,7 @@ final readonly class RenderStubTree
     ) {}
 
     /** @return list<string> files written, package-root-relative */
-    public function __invoke(PackageDefinition $definition, TargetPath $path): array
+    public function handle(PackageDefinition $definition, TargetPath $path): array
     {
         $tokens = $this->tokens->for($definition);
         $written = [];

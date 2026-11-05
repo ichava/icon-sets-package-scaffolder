@@ -35,7 +35,7 @@ function renderAxis(string $axis, array $variants = []): string
         $args['variants'] = $variants;
     }
 
-    app(ScaffoldIconPackage::class)(
+    app(ScaffoldIconPackage::class)->handle(
         PackageDefinition::create(...$args),
         TargetPath::absolute($root),
         force: true,

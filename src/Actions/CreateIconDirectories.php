@@ -21,7 +21,7 @@ final readonly class CreateIconDirectories
     public function __construct(private Filesystem $files) {}
 
     /** @return list<string> directories created, package-root-relative */
-    public function __invoke(PackageDefinition $definition, TargetPath $path): array
+    public function handle(PackageDefinition $definition, TargetPath $path): array
     {
         $root = 'resources/assets/svg/files';
         $created = [];

@@ -46,7 +46,7 @@ it('admits 0.1.0 in every ichava/* constraint, its own and a scaffolded pack\'s'
     $root = scratchDirectory('siblings');
 
     try {
-        app(ScaffoldIconPackage::class)(
+        app(ScaffoldIconPackage::class)->handle(
             PackageDefinition::create(name: 'Beacon', vendor: 'Acme', email: 'dev@example.com'),
             TargetPath::absolute($root),
             force: true,

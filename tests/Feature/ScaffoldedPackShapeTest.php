@@ -52,7 +52,7 @@ function scaffoldShape(string $label, string $type, array $variants = []): array
 {
     $root = scratchDirectory($label);
 
-    app(ScaffoldIconPackage::class)(
+    app(ScaffoldIconPackage::class)->handle(
         PackageDefinition::create(
             name: 'tabler',
             vendor: 'Ichava',
@@ -125,6 +125,7 @@ function expectedShape(array $iconDirectories): array
         'tests/Unit/PhpstanLevelTest.php',
         'tests/Unit/ReleaseVersionTest.php',
         'tests/Unit/ResourceShapeTest.php',
+        'tests/Unit/SanitisedSvgTest.php',
         'tests/Unit/SiblingConstraintsTest.php',
         'tests/Unit/SyncWorkflowCallerTest.php',
         'tests/Unit/VariantTest.php',

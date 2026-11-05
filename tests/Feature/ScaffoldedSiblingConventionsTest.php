@@ -26,7 +26,7 @@ function scaffoldIchavaPack(string $name, string $label): array
 {
     $root = scratchDirectory($label);
 
-    app(ScaffoldIconPackage::class)(
+    app(ScaffoldIconPackage::class)->handle(
         PackageDefinition::create(name: $name, vendor: 'Ichava', email: 'ichava@simtabi.com'),
         TargetPath::absolute($root . '/pack'),
     );
@@ -162,7 +162,7 @@ it('names security@ as the only disclosure address and never ichava@', function 
 it('keeps a non-ichava vendor on its own namespace root', function (): void {
     $root = scratchDirectory('sib-acme');
 
-    app(ScaffoldIconPackage::class)(
+    app(ScaffoldIconPackage::class)->handle(
         PackageDefinition::create(name: 'Hero', vendor: 'Acme', email: 'dev@example.com'),
         TargetPath::absolute($root . '/pack'),
     );

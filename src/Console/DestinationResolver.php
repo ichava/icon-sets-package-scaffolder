@@ -10,6 +10,7 @@ use function Laravel\Prompts\text;
 use function Laravel\Prompts\confirm;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Container\Container;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Support\TargetPath;
 use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
 
@@ -26,7 +27,10 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\PackageDefinition;
  */
 final readonly class DestinationResolver
 {
-    public function __construct(private Filesystem $files) {}
+    public function __construct(
+        private Filesystem $files,
+        private Container $container,
+    ) {}
 
     public function resolve(
         PackageDefinition $definition,
@@ -101,8 +105,8 @@ final readonly class DestinationResolver
      */
     private function basePath(): string
     {
-        return function_exists('base_path') && app()->bound('path.base')
-            ? base_path()
-            : (getcwd() ?: '.');
+        $base = $this->container->bound('path.base') ? $this->container->make('path.base') : null;
+
+        return is_string($base) && $base !== '' ? $base : (getcwd() ?: '.');
     }
 }
