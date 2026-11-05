@@ -4,41 +4,20 @@ declare(strict_types=1);
 
 namespace {{namespace}}\View\Components;
 
-use Simtabi\Laranail\Ichava\View\Components\IconComponent as BaseIconComponent;
 use {{namespace}}\Constants\IconsConstants;
+use Simtabi\Laranail\Ichava\View\Components\IconComponent as BaseIconComponent;
 
 /**
- * {{studlyName}} Icon Component
- *
- * Blade component for rendering {{studlyName}} icons.
- *
- * Usage Examples:
- * <x-{{bladeNamespace}}-icon name="home" />
- * <x-{{bladeNamespace}}-icon name="home" class="w-6 h-6 text-blue-500" />
- * <x-{{bladeNamespace}}-icon name="category/icon-name" />
- *
- * Or using the full path with the generic Ichava component:
- * <x-ichava::icon name="{{packageName}}::home" />
- *
- * Or using the ichava helper:
- * {!! ichava('{{packageName}}::home') !!}
- * {!! ichava('{{packageName}}::category/icon-name') !!}
+ * Blade component for the {{studlyName}} Icons set. See README for usage examples
+ * and accepted name formats.
  */
-final class IconComponent extends BaseIconComponent
+class IconComponent extends BaseIconComponent
 {
-    /**
-     * Get the icon set name
-     */
     protected function getIconSet(): string
     {
         return IconsConstants::getPackageName();
     }
 
-    /**
-     * Get the full vendor/package path
-     *
-     * Automatically built from constants to avoid hardcoding and errors.
-     */
     protected function getVendorPackage(): string
     {
         return IconsConstants::getVendorPackage();

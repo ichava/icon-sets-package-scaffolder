@@ -99,10 +99,12 @@ it('scaffolds a metadata guard, so the value cannot drift once the pack leaves h
     );
     app(ScaffoldIconPackage::class)($definition, TargetPath::absolute($root), force: true);
 
-    $guard = $root . '/tests/Unit/PackageMetadataTest.php';
+    // The guard lives in ResourceShapeTest, where every estate pack carries it;
+    // it was a PackageMetadataTest of its own until the stubs caught up.
+    $guard = $root . '/tests/Unit/ResourceShapeTest.php';
 
     expect(file_exists($guard))->toBeTrue(
-        'Scaffolded packages ship no tests/Unit/PackageMetadataTest.php, so nothing in the '
+        'Scaffolded packages ship no tests/Unit/ResourceShapeTest.php, so nothing in the '
         . 'generated pack stops metadata.homepage drifting onto its own repository.',
     );
 

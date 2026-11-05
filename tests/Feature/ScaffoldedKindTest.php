@@ -164,8 +164,7 @@ it('emits no update-command or about translations, and no prefix copy in config'
         ->and(array_keys($lang['variant_descriptions']))->toBe(array_keys($lang['variants']));
 
     // The prefix lives in config.json (`config.icon_prefix`), which
-    // IconsConstants reads; the config file's copy was read by nothing.
-    $configFile = (string) file_get_contents($this->kindRoot . '/config/icon-sets-beacon.php');
-
-    expect(str_contains($configFile, "'prefix'"))->toBeFalse('the config file still copies the prefix');
+    // IconsConstants reads. The config file that copied it, read by nothing,
+    // is gone altogether, as in every estate pack.
+    expect(is_dir($this->kindRoot . '/config'))->toBeFalse('the pack ships a config file no estate pack has');
 });

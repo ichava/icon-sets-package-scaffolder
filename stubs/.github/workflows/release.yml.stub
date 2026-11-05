@@ -1,5 +1,5 @@
 # Tag-driven. Every release carries a real description, extracted from that
-# version's CHANGELOG section -- never auto-generated notes alone, which list
+# version's CHANGELOG section — never auto-generated notes alone, which list
 # commit subjects and explain nothing.
 #
 # A tag is the only legitimate `push` trigger in this ecosystem; everything else
@@ -123,7 +123,7 @@ jobs:
           fi
 
           # Fail closed. A tag whose version has no CHANGELOG section is a tag
-          # pointing at the wrong commit, or a release nobody wrote notes for --
+          # pointing at the wrong commit, or a release nobody wrote notes for —
           # both are reasons to stop, not to publish auto-generated notes and
           # call it a description.
           if [ -z "$(printf '%s' "$SECTION" | tr -d '[:space:]')" ]; then

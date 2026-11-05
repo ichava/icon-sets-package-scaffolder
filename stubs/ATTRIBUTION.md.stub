@@ -5,9 +5,9 @@ This package has two owners, and each part keeps its own licence.
 | Part | Owner | Licence |
 |---|---|---|
 | The SVG icons in `resources/assets/svg/files/` | <!-- the upstream author(s) of {{humanName}} --> | <!-- the upstream licence --> |
-| Everything else: the PHP, configuration, translations, tests and documentation | {{vendor}} | MIT, see [`LICENSE`](LICENSE) |
+| Everything else: the PHP, configuration, translations, tests and documentation | {{authorName}} | MIT, see [`LICENSE`](LICENSE) |
 
-The MIT licence in `LICENSE` covers ONLY the package code. {{vendor}} packages and redistributes the icons; it did not draw them and claims no authorship of them.
+The MIT licence in `LICENSE` covers ONLY the package code. {{authorName}} packages and redistributes the icons; it did not draw them and claims no authorship of them.
 
 <!-- This file ships in the dist archive; docs/ is export-ignored and never
      reaches an install. Keep the upstream notice here, not appended to

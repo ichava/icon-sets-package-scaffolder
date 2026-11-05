@@ -16,8 +16,10 @@ hand:
 3. Merge the release pull request once CI is green. That run tags `vX.Y.Z` and creates the release;
    the tag starts `release.yml`, which publishes the changelog section as the body.
 
-The first release is the version already in `CHANGELOG.md` (`initial-version` in
-`release-please-config.json`), so the first release pull request finds its section in place. The
+The first release is the version already in `CHANGELOG.md` and in `.release-please-manifest.json`,
+`0.1.0`. Like every pack in the family, it is tagged `v0.1.0` by hand on the commit that changelog
+describes, and release-please proposes the next version from there. The pack's own
+`ReleaseVersionTest` holds the manifest, `config.json` and the branch alias to that line. The
 workflow needs the organisation's Refresh Bot credentials (`REFRESH_APP_CLIENT_ID`,
 `REFRESH_APP_PRIVATE_KEY`); a private repository on GitHub Free needs repository-level copies.
 

@@ -27,10 +27,10 @@ declare(strict_types=1);
 
 return [
     '{{axisPlural}}' => [
-        'default' => 'Default',
+{{axisLabels}}
     ],
 
     '{{axisDescriptions}}' => [
-        'default' => 'The default {{studlyName}} icon style',
+{{axisDescriptionLines}}
     ],
 ];

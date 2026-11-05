@@ -138,6 +138,43 @@ it('declares itself as this package in config.json', function () {
     expect($config['package']['name'])->toBe('{{packageName}}');
 });
 
+it('points metadata.repository at this package, not its upstream', function () {
+    // `metadata.repository` is THIS package's repository; the upstream's
+    // identity lives in the `upstream` block. It had drifted to naming the
+    // upstream in two estate packs and was blank in a third.
+    $config = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+
+    expect($config['metadata']['repository'])->toBe('https://github.com/{{packageName}}');
+});
+
+it('never points metadata.homepage at this package', function () {
+    // `metadata.homepage` is the UPSTREAM project's own site. It reaches a
+    // consumer through IconRegistry and the browser API, but no frontend
+    // renders it, so a wrong value is invisible until somebody reads the JSON.
+    // The scaffolder emits none, because it cannot know the upstream; this
+    // asserts the rule rather than a value, so it holds once you fill it in.
+    $metadata = json_decode(
+        (string) file_get_contents(resourcesPath() . '/assets/svg/config.json'),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    )['metadata'];
+    $homepage = $metadata['homepage'] ?? null;
+
+    if ($homepage === null) {
+        expect($metadata)->not->toHaveKey('homepage');
+
+        return;
+    }
+
+    expect($homepage)
+        ->not->toBe($metadata['repository'])
+        ->and($homepage)->not->toContain('github.com/{{vendorKebab}}/');
+});
+
 it('declares an SVG kind core recognises, for the pack and every category', function () {
     // ichava/core resolves a category's kind as its own `kind`, then
     // `package.kind`, then `icon`, and skips a value that names no kind. A

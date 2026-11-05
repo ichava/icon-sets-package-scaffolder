@@ -19,12 +19,12 @@ was produced by running the generator with vendor `Ichava`, whose packs live und
 `Simtabi\Laranail\Ichava\` like every real pack (any other vendor keeps
 `<Vendor>\IconSets<Slug>`):
 
-| You type | Composer name | Namespace | Config file |
-|---|---|---|---|
-| `tabler` or `Tabler` | `ichava/icon-sets-tabler` | `Simtabi\Laranail\Ichava\IconSetsTabler` | `config/icon-sets-tabler.php` |
-| `flag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
-| `icon-sets-flag` or `IconSetsFlag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` | `config/icon-sets-flag.php` |
-| `TablerIcons` | `ichava/icon-sets-tabler-icons` | `Simtabi\Laranail\Ichava\IconSetsTablerIcons` | `config/icon-sets-tabler-icons.php` |
+| You type | Composer name | Namespace |
+|---|---|---|
+| `tabler` or `Tabler` | `ichava/icon-sets-tabler` | `Simtabi\Laranail\Ichava\IconSetsTabler` |
+| `flag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` |
+| `icon-sets-flag` or `IconSetsFlag` | `ichava/icon-sets-flag` | `Simtabi\Laranail\Ichava\IconSetsFlag` |
+| `TablerIcons` | `ichava/icon-sets-tabler-icons` | `Simtabi\Laranail\Ichava\IconSetsTablerIcons` |
 
 The last row is not a typo. A trailing `Icons` in what you type is kept, so
 `TablerIcons` is a different pack from `tabler`. Type the bare slug.
@@ -55,7 +55,10 @@ behind it blocks rather than fails.
 
 ## What lands
 
-53 files, for a single-set pack and a multi-variant one alike (the variants add directories, not files):
+57 files, for a single-set pack and a multi-variant one alike, plus a `.gitkeep` in each icon
+directory (the variants add directories, not files). It is the file set of `icon-sets-tabler`, less
+what only a vendored pack has (its SVGs, the upstream licence copy, and tests about its own history),
+and `tests/Feature/ScaffoldedPackShapeTest.php` holds it there:
 
 ```
 icon-sets-tabler/
@@ -63,17 +66,17 @@ icon-sets-tabler/
 ├── README.md  CHANGELOG.md  LICENSE.md
 ├── .github/workflows/               tests, code-quality, release, sync-upstream
 ├── .github/                         dependabot.yml, issue templates, PR template
-├── .gitignore  .gitattributes  .editorconfig  phpunit.xml.dist
-├── config/icon-sets-tabler.php      the config file, named for the pack
+├── .gitignore  .gitattributes  .editorconfig  phpunit.xml.dist  phpstan.neon.dist
 ├── docs/                            variants, attribution, customization
 ├── resources/assets/svg/
 │   ├── config.json                  every piece of pack metadata
 │   └── files/                       your icons go here (one dir per variant)
 ├── src/Providers/IconsServiceProvider.php
 ├── src/Constants/IconsConstants.php
-├── src/Enums/Variant.php
+├── src/Enums/Variant.php            one case per --variants entry, or DEFAULT for a flat pack
 ├── src/View/Components/IconComponent.php
-└── tests/                           metadata, docs, attribution and the shared guards
+└── tests/                           Feature: IconsTest, SvgKindTest; Unit: the enum, resources,
+                                     docs, attribution, release, workflows and the shared guards
 ```
 
 `SECURITY.md` names `security@simtabi.com` as the only disclosure address and GitHub private
@@ -83,7 +86,13 @@ cascade; the README and `CONTRIBUTING.md` link the repository's security policy 
 
 ## Then
 
-1. Drop SVGs into `resources/assets/svg/files/` (one sub-directory per variant).
+There is no `config/` file. The estate packs dropped theirs: it held copies of the set name and prefix,
+which nothing read, because core takes both from `config.json`. `sync-upstream.yml` calls
+icon-sets-sync's reusable `sync-pack.yml`, pinned to one commit that the pack's Dependabot advances.
+
+1. Drop SVGs into `resources/assets/svg/files/` (one sub-directory per variant). Then raise the
+   icon-count floors the generated tests carry (`NoStrayTextNodesTest`, `IconsTest`) to the number
+   vendored, as every estate pack does; until there are icons, the item cases in `SvgKindTest` fail.
 2. Edit `resources/assets/svg/config.json` -- description, homepage, repository.
 3. `composer install` inside the pack.
 4. From a host application, `composer require ichava/icon-sets-tabler`.
