@@ -17,7 +17,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Actions\ScaffoldIconPackag
 | that looks right is not evidence the output is.
 |
 | Before this, the generator emitted `Variant` unconditionally: a scaffolded
-| pack could not look like a category pack such as `icon-sets-emoji`.
+| pack could not look like a category pack such as `icon-sets-twemoji`.
 |
 */
 

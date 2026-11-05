@@ -52,7 +52,7 @@ it('defaults to variant, and that is a decision', function () {
 
 it('accepts an axis independently of the layout type', function () {
     // The orthogonality, asserted rather than asserted-about: a category pack
-    // with per-set directories is exactly `icon-sets-emoji`.
+    // with per-set directories is exactly `icon-sets-twemoji`.
     $definition = PackageDefinition::create(
         name: 'Beacon',
         vendor: 'Acme',

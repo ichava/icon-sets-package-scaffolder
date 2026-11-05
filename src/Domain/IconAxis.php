@@ -15,7 +15,7 @@ use Simtabi\Laranail\Ichava\IconSetsPackageScaffolder\Domain\Exceptions\InvalidP
  * *means*, which determines the enum class, the docs page and the translation
  * groups a pack ships.
  *
- * They are orthogonal, and the estate proves it: `icon-sets-emoji` is a
+ * They are orthogonal, and the estate proves it: `icon-sets-twemoji` is a
  * category pack whose SVGs sit in per-set directories, and `icon-sets-flag` is
  * a variant pack with two. Folding them into one four-case enum makes the two
  * questions look like one, which is the conflation that left this generator

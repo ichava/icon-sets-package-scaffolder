@@ -32,7 +32,7 @@ The last row is not a typo. A trailing `Icons` in what you type is kept, so
 The destination directory is yours to name. The prompt suggests
 `<vendor>-<slug>-icons`, which is not how the existing packs are laid out, so
 pass `--path` and name it `icon-sets-<slug>` (`icon-sets-tabler`, `icon-sets-flag`,
-`icon-sets-emoji`, `icon-sets-metronic`, `icon-sets-bundled`).
+`icon-sets-twemoji`, `icon-sets-openmoji`).
 
 ## Non-interactively
 
