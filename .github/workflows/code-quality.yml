@@ -1,0 +1,168 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Laravel Pint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Run Laravel Pint
+        run: composer pint
+
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: PHPStan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Run PHPStan
+        run: composer analyse
+
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Security Audit
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Security Audit
+        run: composer audit
+
+  actionlint:
+    name: Workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    # Nothing else reads these files until a tag is pushed. `release.yml` triggers
+    # on `push: tags`, so until now a broken workflow was first observed as a
+    # release that refused to start -- after the decision to release had been made.
+    #
+    # A YAML parse is not a substitute. `yaml.safe_load` accepts a duplicate key
+    # and silently keeps the last one, which is how a double-applied patch shipped
+    # a step carrying `continue-on-error:` twice and still validated clean.
+    # actionlint rejects what Actions rejects.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: actionlint
+        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+
+  scaffolded-workflows:
+    name: Scaffolded workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # The `actionlint` job above reads `.github/workflows/`, which is this
+    # package's own CI -- not the CI it generates. The four workflow stubs are
+    # invisible to it twice over: they live under `stubs/`, and a `.stub`
+    # extension keeps them out of every YAML tool anyway. They could not be
+    # linted in place even if they were found, because `{{kebabName}}` starts a
+    # YAML flow mapping, so a stub is not a valid document standalone.
+    #
+    # So render one and lint that. A broken scaffolded workflow otherwise
+    # surfaces in somebody else's repository, at their tag time.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Scaffold a package into the workspace
+        id: render
+        # Inside the workspace, not RUNNER_TEMP: `raven-actions/actionlint`
+        # applies its `working-directory` input to the npm install step only,
+        # and resolves `files:` through `@actions/glob` against
+        # GITHUB_WORKSPACE. A path outside it globs to nothing.
+        run: |
+          php scripts/scaffold-sample.php "$GITHUB_WORKSPACE/.scaffolded"
+          expected=$(find stubs/.github/workflows -name '*.yml.stub' | wc -l | tr -d ' ')
+          rendered=$(find .scaffolded/.github/workflows -name '*.yml' | wc -l | tr -d ' ')
+          if [ "$expected" -eq 0 ] || [ "$rendered" -ne "$expected" ]; then
+            echo "::error::rendered $rendered workflow files, expected $expected"
+            exit 1
+          fi
+          echo "expected=$expected" >> "$GITHUB_OUTPUT"
+
+      - name: actionlint
+        id: scaffolded
+        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+        with:
+          files: .scaffolded/.github/workflows/*.yml
+
+      - name: Assert the lint read the scaffolded files
+        # With `files:` globbing to nothing, actionlint falls back to linting
+        # `./.github/workflows` -- this repository's own, already green from the
+        # job above -- and this job passes having checked nothing. The count is
+        # what distinguishes the two.
+        # Both values arrive through `env:` in upper case deliberately:
+        # actionlint runs shellcheck over every `run:` block, and SC2154 fires
+        # on a lower-case name the script never assigns.
+        env:
+          LINTED: ${{ steps.scaffolded.outputs.total-files }}
+          EXPECTED: ${{ steps.render.outputs.expected }}
+        run: |
+          if [ "$LINTED" != "$EXPECTED" ]; then
+            echo "::error::actionlint linted $LINTED files, expected $EXPECTED -- it did not read the scaffolded tree"
+            exit 1
+          fi
+          echo "actionlint linted $LINTED scaffolded workflow files"

@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+use Simtabi\Laranail\Ichava\Testing\PackConformance;
+
+/*
+|--------------------------------------------------------------------------
+| No text node directly under <svg> or <g>
+|--------------------------------------------------------------------------
+|
+| The rule lives once, in core's Testing\PackConformance; this file names it
+| for this pack, so the pack's test names stay as they were.
+|
+| A renderer draws such text as stray glyphs, and js-icon-components refuses it.
+| The detector itself is tested in core (SvgInspectorTest).
+|
+*/
+
+it('has no text node directly under svg or g in any icon', function (): void {
+    PackConformance::noStrayTextNodes(dirname(__DIR__, 2) . '/resources/assets/svg/files', minFiles: 1);
+});

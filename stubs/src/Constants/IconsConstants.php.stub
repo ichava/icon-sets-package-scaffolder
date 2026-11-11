@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}}\Constants;
+
+use Simtabi\Laranail\Ichava\Support\PathResolver;
+use Simtabi\Laranail\Ichava\Constants\JsonConfigConstants;
+
+/**
+ * Resolves {{studlyName}} Icons metadata from its `resources/assets/svg/config.json`.
+ *
+ * @see JsonConfigConstants
+ */
+final class IconsConstants extends JsonConfigConstants
+{
+    protected static function getConfigPath(): string
+    {
+        return PathResolver::resolvePackagePath(self::class, levelsUp: 3, append: 'resources/assets/svg');
+    }
+}

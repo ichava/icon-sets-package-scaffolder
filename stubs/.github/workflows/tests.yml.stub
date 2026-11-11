@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.4, 8.5]
+        laravel: [13.*]
+        stability: [prefer-stable]
+        include:
+          - laravel: 13.*
+            testbench: ^11.0
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl
+          coverage: none
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Test against the siblings' main
+        # The committed constraints stay on the 0.1 line the released 0.1.0 satisfies
+        # (SiblingConstraintsTest). CI aliases the siblings' main into that line so
+        # this repository is tested against what it will ship beside, and restores
+        # composer.json after the install so tests read the committed constraints.
+        run: composer require "ichava/core:dev-main as 0.1.99" --no-update --no-interaction
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: Report the resolved siblings and restore composer.json
+        run: |
+          for p in ichava/core; do composer show "$p" | grep -E '^(name|versions|source) '; done
+          git checkout -- composer.json
+
+      - name: Execute tests
+        run: vendor/bin/pest
