@@ -1,0 +1,52 @@
+# .github/workflows/sync-upstream.yml
+#
+# Weekly upstream refresh for this pack. The work is done by the reusable
+# workflow in ichava/icon-sets-sync: it builds the toolkit from source at the
+# pinned commit below, runs the sync headless, and opens the update pull
+# request with a Refresh Bot token (REFRESH_APP_CLIENT_ID /
+# REFRESH_APP_PRIVATE_KEY, org level; a private repo needs repository copies),
+# so that pull request's own CI runs. A licence change upstream opens an issue
+# and no pull request.
+#
+# A human reviews the PR diff and merges. release-please then opens the
+# release PR, and its tag starts release.yml, which publishes the GitHub
+# release. Packagist reads the tag and lists the new version.
+#
+# The pin is a full commit SHA of icon-sets-sync, and `toolkit-ref` must be
+# the same commit. Dependabot (github-actions) advances the `uses:` pin;
+# advance `toolkit-ref` with it.
+
+name: Sync upstream
+
+on:
+  schedule:
+    # Mondays 06:45 UTC. 45-past-the-hour offset borrowed from Homebrew's
+    # autobump cron to dodge GitHub Actions' on-the-hour load spike.
+    - cron: '45 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Refresh even when current == latest (dev / debugging)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    # The called workflow sets timeout-minutes and its own concurrency group.
+    # `issues: write` is for the licence-change issue; every write to the
+    # repository goes through the Refresh Bot token.
+    permissions:
+      contents: read
+      issues: write
+    uses: ichava/icon-sets-sync/.github/workflows/sync-pack.yml@bf0e2af1c41d4f6e51a7be2cbee1ab777fd41dba # v0.1.0 root
+    with:
+      pack: ${{ github.event.repository.name }}
+      toolkit-ref: bf0e2af1c41d4f6e51a7be2cbee1ab777fd41dba
+      refresh-app-client-id: ${{ vars.REFRESH_APP_CLIENT_ID }}
+      force: ${{ inputs.force == true }}
+    secrets:
+      refresh-app-private-key: ${{ secrets.REFRESH_APP_PRIVATE_KEY }}

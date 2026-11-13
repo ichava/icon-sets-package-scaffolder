@@ -1,0 +1,51 @@
+# Dependencies
+/vendor
+/node_modules
+
+# IDE / editor cruft
+/.idea
+/.vscode
+/.fleet
+/.zed
+*.swp
+*.swo
+*~
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+auth.json
+
+# npm / pnpm / yarn
+# A lock file in a *library* records a resolution consumers never use, and it
+# goes stale invisibly because CI resolves fresh rather than installing from it.
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# PHP test + lint caches
+/.phpunit.cache
+.phpunit.result.cache
+/.phpstan.cache
+/.pint.cache
+/.php-cs-fixer.cache
+/.psalm
+/coverage
+coverage.xml
+clover.xml
+
+# Local env / config overrides
+.env
+.env.local
+.env.*.local
+composer.local.json
+
+# Logs
+*.log
+
+# CI checks ichava/icon-sets-sync out here (sync-upstream.yml).
+# Never track it: a nested repo is recorded as a phantom gitlink.
+/.icon-sets-sync/

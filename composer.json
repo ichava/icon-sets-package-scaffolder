@@ -1,0 +1,104 @@
+{
+    "name": "ichava/icon-sets-package-scaffolder",
+    "description": "Scaffolds Ichava icon packages: one command, a token-substituted stub tree, and the conventions the ecosystem already enforces.",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "scaffolding",
+        "generator",
+        "icons",
+        "svg",
+        "ichava",
+        "icon-sets",
+        "blade"
+    ],
+    "homepage": "https://github.com/ichava/icon-sets-package-scaffolder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simtabi LLC",
+            "email": "ichava@simtabi.com",
+            "homepage": "https://simtabi.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4.1 || ^8.5",
+        "illuminate/support": "^13.0",
+        "laranail/console": "^0.1.0",
+        "laranail/package-tools": "^0.1.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/package-tools.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/console.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/enumerator.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/db-tools.git"
+        }
+    ],
+    "require-dev": {
+        "composer/semver": "^3.4",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.6 || ^5.0",
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.18"
+    },
+    "conflict": {
+        "symfony/http-foundation": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/http-kernel": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/routing": "<7.4.23 || >=8.0,<8.1.11",
+        "symfony/yaml": "<7.4.23 || >=8.0,<8.1.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Simtabi\\Laranail\\Ichava\\IconSetsPackageScaffolder\\Providers\\IconPackageScaffolderServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        }
+    },
+    "scripts": {
+        "pint": "@php vendor/bin/laranail-pint --test",
+        "pint-fix": "@php vendor/bin/laranail-pint --parallel",
+        "lint": "@pint",
+        "format": "@pint-fix",
+        "test": "vendor/bin/pest --parallel",
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=2G"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "source": "https://github.com/ichava/icon-sets-package-scaffolder",
+        "issues": "https://github.com/ichava/icon-sets-package-scaffolder/issues",
+        "security": "https://github.com/ichava/icon-sets-package-scaffolder/security/policy",
+        "docs": "https://github.com/ichava/icon-sets-package-scaffolder/tree/main/docs"
+    }
+}
