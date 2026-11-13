@@ -1,0 +1,87 @@
+# {{packageName}}
+
+<!-- Badges go here, in the standard's order: registry version, Tests, Static
+     analysis, License MIT -- but only the ones whose claim is true for THIS
+     repository. A registry badge for a package the registry does not have
+     renders as a broken "invalid" pill while asserting the package is
+     installable, and a CI badge on a private repository answers 404 for every
+     logged-out reader. Add a one-line note under them saying why any of the
+     four is absent, so the next reader does not restore the count. -->
+
+> {{humanName}} icons for the Ichava Laravel icon ecosystem.
+
+Requires [`ichava/core`](https://github.com/ichava/core); targets PHP `^8.4.1 || ^8.5` on Laravel `^13`.
+
+## Install
+
+This pack requires [`ichava/core`](https://github.com/ichava/core) and nothing else. Nothing in the Ichava family is on Packagist yet, so the **application's** `composer.json` first names the repositories: core's [installation guide](https://github.com/ichava/core/blob/main/docs/installation.md#1-point-composer-at-the-repositories) holds the one block that lists them, core's dependencies included, and this pack's line in it is `https://github.com/{{packageName}}`.
+
+Then require the pack:
+
+```bash
+composer require {{packageName}}
+```
+
+The service provider is discovered automatically. Core's [installation guide](https://github.com/ichava/core/blob/main/docs/installation.md) covers core's own setup.
+
+## Quick start guide and usage
+
+### Getting started
+
+Seed the pack once after installing it, and again after upgrading it:
+
+```bash
+php artisan ichava::ichava-core.database seed --package={{packageName}}
+```
+
+The seed is not optional: until it runs the registry holds no rows for this pack and every lookup returns nothing. No configuration is needed; the pack ships no config file, and its settings live in `resources/assets/svg/config.json`.
+
+### Usage
+
+Icons are addressed as `{{packageName}}::<name>`. In Blade, through core's component:
+
+```blade
+<x-ichava::icon name="{{packageName}}::home" class="w-6 h-6" />
+```
+
+Or from PHP, through core's helper:
+
+```blade
+{{ ichava('{{packageName}}::home')->class('w-5 h-5') }}
+```
+
+See [Getting started](docs/getting-started.md) for the full walkthrough, and the [Documentation](#documentation) index below for everything else.
+
+## <a name="documentation"></a>Documentation
+
+The full documentation lives in this repository, under `docs/`, and is indexed below.
+
+### This pack
+
+- [Installation](docs/installation.md) — requirements, the repositories block, seeding
+- [Getting started](docs/getting-started.md) — your first icon from this pack
+- [Configuration](docs/configuration.md) — why there is no config file, and the kind keys in `config.json`
+- [Architecture](docs/architecture.md) — what it ships, what it delegates, and why
+- [Release](docs/release.md) — how a version is cut, and when the core floor moves
+- [{{axisStudlyPlural}}](docs/{{axisPlural}}.md) — the {{axisPlural}} this pack ships and how to address them
+- [Customisation](docs/customization.md) — colour, size, adding your own icons
+- [Attribution](docs/attribution.md) — upstream project, licence terms, and credit
+
+### Shared across every pack
+
+- [Use an icon pack](https://github.com/ichava/core/blob/main/docs/recipes/use-an-icon-pack.md) — addressing icons, in Blade and in PHP
+- [Seed pack icons](https://github.com/ichava/core/blob/main/docs/recipes/seed-pack-icons.md) — the seeding pipeline and its options
+- [Check pack updates](https://github.com/ichava/core/blob/main/docs/recipes/check-pack-updates.md) — the update checker and what its statuses mean
+- [Serve icons from a CDN](https://github.com/ichava/core/blob/main/docs/recipes/serve-icons-from-a-cdn.md) — reading this pack's CDN templates out of `config.json`
+- [Icon path format](https://github.com/ichava/core/blob/main/docs/tools/icon-path-format.md) — the grammar both spellings normalise to
+- [Blade components](https://github.com/ichava/core/blob/main/docs/tools/blade-components.md) — `<x-ichava::icon>` and its attributes
+
+## Contributing & security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately through the [security policy](https://github.com/{{packageName}}/security/policy) — never in a public issue.
+
+## License
+
+The package code is MIT, © {{authorName}}. See [LICENSE](LICENSE).
+
+The icons keep their upstream authors' licence, and {{authorName}} claims no authorship of them. Their notice is in [ATTRIBUTION.md](ATTRIBUTION.md), which ships with the package and must accompany any copy of the icons.

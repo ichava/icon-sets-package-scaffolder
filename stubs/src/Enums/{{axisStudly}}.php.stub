@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}}\Enums;
+
+use Simtabi\Laranail\Ichava\Traits\HasIconSetVariants;
+use Simtabi\Laranail\Ichava\Contracts\IconSetVariantInterface;
+use {{namespace}}\Constants\IconsConstants;
+
+/**
+ * {{axisEnumSummary}}
+ */
+enum {{axisStudly}}: string implements IconSetVariantInterface
+{
+    use HasIconSetVariants;
+
+{{axisCases}}
+
+{{axisPathMethod}}
+
+    private static function getDefaultValue(): string
+    {
+        return IconsConstants::getDefaultVariant() ?? self::{{axisDefaultCase}}->value;
+    }
+
+    private static function getClassPrefix(): string
+    {
+        return IconsConstants::getPrefix();
+    }
+}

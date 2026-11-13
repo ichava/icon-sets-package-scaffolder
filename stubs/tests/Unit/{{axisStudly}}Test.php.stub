@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+use {{namespace}}\Enums\{{axisStudly}};
+
+/**
+ * Pure-enum behaviour tests. Anything that touches config.json (default(),
+ * isDefault(), getClass(), getPath()) lives in the Feature suite where the
+ * Laravel container is bootstrapped.
+ */
+{{axisCaseValueTests}}
+it(description: 'returns every case from values', closure: function () {
+    expect({{axisStudly}}::values())->toBe({{axisValuesPhp}});
+});
+
+it(description: 'resolves known values and rejects unknown ones', closure: function () {
+    expect({{axisTryFromChain}}
+        ->and({{axisStudly}}::tryFromValue('not-a-real-{{axis}}'))->toBeNull();
+});

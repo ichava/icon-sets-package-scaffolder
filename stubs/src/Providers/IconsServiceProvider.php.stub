@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}}\Providers;
+
+use Simtabi\Laranail\Ichava\Providers\IconPackServiceProvider;
+use {{namespace}}\Constants\IconsConstants;
+use {{namespace}}\View\Components\IconComponent;
+
+/**
+ * Registers the {{studlyName}} Icons set with the Ichava registry on boot.
+ *
+ * Core's IconPackServiceProvider names the package from IconsConstants, sets
+ * the path from this file, registers <x-{{bladeNamespace}}-icon> and the icon
+ * directory. This pack depends on ichava/core alone.
+ */
+class IconsServiceProvider extends IconPackServiceProvider
+{
+    protected function constantsClass(): string
+    {
+        return IconsConstants::class;
+    }
+
+    protected function componentClass(): string
+    {
+        return IconComponent::class;
+    }
+}
