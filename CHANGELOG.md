@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Every workflow declares a top-level `permissions: contents: read`** (S9), so its token no longer depends on the organisation's default. None of these jobs writes. `tests/Unit/WorkflowPermissionsTest.php` fails if a workflow loses the block.
 
-## [0.1.0] - TBD
+## [0.1.0] - 2026-11-13
 
 First release of `ichava/icon-sets-package-scaffolder`. The repository is published as a single commit; the 0.1.x tags cut between 2026-10-23 and 2026-10-27 (v0.1.0 to v0.1.1) are folded into this release, and their notes are kept below under *Archived history*.
 
